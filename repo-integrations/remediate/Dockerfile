@@ -124,25 +124,3 @@ RUN install-tool lerna
 # renovate: datasource=github-releases depName=helm packageName=helm/helm
 ARG HELM_VERSION=v3.14.4
 RUN install-tool helm
-
-# ---------------------------------------------
-# Set up of custom server - do not modify
-# ---------------------------------------------
-
-WORKDIR ${APP_ROOT}
-
-ARG WS_PLATFORM=enterprise
-ENV WS_PLATFORM=${WS_PLATFORM}
-ENV RENOVATE_X_MATCH_PACKAGE_NAMES_MORE=true
-ENV RENOVATE_X_DOCKER_HUB_TAGS=true
-
-# This entry point ensures that dumb-init is run
-ENTRYPOINT [ "docker-entrypoint.sh" ]
-CMD [ "node", "src/server.js" ]
-
-EXPOSE 8080
-
-# Override home for openshift and add user bin to path
-ENV HOME=/home/$USER_NAME PATH=/home/$USER_NAME/bin:$PATH
-
-ENV RENOVATE_BINARY_SOURCE=install

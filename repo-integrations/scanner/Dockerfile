@@ -30,11 +30,11 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=docker depName=node versioning=node
-ARG NODE_VERSION=18.17.1
+ARG NODE_VERSION=20.12.0
 RUN install-tool node
 
 # renovate: datasource=npm depName=npm versioning=npm
-ARG NPM_VERSION=9.8.1
+ARG NPM_VERSION=10.5.0
 RUN install-tool npm
 
 # renovate: datasource=npm depName=yarn
@@ -55,22 +55,27 @@ RUN install-tool java
 ARG JAVA_VERSION=11.0.19+7
 RUN install-tool java
 
-### !!! Install this version after the other versions, so that it is the default !!! ###
-ARG JAVA_VERSION=17.0.7+7
+ARG JAVA_VERSION=21.0.3+9.0.LTS
+RUN install-tool java
+
+### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+ARG JAVA_VERSION=17.0.8+7
 RUN install-tool java
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=6.9.4
 RUN install-tool gradle
 
-### !!! Install this version after the other versions, so that it is the default !!! ###
+### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.2
 RUN install-tool gradle
 
 # renovate: datasource=docker depName=golang versioning=docker
-#ARG GOLANG_VERSION=1.21.0
+#ARG GOLANG_VERSION=1.22.2
 #RUN install-tool golang
+# A temporary workaround, until it is fixed by renovate
+#ENV GOSUMDB="sum.golang.org"
 
 #USER ${USER_ID}
 ## Install package managers
@@ -122,7 +127,7 @@ RUN install-tool python
 ARG PYTHON_VERSION=3.9.18
 RUN install-tool python
 
-#renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
+# renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.12
 RUN install-tool python
 
@@ -150,13 +155,13 @@ RUN install-tool python
 #ARG DOTNET_VERSION=5.0.404
 #RUN install-tool dotnet
 
-#ARG DOTNET_VERSION=6.0.418
+#ARG DOTNET_VERSION=6.0.421
 #RUN install-tool dotnet
 
-ARG DOTNET_VERSION=8.0.101
+ARG DOTNET_VERSION=8.0.204
 RUN install-tool dotnet
 
-ARG DOTNET_VERSION=7.0.405
+ARG DOTNET_VERSION=7.0.408
 RUN install-tool dotnet
 
 # Set .NET SDK 7.0.405 as the default version
@@ -332,4 +337,3 @@ RUN apt-get update && \
 # Install Swift (including SPM)
 #ARG SWIFT_VERSION=5.10.0
 #RUN install-tool swift
-
