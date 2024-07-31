@@ -131,8 +131,8 @@ RUN install-tool python
 ARG PYTHON_VERSION=3.8.12
 RUN install-tool python
 
-# renovate: datasource=pypi depName=checkov
-ARG CHECKOV_VERSION=2.3.298
+# renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
+ARG CHECKOV_VERSION=3.2.174
 RUN install-tool checkov
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
