@@ -1,6 +1,5 @@
 # This default may be swapped for any compatible base image
-ARG BASE_IMAGE=amd64/ubuntu:20.04@sha256:b795f8e0caaaacad9859a9a38fe1c78154f8301fdaf0872eaf1520d66d9c0b98
-
+ARG BASE_IMAGE=ubuntu:20.04
 # This buildpack is used for tool installation and user/directory setup
 FROM ghcr.io/containerbase/base:9.24.0@sha256:82e02e48136e3d3e5d5d1bafd59acb5dbcfdf72b28f012de71757edeb203fc3d AS containerbase
 

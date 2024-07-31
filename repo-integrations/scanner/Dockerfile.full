@@ -1,5 +1,5 @@
 # This default may be swapped for any compatible base image
-ARG BASE_IMAGE=amd64/ubuntu:20.04@sha256:218bb51abbd1864df8be26166f847547b3851a89999ca7bfceb85ca9b5d2e95d
+ARG BASE_IMAGE=ubuntu:20.04
 
 # Containerbase is used for tool installation and user/directory setup
 FROM ghcr.io/containerbase/base:10.3.3@sha256:2229a04d052999d2e46439dd735a7a64ac1b250f82148a2df9338054014dd289 AS containerbase
