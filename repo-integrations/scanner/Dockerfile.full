@@ -247,6 +247,14 @@ RUN apt-get update && \
 
 
 #### Install Conda
+## Warning: Using Anaconda's default channel may require a commercial license.
+## However, the conda-forge channel is not subject to the same terms. See commented
+## out settings below for an example of using conda-forge.
+#
+# Set conda-forge to be the default registry
+# conda config --add channels conda-forge
+# Use conda-forge strictly
+# conda config --set channel_priority strict
 USER ${USER_ID}
 RUN cd ${USER_HOME} && \
         mkdir -p ${USER_HOME}/miniconda3 && \
