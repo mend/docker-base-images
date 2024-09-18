@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:20.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:10.3.3@sha256:2229a04d052999d2e46439dd735a7a64ac1b250f82148a2df9338054014dd289 AS containerbase
+FROM ghcr.io/containerbase/base:11.6.2 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
@@ -17,7 +17,7 @@ ENV BASH_ENV=/usr/local/etc/env
 SHELL ["/bin/bash" , "-c"]
 
 # Set up containerbase
-COPY --from=containerbase /usr/local/bin/ /usr/local/bin/
+COPY --from=containerbase /usr/local/sbin/ /usr/local/sbin/
 COPY --from=containerbase /usr/local/containerbase/ /usr/local/containerbase/
 RUN install-containerbase
 
