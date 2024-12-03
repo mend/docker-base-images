@@ -128,16 +128,16 @@ ARG PYTHON_VERSION=3.9.18
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.7.17
+RUN install-tool python
+
+# renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.12
 RUN install-tool python
 
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
 ARG CHECKOV_VERSION=3.2.174
 RUN install-tool checkov
-
-# renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.7.17
-RUN install-tool python
 
 #ARG PHP_VERSION=8.2.3
 #RUN install-tool php
@@ -182,7 +182,7 @@ RUN install-tool pipenv
 USER 0
 
 # renovate: datasource=pypi
-ARG POETRY_VERSION=1.4.2
+ARG POETRY_VERSION=1.6.0
 RUN install-tool poetry
 
 # renovate: datasource=github-releases depName=ruby lookupName=containerbase/ruby-prebuild
