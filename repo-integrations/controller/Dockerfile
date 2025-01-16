@@ -1,7 +1,8 @@
 # This default may be swapped for any compatible base image
-ARG BASE_IMAGE=ubuntu:20.04
+ARG BASE_IMAGE=ubuntu:24.04
+
 # This buildpack is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:9.24.0 AS containerbase
+FROM containerbase/base:13.0.22 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
@@ -13,10 +14,11 @@ ARG APP_ROOT=/usr/src/app
 ENV BASH_ENV=/usr/local/etc/env
 SHELL ["/bin/bash" , "-c"]
 
-# Set up buildpack
-COPY --from=containerbase /usr/local/bin/ /usr/local/bin/
+# Set up containerbase
+COPY --from=containerbase /usr/local/sbin/ /usr/local/sbin/
 COPY --from=containerbase /usr/local/containerbase/ /usr/local/containerbase/
-RUN install-containerbase
+RUN install-containerbase && \
+    prepare-tool all
 
 # renovate: datasource=docker depName=openjdk versioning=docker
 ARG JAVA_VERSION=17.0.9+9

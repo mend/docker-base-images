@@ -1,8 +1,8 @@
 # This default may be swapped for any compatible base image
-ARG BASE_IMAGE=ubuntu:20.04
+ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:11.6.2 AS containerbase
+FROM containerbase/base:13.0.22 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
@@ -19,7 +19,8 @@ SHELL ["/bin/bash" , "-c"]
 # Set up containerbase
 COPY --from=containerbase /usr/local/sbin/ /usr/local/sbin/
 COPY --from=containerbase /usr/local/containerbase/ /usr/local/containerbase/
-RUN install-containerbase
+RUN install-containerbase && \
+    prepare-tool all
 
 # renovate: datasource=github-tags depName=git packageName=git/git
 ARG GIT_VERSION=v2.41.0
@@ -146,6 +147,10 @@ RUN install-tool checkov
 #ARG COMPOSER_VERSION=2.0.13
 #RUN install-tool composer
 
+# These are needed to get earlier dotnet versions to install in Ubuntu 24.04
+# RUN curl -o /tmp/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb https://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+# RUN dpkg -i /tmp/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+
 #ARG DOTNET_VERSION=2.2.207
 #RUN install-tool dotnet
 
@@ -159,6 +164,9 @@ RUN install-tool checkov
 #RUN install-tool dotnet
 
 ARG DOTNET_VERSION=8.0.403
+RUN install-tool dotnet
+
+ARG DOTNET_VERSION=9.0.100
 RUN install-tool dotnet
 
 ARG DOTNET_VERSION=7.0.410
@@ -283,8 +291,8 @@ RUN apt-get update && \
 
 ### Install PHP Plugins
 #RUN apt-get update && \
-#	apt-get install -y php7.4-mbstring && \
-#	apt-get install -y php7.4-dom && \
+#	apt-get install -y php-mbstring && \
+#	apt-get install -y php-dom && \
 #	apt-get clean && \
 #	rm -rf /var/lib/apt/lists/* && \
 #	rm -rf /tmp/*
@@ -301,17 +309,23 @@ RUN apt-get update && \
 #	rm -rf /var/lib/apt/lists/* && \
 #	rm -rf /tmp/*
 
+
 #### Install Cabal
-#RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 063DAB2BDC0B3F9FCEBC378BFF3AEACEF6F88286 && \
-#	echo "deb http://ppa.launchpad.net/hvr/ghc/ubuntu bionic main " | tee /etc/apt/sources.list.d/ppa_hvr_ghc.list && \
-#	apt-get update && \
-#	apt-get install -y ghc-${HASKELL_GHC_VERSION} cabal-install-${CABAL_VERSION} && \
-#	PATH="/opt/ghc/bin:${PATH}" && \
-#	cabal update && \
+#RUN apt-get update &&\
+#	apt-get install -y build-essential curl libffi-dev libffi8ubuntu1 libgmp-dev libgmp10 libncurses-dev && \
 #	apt-get clean && \
 #	rm -rf /var/lib/apt/lists/* && \
 #	rm -rf /tmp/*
-#ENV PATH /opt/ghc/bin:$PATH
+#
+#USER ${USER_ID}
+#
+#RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh && \
+#	source /home/wss-scanner/.ghcup/env && \
+#	echo "source /home/wss-scanner/.ghcup/env" >> /home/wss-scanner/.bashrc && \
+#	ghcup install cabal ${CABAL_VERSION} &&\
+#	cabal update
+#
+#USER 0
 
 #### Install Mono
 #RUN apt-get update && \
