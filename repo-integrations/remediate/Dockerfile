@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:20.04
 
 # This containerbase is used for tool intallation and user/directory setup
-FROM ghcr.io/containerbase/base:11.11.14@sha256:b4e504d81e3ee708e66e7b1ab7d92c98714e871c55ff3be795e76779f0258675 AS containerbase
+FROM ghcr.io/containerbase/base:11.11.14 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 

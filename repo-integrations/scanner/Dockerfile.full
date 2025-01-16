@@ -161,17 +161,17 @@ ARG DOTNET_VERSION=5.0.404
 RUN install-tool dotnet
 
 
-ARG DOTNET_VERSION=6.0.421
+ARG DOTNET_VERSION=6.0.427
 RUN install-tool dotnet
 
-ARG DOTNET_VERSION=8.0.204
+ARG DOTNET_VERSION=8.0.403
 RUN install-tool dotnet
 
-ARG DOTNET_VERSION=7.0.408
+ARG DOTNET_VERSION=7.0.410
 RUN install-tool dotnet
 
 # Set .NET SDK 7.0.405 as the default version
-RUN echo '{ "sdk": { "version": "7.0.405" } }' > ${USER_HOME}/global.json
+RUN echo '{ "sdk": { "version": "7.0.410" } }' > ${USER_HOME}/global.json
 
 ARG RUST_VERSION=1.58.1
 RUN install-tool rust
