@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM containerbase/base:13.0.22 AS containerbase
+FROM containerbase/base:13.5.8 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
@@ -360,3 +360,6 @@ RUN apt-get update && \
 # Install Swift (including SPM)
 #ARG SWIFT_VERSION=5.10.0
 #RUN install-tool swift
+
+# delete the partially populated directory /tmp/containerbase and recreate one with full content instead
+RUN rm -rf /tmp/* && containerbase-cli init tool all
