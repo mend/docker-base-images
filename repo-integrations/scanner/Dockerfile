@@ -157,13 +157,13 @@ RUN install-tool checkov
 #ARG DOTNET_VERSION=3.1.416
 #RUN install-tool dotnet
 
-#ARG DOTNET_VERSION=5.0.404
+#ARG DOTNET_VERSION=5.0.408
 #RUN install-tool dotnet
 
-#ARG DOTNET_VERSION=6.0.421
+#ARG DOTNET_VERSION=6.0.428
 #RUN install-tool dotnet
 
-ARG DOTNET_VERSION=8.0.403
+ARG DOTNET_VERSION=8.0.405
 RUN install-tool dotnet
 
 ARG DOTNET_VERSION=9.0.100
