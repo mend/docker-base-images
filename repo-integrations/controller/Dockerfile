@@ -23,3 +23,5 @@ RUN install-containerbase && \
 # renovate: datasource=docker depName=openjdk versioning=docker
 ARG JAVA_VERSION=17.0.9+9
 RUN install-tool java
+
+# END OF BASE IMAGE

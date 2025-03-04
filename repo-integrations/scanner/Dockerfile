@@ -46,6 +46,9 @@ RUN install-tool yarn
 ARG BOWER_VERSION=1.8.14
 RUN install-tool bower
 
+#ARG PNPM_VERSION=10.3.0
+#RUN install-tool pnpm
+
 ### provide permissions
 RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
@@ -125,10 +128,6 @@ ARG PYTHON_VERSION=3.10.14
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.9.18
-RUN install-tool python
-
-# renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.7.17
 RUN install-tool python
 
@@ -136,8 +135,12 @@ RUN install-tool python
 ARG PYTHON_VERSION=3.8.12
 RUN install-tool python
 
+# renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.9.18
+RUN install-tool python
+
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
-ARG CHECKOV_VERSION=3.2.174
+ARG CHECKOV_VERSION=3.2.369
 RUN install-tool checkov
 
 #ARG PHP_VERSION=8.2.3
@@ -148,8 +151,8 @@ RUN install-tool checkov
 #RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
-# RUN curl -o /tmp/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb https://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
-# RUN dpkg -i /tmp/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+# RUN curl -o /tmp/libssl1.1.deb https://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb
+# RUN dpkg -i /tmp/libssl1.1.deb
 
 #ARG DOTNET_VERSION=2.2.207
 #RUN install-tool dotnet
@@ -193,11 +196,14 @@ USER 0
 ARG POETRY_VERSION=1.6.0
 RUN install-tool poetry
 
+#ENV GEM_HOME=/tmp/containerbase/cache/.ruby
+#ENV GEM_PATH="${GEM_HOME}"
 # renovate: datasource=github-releases depName=ruby lookupName=containerbase/ruby-prebuild
 #ARG RUBY_VERSION=3.2.2
 #RUN install-tool ruby && \
 #    gem install rubygems-update -v 3.3.0 && \
 #    gem update --system
+#ENV PATH="${GEM_HOME}/bin:${PATH}"
 
 # renovate: datasource=rubygems depName=bundler versioning=ruby
 #ARG BUNDLER_VERSION=2.4.18
@@ -363,3 +369,5 @@ RUN apt-get update && \
 
 # delete the partially populated directory /tmp/containerbase and recreate one with full content instead
 RUN rm -rf /tmp/* && containerbase-cli init tool all
+
+# END OF BASE IMAGE

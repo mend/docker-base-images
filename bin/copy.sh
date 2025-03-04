@@ -32,7 +32,7 @@ if [ ! -f $scaScannerDockerfilefull ]; then
   exit 1
 fi
 
-sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations/scanner/Dockerfilefull
+sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations/scanner/Dockerfile.full
 
 remediateDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-remediate/docker/Dockerfile
 
