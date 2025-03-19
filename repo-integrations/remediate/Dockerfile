@@ -95,7 +95,7 @@ ARG PIPENV_VERSION=2023.12.1
 RUN install-tool pipenv
 
 # renovate: datasource=github-releases depName=poetry packageName=python-poetry/poetry
-ARG POETRY_VERSION=1.8.5
+ARG POETRY_VERSION=2.1.1
 RUN install-tool poetry
 
 # renovate: datasource=pypi depName=hashin
