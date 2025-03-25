@@ -135,6 +135,10 @@ RUN install-tool python
 ARG PYTHON_VERSION=3.8.12
 RUN install-tool python
 
+# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.13.0
+RUN install-tool python
+
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.9.18
 RUN install-tool python
