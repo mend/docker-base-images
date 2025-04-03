@@ -6,6 +6,8 @@ FROM ghcr.io/containerbase/base:13.7.9@sha256:581c542f5678879acfd3ee72e5161b0dff
 
 FROM ${BASE_IMAGE} as base
 
+RUN apt-get update -y && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # The containerbase supports custom user but Renovate requires ubuntu
 ARG USER_NAME=ubuntu
 ARG USER_ID=1000

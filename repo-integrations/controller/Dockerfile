@@ -6,6 +6,8 @@ FROM containerbase/base:13.5.8 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
+RUN apt-get update -y && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 ARG USER_NAME=user
 ARG USER_ID=1542
 ARG APP_ROOT=/usr/src/app
