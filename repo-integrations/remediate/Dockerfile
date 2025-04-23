@@ -1,5 +1,5 @@
 # This default may be swapped for any compatible base image
-ARG BASE_IMAGE=ubuntu:24.04
+ARG BASE_IMAGE=amd64/ubuntu:24.04@sha256:1dacde97de49b533b8eaa9fd4747fbc605cb3fbd503f0803871a0bca84754d45
 
 # This containerbase is used for tool intallation and user/directory setup
 FROM ghcr.io/containerbase/base:13.8.3@sha256:81461c7705c65631c5a5b93b0953ca899aa452297856952756baa2b25509047c AS containerbase
