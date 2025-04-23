@@ -1,15 +1,17 @@
 # This default may be swapped for any compatible base image
-ARG BASE_IMAGE=amd64/ubuntu:24.04@sha256:1dacde97de49b533b8eaa9fd4747fbc605cb3fbd503f0803871a0bca84754d45
+ARG BASE_IMAGE=amd64/ubuntu:24.04
 
 # This containerbase is used for tool intallation and user/directory setup
-FROM ghcr.io/containerbase/base:13.8.3@sha256:81461c7705c65631c5a5b93b0953ca899aa452297856952756baa2b25509047c AS containerbase
+FROM ghcr.io/containerbase/base:13.8.8@sha256:34251c4bc8b6bbaeb8853a63823e67093b6e4071bb533154b7e1d00f7d483d85 AS containerbase
 
-FROM ${BASE_IMAGE} as base
+FROM ${BASE_IMAGE} AS base
+
+RUN apt-get update -y && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # The containerbase supports custom user but Renovate requires ubuntu
 ARG USER_NAME=ubuntu
 ARG USER_ID=1000
-ARG APP_ROOT=/usr/src/app
+ARG APP_ROOT=/usr/src/mend
 
 # Set env and shell
 ENV BASH_ENV=/usr/local/etc/env
@@ -27,7 +29,7 @@ RUN install-containerbase && \
 # --------------------------------------------------------------
 
 # renovate: datasource=github-tags depName=git packageName=git/git
-ARG GIT_VERSION=v2.48.1
+ARG GIT_VERSION=v2.49.0
 RUN install-tool git
 
 # install git-lfs
@@ -67,15 +69,15 @@ ARG GRADLE_VERSION=8.13
 RUN install-tool gradle
 
 # renovate: datasource=github-releases depName=erlang packageName=containerbase/erlang-prebuild versioning=docker
-ARG ERLANG_VERSION=27.2.4.0
+ARG ERLANG_VERSION=27.3.0.0
 RUN install-tool erlang
 
 # renovate: datasource=docker depName=elixir versioning=docker
-ARG ELIXIR_VERSION=1.18.2
+ARG ELIXIR_VERSION=1.18.3
 RUN install-tool elixir
 
 # renovate: datasource=github-releases depName=php packageName=containerbase/php-prebuild
-ARG PHP_VERSION=8.4.4
+ARG PHP_VERSION=8.4.5
 RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer packageName=composer/composer
@@ -83,7 +85,7 @@ ARG COMPOSER_VERSION=2.8.6
 RUN install-tool composer
 
 # renovate: datasource=docker depName=golang versioning=docker
-ARG GOLANG_VERSION=1.24.0
+ARG GOLANG_VERSION=1.24.1
 RUN install-tool golang
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
@@ -103,7 +105,7 @@ ARG HASHIN_VERSION=1.0.3
 RUN install-tool hashin
 
 # renovate: datasource=docker depName=rust versioning=docker
-ARG RUST_VERSION=1.85.0
+ARG RUST_VERSION=1.85.1
 RUN install-tool rust
 
 # renovate: datasource=github-releases depName=ruby packageName=containerbase/ruby-prebuild versioning=ruby
@@ -111,7 +113,7 @@ ARG RUBY_VERSION=3.4.2
 RUN install-tool ruby
 
 # renovate: datasource=rubygems depName=bundler
-ARG BUNDLER_VERSION=2.6.5
+ARG BUNDLER_VERSION=2.6.6
 RUN install-tool bundler
 
 # renovate: datasource=rubygems depName=cocoapods versioning=ruby
@@ -123,11 +125,11 @@ ARG PNPM_VERSION=8.15.9
 RUN install-tool pnpm
 
 # renovate: datasource=docker depName=dotnet packageName=mcr.microsoft.com/dotnet/sdk
-ARG DOTNET_VERSION=6.0.425
+ARG DOTNET_VERSION=8.0.407
 RUN install-tool dotnet
 
 # renovate: datasource=github-releases depName=helm packageName=helm/helm
-ARG HELM_VERSION=v3.17.1
+ARG HELM_VERSION=v3.17.2
 RUN install-tool helm
 
 # END OF BASE IMAGE
