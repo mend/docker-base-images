@@ -1,0 +1,60 @@
+name: Build and Push Base Image Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      Tag:
+        description: "Base Image Tag to Deploy to docker hub"
+        default: "1.1.1"
+        type: string
+        
+permissions:
+  contents: write
+
+jobs:
+  Build_And_Push_Base_Image:
+    runs-on: [ mend-self-hosted, profile=developer-platform-xlarge ]
+    
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          ref: "main"
+          fetch-depth: 0
+          
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Download Agent
+        run: |
+          ./bin/download.sh ${{ github.event.inputs.Tag }}
+          
+      - name: Copy Agent Files
+        run: | 
+          ./bin/copy.sh ${{ github.event.inputs.Tag }}
+          
+      - name: Build Docker Images
+        run: |
+          ./bin/build.sh ${{ github.event.inputs.Tag }}
+          
+      # Do the git tag/release stuff before docker push since if there's a tag collision, we want to fail before pushing to docker
+      - name: Commit, Push and Tag Changes
+        run: |
+          # Note: using Github
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Saving new files for ${{ github.event.inputs.Tag }}"
+          git push
+          git tag -a ${{ github.event.inputs.Tag }} -m "Automated Tag for Release ${{ github.event.inputs.Tag }}"
+          git push origin --tags
+          
+      - name: Publish to Docker Hub
+        run: |
+          ./bin/publish.sh ${{ github.event.inputs.Tag }}
+          
+
+          
