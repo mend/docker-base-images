@@ -40,7 +40,10 @@ jobs:
         run: |
           ./bin/build.sh ${{ github.event.inputs.Tag }}
           
-      # Do the git tag/release stuff before docker push since if there's a tag collision, we want to fail before pushing to docker
+      - name: Publish to Docker Hub
+        run: |
+          ./bin/publish.sh ${{ github.event.inputs.Tag }}
+          
       - name: Commit, Push and Tag Changes
         run: |
           # Note: using Github
@@ -52,9 +55,7 @@ jobs:
           git tag -a ${{ github.event.inputs.Tag }} -m "Automated Tag for Release ${{ github.event.inputs.Tag }}"
           git push origin --tags
           
-      - name: Publish to Docker Hub
-        run: |
-          ./bin/publish.sh ${{ github.event.inputs.Tag }}
+
           
 
           
