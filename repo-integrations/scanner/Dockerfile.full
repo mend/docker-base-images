@@ -6,8 +6,6 @@ FROM containerbase/base:13.5.8 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
-RUN apt-get update -y && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Containerbase supports custom user
 ARG USER_NAME=wss-scanner
 ARG USER_ID=1000
@@ -72,13 +70,9 @@ RUN install-tool java
 ARG GRADLE_VERSION=6.9.4
 RUN install-tool gradle
 
-# renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=7.6.2
-RUN install-tool gradle
-
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.13
+ARG GRADLE_VERSION=7.6.2
 RUN install-tool gradle
 
 # renovate: datasource=docker depName=golang versioning=docker
