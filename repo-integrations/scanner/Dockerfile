@@ -6,6 +6,8 @@ FROM containerbase/base:13.5.8 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
+RUN apt-get update -y && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Containerbase supports custom user
 ARG USER_NAME=wss-scanner
 ARG USER_ID=1000
@@ -133,10 +135,6 @@ RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.12
-RUN install-tool python
-
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.13.0
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
