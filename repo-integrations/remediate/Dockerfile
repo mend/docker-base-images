@@ -2,16 +2,16 @@
 ARG BASE_IMAGE=amd64/ubuntu:24.04
 
 # This containerbase is used for tool intallation and user/directory setup
-FROM ghcr.io/containerbase/base:13.7.9@sha256:581c542f5678879acfd3ee72e5161b0dffd6ac3ba0a6b4d64978351897253df4 AS containerbase
+FROM ghcr.io/containerbase/base:13.8.17@sha256:24a4dd4ac98c5f9cedaaae344b84157106d9538f97720a48be4e652fc04fee07 AS containerbase
 
-FROM ${BASE_IMAGE} as base
+FROM ${BASE_IMAGE} AS base
 
 RUN apt-get update -y && apt-get upgrade -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # The containerbase supports custom user but Renovate requires ubuntu
 ARG USER_NAME=ubuntu
 ARG USER_ID=1000
-ARG APP_ROOT=/usr/src/app
+ARG APP_ROOT=/usr/src/mend
 
 # Set env and shell
 ENV BASH_ENV=/usr/local/etc/env
@@ -29,7 +29,7 @@ RUN install-containerbase && \
 # --------------------------------------------------------------
 
 # renovate: datasource=github-tags depName=git packageName=git/git
-ARG GIT_VERSION=v2.48.1
+ARG GIT_VERSION=v2.49.0
 RUN install-tool git
 
 # install git-lfs
@@ -38,7 +38,7 @@ RUN install-tool git
 #ENV RENOVATE_GIT_NO_VERIFY=commit
 
 # renovate: datasource=github-releases depName=node packageName=nodejs/node versioning=node
-ARG NODE_VERSION=22.13.1
+ARG NODE_VERSION=22.15.0
 RUN install-tool node
 
 # Copy and validate the expected node runtime installation path used by the worker for executing the Renovate CLI
@@ -49,7 +49,7 @@ RUN COERCED_NODE_VERSION=$(node -v | grep '^v2' | sed 's/^v//') && \
 RUN $DOCKERFILE_NODE_DEFAULT_PATH --version
 
 # renovate: datasource=npm depName=npm versioning=npm
-ARG NPM_VERSION=9.9.4
+ARG NPM_VERSION=10.9.2
 RUN install-tool npm
 
 # renovate: datasource=npm depName=yarn versioning=npm
@@ -61,35 +61,35 @@ RUN install-tool yarn
 # -------------------------------------------------------------------------------------
 
 # renovate: datasource=adoptium-java depName=java
-ARG JAVA_VERSION=11.0.26+4
+ARG JAVA_VERSION=11.0.27+6
 RUN install-tool java
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.12.1
+ARG GRADLE_VERSION=8.14
 RUN install-tool gradle
 
 # renovate: datasource=github-releases depName=erlang packageName=containerbase/erlang-prebuild versioning=docker
-ARG ERLANG_VERSION=27.2.1.0
+ARG ERLANG_VERSION=27.3.3.0
 RUN install-tool erlang
 
 # renovate: datasource=docker depName=elixir versioning=docker
-ARG ELIXIR_VERSION=1.18.1
+ARG ELIXIR_VERSION=1.18.3
 RUN install-tool elixir
 
 # renovate: datasource=github-releases depName=php packageName=containerbase/php-prebuild
-ARG PHP_VERSION=8.4.3
+ARG PHP_VERSION=8.4.6
 RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer packageName=composer/composer
-ARG COMPOSER_VERSION=2.8.5
+ARG COMPOSER_VERSION=2.8.8
 RUN install-tool composer
 
 # renovate: datasource=docker depName=golang versioning=docker
-ARG GOLANG_VERSION=1.23.6
+ARG GOLANG_VERSION=1.24.2
 RUN install-tool golang
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.13.2
+ARG PYTHON_VERSION=3.13.3
 RUN install-tool python
 
 # renovate: datasource=pypi depName=pipenv
@@ -105,15 +105,15 @@ ARG HASHIN_VERSION=1.0.3
 RUN install-tool hashin
 
 # renovate: datasource=docker depName=rust versioning=docker
-ARG RUST_VERSION=1.84.1
+ARG RUST_VERSION=1.86.0
 RUN install-tool rust
 
 # renovate: datasource=github-releases depName=ruby packageName=containerbase/ruby-prebuild versioning=ruby
-ARG RUBY_VERSION=3.4.1
+ARG RUBY_VERSION=3.4.3
 RUN install-tool ruby
 
 # renovate: datasource=rubygems depName=bundler
-ARG BUNDLER_VERSION=2.6.3
+ARG BUNDLER_VERSION=2.6.8
 RUN install-tool bundler
 
 # renovate: datasource=rubygems depName=cocoapods versioning=ruby
@@ -125,11 +125,11 @@ ARG PNPM_VERSION=8.15.9
 RUN install-tool pnpm
 
 # renovate: datasource=docker depName=dotnet packageName=mcr.microsoft.com/dotnet/sdk
-ARG DOTNET_VERSION=6.0.425
+ARG DOTNET_VERSION=8.0.408
 RUN install-tool dotnet
 
 # renovate: datasource=github-releases depName=helm packageName=helm/helm
-ARG HELM_VERSION=v3.17.0
+ARG HELM_VERSION=v3.17.3
 RUN install-tool helm
 
 # END OF BASE IMAGE

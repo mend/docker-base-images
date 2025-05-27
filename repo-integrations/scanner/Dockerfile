@@ -72,9 +72,13 @@ RUN install-tool java
 ARG GRADLE_VERSION=6.9.4
 RUN install-tool gradle
 
-### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.2
+RUN install-tool gradle
+
+### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+# renovate: datasource=gradle-version depName=gradle versioning=gradle
+ARG GRADLE_VERSION=8.13
 RUN install-tool gradle
 
 # renovate: datasource=docker depName=golang versioning=docker
@@ -135,6 +139,10 @@ RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.12
+RUN install-tool python
+
+# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.13.0
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
