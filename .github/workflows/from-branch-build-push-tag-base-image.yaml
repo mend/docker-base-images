@@ -49,13 +49,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
-      #      - name: Build Docker Images
-      #        run: |
-      #          ./bin/build.sh ${{ github.event.inputs.Tag }}
+      - name: Build Docker Images
+        run: |
+          ./bin/build.sh ${{ github.event.inputs.Tag }}
 
-      #      - name: Publish to Docker Hub
-      #        run: |
-      #          ./bin/publish.sh ${{ github.event.inputs.Tag }}
+      - name: Publish to Docker Hub
+        run: |
+          ./bin/publish.sh ${{ github.event.inputs.Tag }}
 
 
       - name: Branch, Commit, Push and Tag Changes
