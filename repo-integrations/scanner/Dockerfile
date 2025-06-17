@@ -72,13 +72,17 @@ RUN install-tool java
 ARG GRADLE_VERSION=6.9.4
 RUN install-tool gradle
 
-### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.2
 RUN install-tool gradle
 
+### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+# renovate: datasource=gradle-version depName=gradle versioning=gradle
+ARG GRADLE_VERSION=8.13
+RUN install-tool gradle
+
 # renovate: datasource=docker depName=golang versioning=docker
-#ARG GOLANG_VERSION=1.24.0
+#ARG GOLANG_VERSION=1.22.2
 #RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 #ENV GOSUMDB="sum.golang.org"
@@ -135,6 +139,10 @@ RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.12
+RUN install-tool python
+
+# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.13.0
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
@@ -226,7 +234,7 @@ RUN install-tool poetry
 #ENV PATH ${USER_HOME}/.rbenv/bin:$PATH
 
 # renovate: datasource=rubygems depName=cocoapods versioning=ruby
-# ARG COCOAPODS_VERSION=1.16.2
+# ARG COCOAPODS_VERSION=1.11.2
 # RUN install-tool cocoapods
 # RUN adduser cocoapods
 # USER cocoapods
@@ -307,36 +315,15 @@ RUN apt-get update && \
 
 
 #### Install R and Packrat
-# Set environment variables to avoid interactive prompts
-# ENV DEBIAN_FRONTEND=noninteractive
-# ENV TZ=UTC
-# Update system and install dependencies
-#RUN apt-get update && apt-get install -y \
-#    software-properties-common \
-#    dirmngr \
-#    lsb-release \
-#    build-essential \
-#    gfortran \
-#    libcurl4-openssl-dev \
-#    libssl-dev \
-#    libxml2-dev \
-#    libfontconfig1-dev \
-#    libharfbuzz-dev \
-#    libfribidi-dev \
-#    libfreetype6-dev \
-#    libpng-dev \
-#    libtiff5-dev \
-#    libjpeg-dev \
-#    git \
-#    && rm -rf /var/lib/apt/lists/*
-## Add CRAN repository and install R
-#RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | gpg --dearmor -o /usr/share/keyrings/r-project.gpg && \
-#    echo "deb [signed-by=/usr/share/keyrings/r-project.gpg] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" | tee -a /etc/apt/sources.list.d/r-project.list && \
-#    apt-get update && \
-#    apt-get install -y r-base r-base-dev && \
-#    rm -rf /var/lib/apt/lists/*
-## Install devtools and packrat from R
-#RUN R -e "install.packages(c('devtools', 'packrat'), repos='https://cloud.r-project.org/')"
+#RUN apt-get update && \
+#	apt-get install -y r-base libopenblas-base r-base gdebi && \
+#	wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2021.09.1-372-amd64.deb && \
+#	gdebi rstudio-server-2021.09.1-372-amd64.deb && \
+#	rm rstudio-server-2021.09.1-372-amd64.deb && \
+#	R -e 'install.packages("packrat" , repos="http://cran.us.r-project.org");'  && \
+#	apt-get clean && \
+#	rm -rf /var/lib/apt/lists/* && \
+#	rm -rf /tmp/*
 
 
 #### Install Cabal
