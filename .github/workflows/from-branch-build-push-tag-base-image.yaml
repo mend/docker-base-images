@@ -12,8 +12,8 @@ on:
         description: "Branch: The branch containing the manually modified docker files to build and push to docker. If the action is successful, this branch will be deleted."
         type: string
         required: true
-      IsHotfix:
-        description: "IsHotfix: (default false) If True, release branch will not be merged back into main."
+      IsLatest:
+        description: "IsLatest: (default false) If True, release branch will be merged back into main and release will be set as latest."
         default: false
         type: boolean
       SkipGit:
@@ -91,9 +91,9 @@ jobs:
           git push origin --tags
           
           # Create release
-          if [ "${{ github.event.inputs.IsHotfix }}" = true ]; then
+          if [ "${{ github.event.inputs.IsLatest }}" = false ]; then
             gh release create "${{ github.event.inputs.Tag }}" --latest=false --generate-notes --target release/${{ github.event.inputs.Tag }} --title "${{ github.event.inputs.Tag }}"
-            echo "IsHotfix is true, not merging release branch back into main"
+            echo "IsLatest is false, not merging release branch back into main"
           else
             # Merge release branch back into main
             git checkout main
