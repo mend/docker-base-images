@@ -60,6 +60,9 @@ RUN install-tool yarn
 # Any of the below third-party tools may be commented out to save space and build time
 # -------------------------------------------------------------------------------------
 
+# renovate: datasource=github-releases packageName=moby/moby
+RUN install-tool docker v28.1.1
+
 # renovate: datasource=adoptium-java depName=java
 ARG JAVA_VERSION=11.0.27+6
 RUN install-tool java
@@ -92,6 +95,9 @@ RUN install-tool golang
 ARG PYTHON_VERSION=3.13.3
 RUN install-tool python
 
+# renovate: datasource=pypi
+RUN install-tool conan 2.16.1
+
 # renovate: datasource=pypi depName=pipenv
 ARG PIPENV_VERSION=2023.12.1
 RUN install-tool pipenv
@@ -100,9 +106,18 @@ RUN install-tool pipenv
 ARG POETRY_VERSION=1.8.5
 RUN install-tool poetry
 
+# renovate: datasource=pypi
+RUN install-tool uv 0.7.6
+
 # renovate: datasource=pypi depName=hashin
 ARG HASHIN_VERSION=1.0.3
 RUN install-tool hashin
+
+# renovate: datasource=pypi
+RUN install-tool pdm 2.24.1
+
+# renovate: datasource=pypi
+RUN install-tool pip-tools 7.4.1
 
 # renovate: datasource=docker depName=rust versioning=docker
 ARG RUST_VERSION=1.86.0
@@ -131,5 +146,26 @@ RUN install-tool dotnet
 # renovate: datasource=github-releases depName=helm packageName=helm/helm
 ARG HELM_VERSION=v3.17.3
 RUN install-tool helm
+
+# renovate: datasource=github-releases packageName=jsonnet-bundler/jsonnet-bundler
+RUN install-tool jb v0.6.0
+
+# renovate: datasource=npm
+RUN install-tool bun 1.2.13
+
+# renovate: datasource=github-releases packageName=containerbase/nix-prebuild
+RUN install-tool nix 2.28.3
+
+# renovate: datasource=github-releases packageName=jetify-com/devbox
+RUN install-tool devbox 0.14.2
+
+# renovate: datasource=github-releases packageName=bazelbuild/bazelisk
+RUN install-tool bazelisk v1.26.0
+
+# renovate: datasource=dart-version
+RUN install-tool dart 3.8.0
+
+# renovate: datasource=flutter-version
+RUN install-tool flutter 3.29.3
 
 # END OF BASE IMAGE
