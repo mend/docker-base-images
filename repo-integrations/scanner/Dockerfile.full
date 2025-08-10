@@ -33,7 +33,7 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=docker depName=node versioning=docker
-ARG NODE_VERSION=22.11.0
+ARG NODE_VERSION=20.12.0
 RUN install-tool node
 
 # renovate: datasource=npm depName=npm versioning=npm
@@ -204,10 +204,6 @@ RUN install-tool pipenv
 USER 0
 
 # renovate: datasource=pypi
-
-ARG POETRY_VERSION=2.0.1
-RUN install-tool poetry
-
 ARG POETRY_VERSION=1.6.0
 RUN install-tool poetry
 
@@ -227,16 +223,6 @@ RUN install-tool bundler
 RUN install-tool erlang 24.3.3.0
 
 RUN install-tool elixir 1.13.4
-
-#### Install rbenv and ruby-build
-### or maybe be saved to /etc/profile instead of /etc/profile.d/
-# RUN git clone https://github.com/sstephenson/rbenv.git ${USER_HOME}/.rbenv; \
-#	git clone https://github.com/sstephenson/ruby-build.git ${USER_HOME}/.rbenv/plugins/ruby-build; \
-#	${USER_HOME}/.rbenv/plugins/ruby-build/install.sh && \
-#	echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh && \
-#	echo 'eval "$(rbenv init -)"' >> ${USER_HOME}/.bashrc && \
-#	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.rbenv ${USER_HOME}/.bashrc
-# ENV PATH ${USER_HOME}/.rbenv/bin:$PATH
 
 # renovate: datasource=rubygems depName=cocoapods versioning=ruby
 ARG COCOAPODS_VERSION=1.16.2
@@ -315,11 +301,12 @@ RUN apt-get update && \
 	rm -rf /tmp/*
 
 
+
 #### Install R and Packrat
 # Set environment variables to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC
-# Update system and install dependencies
+## Update system and install dependencies
 RUN apt-get update && apt-get install -y \
     software-properties-common \
     dirmngr \

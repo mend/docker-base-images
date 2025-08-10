@@ -33,7 +33,7 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=docker depName=node versioning=node
-ARG NODE_VERSION=22.11.0
+ARG NODE_VERSION=20.12.0
 RUN install-tool node
 
 # renovate: datasource=npm depName=npm versioning=npm
@@ -203,10 +203,6 @@ RUN install-tool pipenv
 USER 0
 
 # renovate: datasource=pypi
-
-ARG POETRY_VERSION=2.0.1
-RUN install-tool poetry
-
 ARG POETRY_VERSION=1.6.0
 RUN install-tool poetry
 
