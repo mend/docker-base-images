@@ -136,7 +136,7 @@ ARG COCOAPODS_VERSION=1.16.2
 RUN install-tool cocoapods
 
 # renovate: datasource=npm depName=pnpm versioning=npm
-ARG PNPM_VERSION=8.15.9
+ARG PNPM_VERSION=10.14.0
 RUN install-tool pnpm
 
 # renovate: datasource=docker depName=dotnet packageName=mcr.microsoft.com/dotnet/sdk
