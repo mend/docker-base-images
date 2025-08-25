@@ -1,6 +1,25 @@
 #!/bin/bash
 set -e
 
+append_scanner_script_support() {
+    local dockerfile_name=$1
+    local target_file=$2
+    
+    cat >> "$target_file" << EOF
+
+
+# Temporarily copying the current Dockerfile and the version scanner script to generate the installed-versions.json file.
+ARG THIS_DOCKERFILE_NAME=$dockerfile_name
+COPY \${THIS_DOCKERFILE_NAME} /tmp/target-dockerfile
+COPY docker-image-scanner/generate_versions_json.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/generate_versions_json.sh \\
+  && mkdir "\${USER_HOME}/.mend" \\
+  && /usr/local/bin/generate_versions_json.sh /tmp/target-dockerfile \\
+     > "\${USER_HOME}/.mend/installed-versions.json" \\
+  && rm /tmp/target-dockerfile && rm /usr/local/bin/generate_versions_json.sh 
+EOF
+}
+
 if [ -z "$1" ]; then
   echo "Error: No release argument provided."
   exit 1
@@ -30,6 +49,8 @@ if [ ! -f $scaScannerDockerfile ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfile > repo-integrations/scanner/Dockerfile
+append_scanner_script_support "Dockerfile" "repo-integrations/scanner/Dockerfile"
+
 
 scaScannerDockerfilefull=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/Dockerfilefull
 
@@ -39,6 +60,8 @@ if [ ! -f $scaScannerDockerfilefull ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations/scanner/Dockerfile.full
+append_scanner_script_support "Dockerfile.full" "repo-integrations/scanner/Dockerfile.full"
+
 
 remediateDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-remediate/docker/Dockerfile
 
