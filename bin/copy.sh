@@ -2,7 +2,7 @@
 set -e
 
 append_scanner_script_support() {
-    local target_file=$2
+    local target_file=$1
     
     cat >> "$target_file" << EOF
 
