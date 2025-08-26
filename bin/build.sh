@@ -14,6 +14,9 @@ fi
 RELEASE=$1
 
 
+cp ../repo-integrations/wss-scanner/docker/docker-image-scanner/generate_versions_json.sh /usr/local/bin/
+
+
 docker pull ubuntu:24.04
 docker build --no-cache -t mend/base-repo-controller:${RELEASE} -f repo-integrations/controller/Dockerfile .
 docker build --no-cache -t mend/base-repo-remediate:${RELEASE} -f repo-integrations/remediate/Dockerfile .
