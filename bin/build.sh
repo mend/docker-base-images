@@ -13,7 +13,6 @@ fi
 
 RELEASE=$1
 
-cp tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/docker-image-scanner/generate_versions_json.sh repo-integrations/scanner/
 
 docker pull ubuntu:24.04
 docker build --no-cache -t mend/base-repo-controller:${RELEASE} -f repo-integrations/controller/Dockerfile .
