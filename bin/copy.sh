@@ -8,7 +8,7 @@ append_scanner_script_support() {
 
 
 # Temporarily copying the current Dockerfile and the version scanner script to generate the installed-versions.json file.
-COPY ./generate_versions.sh /usr/local/bin/generate_versions.sh
+COPY generate_versions.sh /usr/local/bin/generate_versions.sh
 ARG THIS_DOCKERFILE_NAME=$target_file
 COPY \${THIS_DOCKERFILE_NAME} /tmp/target-dockerfile
 RUN chmod +x /usr/local/bin/generate_versions_json.sh \\
