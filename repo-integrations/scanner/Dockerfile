@@ -406,3 +406,14 @@ RUN apt-get update && \
 RUN rm -rf /tmp/* && containerbase-cli init tool all
 
 # END OF BASE IMAGE
+
+
+# Temporarily copying the current Dockerfile and the version scanner script to generate the installed-versions.json file.
+COPY generate_versions_json.sh /usr/local/bin/generate_versions_json.sh
+ARG THIS_DOCKERFILE_NAME=repo-integrations/scanner/Dockerfile
+COPY ${THIS_DOCKERFILE_NAME} /tmp/target-dockerfile
+RUN chmod +x /usr/local/bin/generate_versions_json.sh \
+  && mkdir "${USER_HOME}/.mend" \
+  && /usr/local/bin/generate_versions_json.sh /tmp/target-dockerfile \
+     > "${USER_HOME}/.mend/installed-versions.json" \
+  && rm /tmp/target-dockerfile && rm /usr/local/bin/generate_versions_json.sh 
