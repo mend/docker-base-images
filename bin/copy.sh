@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 
-append_scanner_script_support() {
-    local target_file=$1
-    
-    cat >> "$target_file" << EOF
+if [ "$2" = true ] ; then
+    append_scanner_script_support() {
+        local target_file=$1
+        
+        cat >> "$target_file" << EOF
 
 
 # Temporarily copying the current Dockerfile and the version scanner script to generate the installed-versions.json file.
@@ -18,6 +19,7 @@ RUN chmod +x /usr/local/bin/generate_versions_json.sh \\
   && rm /tmp/target-dockerfile && rm /usr/local/bin/generate_versions_json.sh 
 EOF
 }
+fi
 
 if [ -z "$1" ]; then
   echo "Error: No release argument provided."
