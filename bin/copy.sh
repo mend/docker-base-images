@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-if [ "$2" = true ] ; then
-    append_scanner_script_support() {
-        local target_file=$1
-        
-        cat >> "$target_file" << EOF
+
+append_scanner_script_support() {
+    local target_file=$1
+    
+    cat >> "$target_file" << EOF
 
 
 # Temporarily copying the current Dockerfile and the version scanner script to generate the installed-versions.json file.
@@ -19,7 +19,6 @@ RUN chmod +x /usr/local/bin/generate_versions_json.sh \\
   && rm /tmp/target-dockerfile && rm /usr/local/bin/generate_versions_json.sh 
 EOF
 }
-fi
 
 if [ -z "$1" ]; then
   echo "Error: No release argument provided."
@@ -50,8 +49,9 @@ if [ ! -f $scaScannerDockerfile ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfile > repo-integrations/scanner/Dockerfile
-append_scanner_script_support "repo-integrations/scanner/Dockerfile"
-
+if [ "$2" = true ]; then
+    append_scanner_script_support "repo-integrations/scanner/Dockerfile"
+fi
 
 scaScannerDockerfilefull=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/Dockerfilefull
 
@@ -61,8 +61,9 @@ if [ ! -f $scaScannerDockerfilefull ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations/scanner/Dockerfile.full
-append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
-
+if [ "$2" = true ]; then
+    append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
+fi
 
 remediateDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-remediate/docker/Dockerfile
 
