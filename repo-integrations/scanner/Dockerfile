@@ -25,7 +25,7 @@ RUN install-containerbase && \
     prepare-tool all
 
 # renovate: datasource=github-tags depName=git packageName=git/git
-ARG GIT_VERSION=v2.41.0
+ARG GIT_VERSION=v2.41.3
 RUN install-tool git
 
 # install git lfs
@@ -33,15 +33,15 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=docker depName=node versioning=node
-ARG NODE_VERSION=22.11.0
+ARG NODE_VERSION=22.19.0
 RUN install-tool node
 
 # renovate: datasource=npm depName=npm versioning=npm
-ARG NPM_VERSION=10.5.0
+ARG NPM_VERSION=10.5.2
 RUN install-tool npm
 
 # renovate: datasource=npm depName=yarn
-ARG YARN_VERSION=1.22.19
+ARG YARN_VERSION=1.22.22
 RUN install-tool yarn
 
 # renovate: datasource=npm depName=bower
@@ -55,17 +55,17 @@ RUN install-tool bower
 RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
 
-ARG JAVA_VERSION=8.0.342+7
+ARG JAVA_VERSION=8.0.432+6
 RUN install-tool java
 
-ARG JAVA_VERSION=11.0.19+7
+ARG JAVA_VERSION=11.0.25+9
 RUN install-tool java
 
-ARG JAVA_VERSION=21.0.3+9.0.LTS
+ARG JAVA_VERSION=21.0.5+11.0.LTS
 RUN install-tool java
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
-ARG JAVA_VERSION=17.0.8+7
+ARG JAVA_VERSION=17.0.13+11
 RUN install-tool java
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
@@ -73,16 +73,16 @@ ARG GRADLE_VERSION=6.9.4
 RUN install-tool gradle
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=7.6.2
+ARG GRADLE_VERSION=7.6.6
 RUN install-tool gradle
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.13
+ARG GRADLE_VERSION=8.14.3
 RUN install-tool gradle
 
 # renovate: datasource=docker depName=golang versioning=docker
-#ARG GOLANG_VERSION=1.24.0
+#ARG GOLANG_VERSION=1.24.7
 #RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 #ENV GOSUMDB="sum.golang.org"
@@ -102,11 +102,11 @@ RUN install-tool gradle
 #RUN chgrp -R 0 /go && chmod -R g=u /go
 
 # renovate: datasource=maven depName=maven packageName=org.apache.maven:maven
-ARG MAVEN_VERSION=3.9.4
+ARG MAVEN_VERSION=3.9.11
 RUN install-tool maven
 
 # renovate: datasource=github-releases depName=scala packageName=scala/scala
-# ARG SCALA_VERSION=2.13.5
+# ARG SCALA_VERSION=v2.13.16
 # RUN install-tool scala
 
 # renovate: datasource=github-releases depName=sbt packageName=sbt/sbt
@@ -122,15 +122,15 @@ ARG PYTHON_VERSION=2.7.18
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.11.7
+ARG PYTHON_VERSION=3.11.13
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.12.3
+ARG PYTHON_VERSION=3.12.9
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.10.14
+ARG PYTHON_VERSION=3.10.18
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
@@ -138,22 +138,22 @@ ARG PYTHON_VERSION=3.7.17
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.8.12
+ARG PYTHON_VERSION=3.8.20
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.13.0
+ARG PYTHON_VERSION=3.13.7
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.9.18
+ARG PYTHON_VERSION=3.9.21
 RUN install-tool python
 
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
 ARG CHECKOV_VERSION=3.2.369
 RUN install-tool checkov
 
-#ARG PHP_VERSION=8.2.3
+#ARG PHP_VERSION=8.4.8
 #RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer packageName=composer/composer
@@ -176,10 +176,10 @@ RUN install-tool checkov
 #ARG DOTNET_VERSION=6.0.428
 #RUN install-tool dotnet
 
-ARG DOTNET_VERSION=8.0.405
+ARG DOTNET_VERSION=8.0.413
 RUN install-tool dotnet
 
-ARG DOTNET_VERSION=9.0.100
+ARG DOTNET_VERSION=9.0.101
 RUN install-tool dotnet
 
 ARG DOTNET_VERSION=7.0.410
@@ -207,7 +207,7 @@ USER 0
 ARG POETRY_VERSION=2.0.1
 RUN install-tool poetry
 
-ARG POETRY_VERSION=1.6.0
+ARG POETRY_VERSION=1.6.1
 RUN install-tool poetry
 
 #ENV GEM_HOME=/tmp/containerbase/cache/.ruby

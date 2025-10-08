@@ -25,7 +25,7 @@ RUN install-containerbase && \
     prepare-tool all
 
 # renovate: datasource=github-tags depName=git lookupName=git/git
-ARG GIT_VERSION=v2.41.0
+ARG GIT_VERSION=v2.41.3
 RUN install-tool git
 
 # install git lfs
@@ -33,15 +33,15 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=docker depName=node versioning=docker
-ARG NODE_VERSION=22.11.0
+ARG NODE_VERSION=22.19.0
 RUN install-tool node
 
 # renovate: datasource=npm depName=npm versioning=npm
-ARG NPM_VERSION=10.5.0
+ARG NPM_VERSION=10.5.2
 RUN install-tool npm
 
 # renovate: datasource=npm depName=yarn
-ARG YARN_VERSION=1.22.19
+ARG YARN_VERSION=1.22.22
 RUN install-tool yarn
 
 # renovate: datasource=npm depName=bower
@@ -55,17 +55,17 @@ RUN install-tool pnpm
 RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
 
-ARG JAVA_VERSION=8.0.342+7
+ARG JAVA_VERSION=8.0.432+6
 RUN install-tool java
 
-ARG JAVA_VERSION=11.0.19+7
+ARG JAVA_VERSION=11.0.25+9
 RUN install-tool java
 
-ARG JAVA_VERSION=21.0.3+9.0.LTS
+ARG JAVA_VERSION=21.0.5+11.0.LTS
 RUN install-tool java
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
-ARG JAVA_VERSION=17.0.8+7
+ARG JAVA_VERSION=17.0.13+11
 RUN install-tool java
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
@@ -73,16 +73,16 @@ ARG GRADLE_VERSION=6.9.4
 RUN install-tool gradle
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=7.6.2
+ARG GRADLE_VERSION=7.6.4
 RUN install-tool gradle
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.13
+ARG GRADLE_VERSION=8.14.3
 RUN install-tool gradle
 
 # renovate: datasource=docker depName=golang versioning=docker
-ARG GOLANG_VERSION=1.24.0
+ARG GOLANG_VERSION=1.24.7
 RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 ENV GOSUMDB="sum.golang.org"
@@ -102,15 +102,15 @@ RUN go install  github.com/kardianos/govendor@latest
 USER 0
 
 # renovate: datasource=maven depName=maven lookupName=org.apache.maven:maven
-ARG MAVEN_VERSION=3.9.4
+ARG MAVEN_VERSION=3.9.11
 RUN install-tool maven
 
 # renovate: datasource=github-releases depName=scala lookupName=scala/scala
-ARG SCALA_VERSION=2.13.5
+ARG SCALA_VERSION=v2.13.16
 RUN install-tool scala
 
 # renovate: datasource=github-releases depName=sbt lookupName=sbt/sbt
-ARG SBT_VERSION=1.5.7
+ARG SBT_VERSION=1.5.8
 RUN install-tool sbt
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
@@ -122,15 +122,15 @@ ARG PYTHON_VERSION=2.7.18
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.11.4
+ARG PYTHON_VERSION=3.11.13
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.12.3
+ARG PYTHON_VERSION=3.12.9
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.10.14
+ARG PYTHON_VERSION=3.10.18
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
@@ -138,26 +138,26 @@ ARG PYTHON_VERSION=3.7.17
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.8.12
+ARG PYTHON_VERSION=3.8.20
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.13.0
+ARG PYTHON_VERSION=3.13.7
 RUN install-tool python
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.9.17
+ARG PYTHON_VERSION=3.9.21
 RUN install-tool python
 
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
 ARG CHECKOV_VERSION=3.2.369
 RUN install-tool checkov
 
-ARG PHP_VERSION=8.2.3
+ARG PHP_VERSION=8.4.8
 RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer lookupName=composer/composer
-ARG COMPOSER_VERSION=2.0.13
+ARG COMPOSER_VERSION=2.0.14
 RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
@@ -168,7 +168,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 ARG DOTNET_VERSION=2.2.207
 RUN install-tool dotnet
 
-ARG DOTNET_VERSION=3.1.416
+ARG DOTNET_VERSION=3.1.426
 RUN install-tool dotnet
 
 ARG DOTNET_VERSION=5.0.408
@@ -177,10 +177,10 @@ RUN install-tool dotnet
 ARG DOTNET_VERSION=6.0.428
 RUN install-tool dotnet
 
-ARG DOTNET_VERSION=8.0.405
+ARG DOTNET_VERSION=8.0.413
 RUN install-tool dotnet
 
-ARG DOTNET_VERSION=9.0.100
+ARG DOTNET_VERSION=9.0.101
 RUN install-tool dotnet
 
 ARG DOTNET_VERSION=7.0.410
@@ -208,20 +208,20 @@ USER 0
 ARG POETRY_VERSION=2.0.1
 RUN install-tool poetry
 
-ARG POETRY_VERSION=1.6.0
+ARG POETRY_VERSION=1.6.1
 RUN install-tool poetry
 
 ENV GEM_HOME=/tmp/containerbase/cache/.ruby
 ENV GEM_PATH="${GEM_HOME}"
 # renovate: datasource=github-releases depName=ruby lookupName=containerbase/ruby-prebuild
-ARG RUBY_VERSION=3.2.2
+ARG RUBY_VERSION=3.2.9
 RUN install-tool ruby && \
     gem install rubygems-update -v 3.3.0 && \
     gem update --system
 ENV PATH="${GEM_HOME}/bin:${PATH}"
 
 # renovate: datasource=rubygems depName=bundler versioning=ruby
-ARG BUNDLER_VERSION=2.4.18
+ARG BUNDLER_VERSION=2.4.22
 RUN install-tool bundler
 
 RUN install-tool erlang 24.3.3.0
@@ -395,7 +395,7 @@ RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8
     ln -s /usr/bin/bazel-6.1.1 /usr/local/bin/bazel
 
 # Install Swift (including SPM)
-ARG SWIFT_VERSION=5.10.0
+ARG SWIFT_VERSION=5.10.1
 RUN install-tool swift
 
 # delete the partially populated directory /tmp/containerbase and recreate one with full content instead
