@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM containerbase/base:13.5.8 AS containerbase
+FROM ghcr.io/containerbase/base:13.14.2 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
@@ -48,7 +48,7 @@ RUN install-tool yarn
 ARG BOWER_VERSION=1.8.14
 RUN install-tool bower
 
-ARG PNPM_VERSION=10.3.0
+ARG PNPM_VERSION=10.17.0
 RUN install-tool pnpm
 
 ### provide permissions
@@ -74,6 +74,10 @@ RUN install-tool gradle
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.4
+RUN install-tool gradle
+
+# renovate: datasource=gradle-version depName=gradle versioning=gradle
+ARG GRADLE_VERSION=9.1.0
 RUN install-tool gradle
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
@@ -150,7 +154,7 @@ ARG PYTHON_VERSION=3.9.21
 RUN install-tool python
 
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
-ARG CHECKOV_VERSION=3.2.369
+ARG CHECKOV_VERSION=3.2.471
 RUN install-tool checkov
 
 ARG PHP_VERSION=8.4.8
@@ -224,6 +228,9 @@ ENV PATH="${GEM_HOME}/bin:${PATH}"
 ARG BUNDLER_VERSION=2.4.22
 RUN install-tool bundler
 
+ARG CONAN_VERSION=2.20.1
+RUN install-tool conan
+
 RUN install-tool erlang 24.3.3.0
 
 RUN install-tool elixir 1.13.4
@@ -246,7 +253,7 @@ USER cocoapods
 RUN pod setup
 USER 0
 
-ARG HELM_VERSION=3.11.2
+ARG HELM_VERSION=3.19.0
 RUN install-tool helm
 
 ## No renovate datasource exists yet
