@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:13.14.2 AS containerbase
+FROM containerbase/base:13.23.9 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
@@ -39,36 +39,16 @@ RUN install-tool node
 # renovate: datasource=npm depName=npm versioning=npm
 ARG NPM_VERSION=10.5.2
 RUN install-tool npm
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 1          │ CVE-2024-21538                                     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm depName=yarn
 ARG YARN_VERSION=1.22.22
 RUN install-tool yarn
 
 # renovate: datasource=npm depName=bower
-ARG BOWER_VERSION=1.8.14
-RUN install-tool bower
-# ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 11         │ CVE-2023-26136, CVE-2019-10744, CVE-2021-23807, CVE-2025-7783      │
-# │            │            │ CVE-2023-26136, CVE-2019-10744, CVE-2025-7783, CVE-2021-23383      │
-# │            │            │ CVE-2021-3918, CVE-2021-23369, CVE-2021-44906                      │
-# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
-# │ High       │ 28         │ CVE-2022-24999, CVE-2022-3517, CVE-2020-8116, CVE-2020-8203        │
-# │            │            │ CVE-2021-23337, CVE-2021-23343, CVE-2020-36604, CVE-2018-3728      │
-# │            │            │ CVE-2022-3517, CVE-2016-10540, CVE-2022-25883, CVE-2015-8855       │
-# │            │            │ CVE-2022-25883, CVE-2020-8203, CVE-2021-23337, CVE-2017-15010      │
-# │            │            │ CVE-2017-15010, CVE-2024-12905, CVE-2025-48387, CVE-2025-59343     │
-# │            │            │ CVE-2022-24999, CVE-2017-1000048, CVE-2022-21213, CVE-2020-7792    │
-# │            │            │ CVE-2021-43138, CVE-2022-29167, CVE-2022-21213, CVE-2020-7792      │
-# └────────────┴────────────┴────────────────────────────────────────────────────────────────────┘
+#ARG BOWER_VERSION=1.8.14
+#RUN install-tool bower
 
-#ARG PNPM_VERSION=10.17.0
+#ARG PNPM_VERSION=10.3.0
 #RUN install-tool pnpm
 
 ### provide permissions
@@ -91,41 +71,15 @@ RUN install-tool java
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=6.9.4
 RUN install-tool gradle
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 5          │ CVE-2025-4949, CVE-2021-26291, CVE-2021-26291, CVE-2022-1471      │
-# │            │            │ CVE-2020-7692                                                     │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 18         │ CVE-2021-46877, CVE-2020-36518, CVE-2022-42003, CVE-2022-42004    │
-# │            │            │ CVE-2022-46751, CVE-2022-37866, CVE-2022-25647, CVE-2023-2976     │
-# │            │            │ CVE-2021-36090, CVE-2024-21634, CVE-2024-47554, CVE-2025-52999    │
-# │            │            │ CVE-2022-25857, CVE-2021-35516, CVE-2021-35515, CVE-2021-35517    │
-# │            │            │ CVE-2021-22573, CVE-2023-4759                                     │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.6
-RUN install-tool gradle
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2025-4949                                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
-
-# renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.1.0
 RUN install-tool gradle
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=8.14.3
 RUN install-tool gradle
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2025-4949                                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=docker depName=golang versioning=docker
 #ARG GOLANG_VERSION=1.24.7
@@ -162,29 +116,14 @@ RUN install-tool maven
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.6.15
 RUN install-tool python
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2024-6345, CVE-2024-53899, CVE-2025-47273      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=2.7.18
 RUN install-tool python
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2024-53899, CVE-2024-6345, CVE-2025-47273      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.11.13
 RUN install-tool python
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.12.9
@@ -193,29 +132,14 @@ RUN install-tool python
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.10.18
 RUN install-tool python
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.7.17
 RUN install-tool python
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.20
 RUN install-tool python
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.13.7
@@ -224,20 +148,10 @@ RUN install-tool python
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.9.21
 RUN install-tool python
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
-ARG CHECKOV_VERSION=3.2.471
-RUN install-tool checkov
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2025-24359, GHSA-vp47-9734-prjw                │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
+#ARG CHECKOV_VERSION=3.2.369
+#RUN install-tool checkov
 
 #ARG PHP_VERSION=8.4.8
 #RUN install-tool php
@@ -264,32 +178,12 @@ RUN install-tool checkov
 
 ARG DOTNET_VERSION=8.0.413
 RUN install-tool dotnet
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 5          │ CVE-2025-26646, CVE-2025-26646, CVE-2024-38095, CVE-2025-26646    │
-# │            │            │ CVE-2025-26646                                                    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 ARG DOTNET_VERSION=9.0.101
 RUN install-tool dotnet
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2025-26646, CVE-2024-38095, CVE-2025-26646     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 ARG DOTNET_VERSION=7.0.410
 RUN install-tool dotnet
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 2          │ CVE-2024-0057, CVE-2021-24112                                     │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 12         │ CVE-2024-30105, CVE-2024-38081, CVE-2024-30105, CVE-2025-26646    │
-# │            │            │ CVE-2024-30105, CVE-2025-26646, CVE-2024-30105, CVE-2024-38095    │
-# │            │            │ CVE-2024-30105, CVE-2024-38095, CVE-2024-38095, CVE-2025-26646    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # Set .NET SDK 7.0.405 as the default version
 RUN echo '{ "sdk": { "version": "7.0.410" } }' > ${USER_HOME}/global.json
@@ -329,9 +223,6 @@ RUN install-tool poetry
 #ARG BUNDLER_VERSION=2.4.18
 #RUN install-tool bundler
 
-#ARG CONAN_VERSION=2.20.1
-#RUN install-tool conan
-
 #RUN install-tool erlang 24.3.3.0
 
 #RUN install-tool elixir 1.13.4
@@ -354,7 +245,7 @@ RUN install-tool poetry
 # RUN pod setup
 # USER 0
 
-#ARG HELM_VERSION=3.19.0
+#ARG HELM_VERSION=3.11.2
 #RUN install-tool helm
 
 ## No renovate datasource exists yet
@@ -378,11 +269,6 @@ RUN apt-get update && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
 	rm -rf /tmp/*
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 1          │ CVE-2025-38666                                     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 
 ##### Install Conda
@@ -495,7 +381,7 @@ RUN apt-get update && \
 #
 #### Install Nuget CLI
 #RUN apt-get update && \
-#    apt-get install nuget
+#	apt-get install nuget
 
 ## Install Paket
 #ENV PAKET_HOME=${USER_HOME}/.dotnet/tools
