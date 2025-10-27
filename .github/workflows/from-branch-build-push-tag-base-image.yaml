@@ -29,7 +29,7 @@ permissions:
 
 jobs:
   Build_And_Push_Base_Image_From_Branch:
-    runs-on: [ mend-self-hosted, profile=developer-platform-xlarge ]
+    runs-on: [ mend-self-hosted, profile=developer-platform-xlarge-od ]
 
     steps:
       - name: Validate tag
