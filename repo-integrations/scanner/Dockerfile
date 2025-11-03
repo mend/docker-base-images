@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:13.14.2 AS containerbase
+FROM ghcr.io/containerbase/base:13.23.10@sha256:03cd965862ad066be8906e4b382aedf8758bcff1883b6be3ff1288f8058a200f AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
@@ -50,8 +50,8 @@ ARG YARN_VERSION=1.22.22
 RUN install-tool yarn
 
 # renovate: datasource=npm depName=bower
-ARG BOWER_VERSION=1.8.14
-RUN install-tool bower
+#ARG BOWER_VERSION=1.8.14
+#RUN install-tool bower
 # ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
@@ -67,7 +67,6 @@ RUN install-tool bower
 # │            │            │ CVE-2022-24999, CVE-2017-1000048, CVE-2022-21213, CVE-2020-7792    │
 # │            │            │ CVE-2021-43138, CVE-2022-29167, CVE-2022-21213, CVE-2020-7792      │
 # └────────────┴────────────┴────────────────────────────────────────────────────────────────────┘
-
 #ARG PNPM_VERSION=10.17.0
 #RUN install-tool pnpm
 
@@ -231,8 +230,8 @@ RUN install-tool python
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
-ARG CHECKOV_VERSION=3.2.471
-RUN install-tool checkov
+#ARG CHECKOV_VERSION=3.2.471
+#RUN install-tool checkov
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
