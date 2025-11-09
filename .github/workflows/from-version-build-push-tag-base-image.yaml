@@ -16,12 +16,16 @@ on:
         description: "SkipGit: (default false) If True, no changes will be made to repo. However, the new images will still be pushed to Docker Hub!"
         default: false
         type: boolean
+      CopyVersionScript:
+        description: "CopyVersionScript: (default true) If True generate_versions.sh will be copied from the release and added to the docker image"
+        default: true
+        type: boolean
 permissions:
   contents: write
 
 jobs:
   Build_And_Push_Base_Image_From_Version:
-    runs-on: [ mend-self-hosted, profile=developer-platform-xlarge ]
+    runs-on: [ mend-self-hosted, profile=developer-platform-xlarge-od ]
 
     steps:
       - name: Check out code
@@ -42,11 +46,11 @@ jobs:
 
       - name: Copy Agent Files
         run: |
-          ./bin/copy.sh ${{ github.event.inputs.Tag }}
+          ./bin/copy.sh ${{ github.event.inputs.Tag }} ${{ github.event.inputs.CopyVersionScript }}
 
       - name: Build Docker Images
         run: |
-          ./bin/build.sh ${{ github.event.inputs.Tag }}
+          ./bin/build.sh ${{ github.event.inputs.Tag }} ${{ github.event.inputs.CopyVersionScript }}
       
       - name: Publish to Docker Hub
         run: |

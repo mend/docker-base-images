@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+
 append_scanner_script_support() {
     local target_file=$1
     
@@ -8,7 +9,7 @@ append_scanner_script_support() {
 
 
 # Temporarily copying the current Dockerfile and the version scanner script to generate the installed-versions.json file.
-COPY generate_versions.sh /usr/local/bin/generate_versions.sh
+COPY generate_versions_json.sh /usr/local/bin/generate_versions_json.sh
 ARG THIS_DOCKERFILE_NAME=$target_file
 COPY \${THIS_DOCKERFILE_NAME} /tmp/target-dockerfile
 RUN chmod +x /usr/local/bin/generate_versions_json.sh \\
@@ -48,8 +49,9 @@ if [ ! -f $scaScannerDockerfile ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfile > repo-integrations/scanner/Dockerfile
-append_scanner_script_support "repo-integrations/scanner/Dockerfile"
-
+if [ "$2" = true ]; then
+    append_scanner_script_support "repo-integrations/scanner/Dockerfile"
+fi
 
 scaScannerDockerfilefull=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/Dockerfilefull
 
@@ -59,8 +61,9 @@ if [ ! -f $scaScannerDockerfilefull ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations/scanner/Dockerfile.full
-append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
-
+if [ "$2" = true ]; then
+    append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
+fi
 
 remediateDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-remediate/docker/Dockerfile
 
