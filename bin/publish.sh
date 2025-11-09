@@ -17,3 +17,4 @@ docker push mend/base-repo-controller:${RELEASE}
 docker push mend/base-repo-remediate:${RELEASE}
 docker push mend/base-repo-scanner:${RELEASE}
 docker push mend/base-repo-scanner:${RELEASE}-full
+docker push mend/base-repo-scanner-sast:${RELEASE}

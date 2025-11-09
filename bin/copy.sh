@@ -73,3 +73,15 @@ if [ ! -f $remediateDockerfile ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $remediateDockerfile > repo-integrations/remediate/Dockerfile
+
+sastScannerDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/DockerfileSast
+
+if [ ! -f $sastScannerDockerfile ]; then
+  echo "Error: $sastScannerDockerfile not found."
+  exit 1
+fi
+
+sed '/# END OF BASE IMAGE/ q' $sastScannerDockerfile > repo-integrations/scanner/DockerfileSast
+if [ "$2" = true ]; then
+    append_scanner_script_support "repo-integrations/scanner/DockerfileSast"
+fi
