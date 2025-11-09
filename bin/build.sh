@@ -23,7 +23,7 @@ docker build --no-cache -t mend/base-repo-controller:${RELEASE} -f repo-integrat
 docker build --no-cache -t mend/base-repo-remediate:${RELEASE} -f repo-integrations/remediate/Dockerfile .
 docker build --no-cache -t mend/base-repo-scanner:${RELEASE} -f repo-integrations/scanner/Dockerfile .
 docker build --no-cache -t mend/base-repo-scanner:${RELEASE}-full -f repo-integrations/scanner/Dockerfile.full .
-docker build --no-cache -t mend/base-repo-scanner:${RELEASE} -f repo-integrations/scanner/DockerfileSast .
+docker build --no-cache -t mend/base-repo-scanner-sast:${RELEASE} -f repo-integrations/scanner/DockerfileSast .
 
 
 #Validate built images successfully created
