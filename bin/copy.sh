@@ -82,6 +82,3 @@ if [ ! -f $sastScannerDockerfile ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $sastScannerDockerfile > repo-integrations/scanner/DockerfileSast
-if [ "$2" = true ]; then
-    append_scanner_script_support "repo-integrations/scanner/DockerfileSast"
-fi
