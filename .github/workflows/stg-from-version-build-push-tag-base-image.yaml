@@ -61,7 +61,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}    # todo change?
           ECR_REPOSITORY: stg-ghe-base-images # todo create?
         run: |
-          ./bin/publish.sh ${{ github.event.inputs.Tag }}
+          ./bin/stg-publish.sh ${{ github.event.inputs.Tag }}
 
       - name: Branch, Commit, Push and Tag Changes
         env:
