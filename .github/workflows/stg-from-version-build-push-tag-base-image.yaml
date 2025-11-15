@@ -1,5 +1,8 @@
 name: Build and Push From Repo Integration Version
 
+env:
+  ECR_REPOSITORY: stg-ghe-base-images
+
 on:
   workflow_dispatch:
     inputs:
@@ -53,15 +56,16 @@ jobs:
           ./bin/copy.sh ${{ github.event.inputs.Tag }} ${{ github.event.inputs.CopyVersionScript }}
 
       - name: Build Docker Images
-        run: |
-          ./bin/build.sh ${{ github.event.inputs.Tag }} ${{ github.event.inputs.CopyVersionScript }}
-
-      - name: Publish to ECR Hub
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}    # todo change?
-          ECR_REPOSITORY: stg-ghe-base-images # todo create?
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          ./bin/stg-publish.sh ${{ github.event.inputs.Tag }}
+          ./bin/build.sh ${{ github.event.inputs.Tag }} $ECR_REGISTRY/$ECR_REPOSITORY ${{ github.event.inputs.CopyVersionScript }}
+
+      - name: Publish to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          ./bin/publish.sh ${{ github.event.inputs.Tag }} $ECR_REGISTRY/$ECR_REPOSITORY
 
       - name: Branch, Commit, Push and Tag Changes
         env:

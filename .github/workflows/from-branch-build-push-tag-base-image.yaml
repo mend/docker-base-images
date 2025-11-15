@@ -59,7 +59,7 @@ jobs:
 
       - name: Publish to Docker Hub
         run: |
-          ./bin/publish.sh ${{ github.event.inputs.Tag }}
+          ./bin/prod-publish.sh ${{ github.event.inputs.Tag }}
 
 
       - name: Branch, Commit, Push and Tag Changes
