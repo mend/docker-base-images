@@ -1,4 +1,4 @@
-name: Build and Push From Repo Integration Version
+name: Staging Build and Push From Repo Integration Version
 
 env:
   ECR_REPOSITORY: stg-ghe-base-images
