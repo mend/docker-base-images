@@ -114,7 +114,12 @@ jobs:
           git push
         shell: bash
 
+      - name: Notify Slack - Images Ready
+        if: always()
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "ECR" "$ECR_REGISTRY" "$ECR_REPOSITORY" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#base-images-stg"
 
-          
 
-          

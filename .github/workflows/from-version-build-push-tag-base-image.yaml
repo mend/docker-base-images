@@ -68,7 +68,10 @@ jobs:
         run: |
           ./bin/merge-to-main.sh ${{ github.event.inputs.Version }}
 
+      - name: Notify Slack - Images Ready
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          ./bin/notify-slack.sh "Production" "${{ github.event.inputs.Version }}" "DockerHub" "mend" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#base-images-prod"
 
-          
-
-          
