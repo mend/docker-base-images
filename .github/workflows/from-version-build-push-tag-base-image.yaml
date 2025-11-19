@@ -73,5 +73,5 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          ./bin/notify-slack.sh "Production" "${{ github.event.inputs.Version }}" "DockerHub" "mend" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#base-images-prod"
+          ./bin/notify-slack.sh "Production" "${{ github.event.inputs.Version }}" "DockerHub" "mend" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#repo_integration_prod_releases"
 

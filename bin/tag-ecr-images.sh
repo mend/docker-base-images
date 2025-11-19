@@ -29,24 +29,19 @@ echo ""
 
 # Tag controller image
 echo "Tagging controller image..."
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/controller:$VERSION mend/controller:$VERSION
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/controller:$VERSION mend/controller:latest
+docker tag $ECR_REGISTRY/$ECR_REPOSITORY/base-repo-controller:$VERSION mend/controller:$VERSION
 
 # Tag scanner images
 echo "Tagging scanner images..."
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/scanner:$VERSION mend/scanner:$VERSION
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/scanner:$VERSION mend/scanner:latest
+docker tag $ECR_REGISTRY/$ECR_REPOSITORY/base-repo-scanner:$VERSION mend/scanner:$VERSION
 
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/scanner-full:$VERSION mend/scanner-full:$VERSION
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/scanner-full:$VERSION mend/scanner-full:latest
+docker tag $ECR_REGISTRY/$ECR_REPOSITORY/base-repo-scanner-full:$VERSION mend/scanner-full:$VERSION
 
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/scanner-sast:$VERSION mend/scanner-sast:$VERSION
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/scanner-sast:$VERSION mend/scanner-sast:latest
+docker tag $ECR_REGISTRY/$ECR_REPOSITORY/base-repo-scanner-sast:$VERSION mend/scanner-sast:$VERSION
 
 # Tag remediate image
 echo "Tagging remediate image..."
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/remediate:$VERSION mend/remediate:$VERSION
-docker tag $ECR_REGISTRY/$ECR_REPOSITORY/remediate:$VERSION mend/remediate:latest
+docker tag $ECR_REGISTRY/$ECR_REPOSITORY/base-repo-remediate:$VERSION mend/remediate:$VERSION
 
 echo "✅ All images tagged successfully for Mend Hub!"
 echo ""

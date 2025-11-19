@@ -13,7 +13,7 @@ JOB_STATUS=$6
 WORKFLOW_URL=$7
 SLACK_CHANNEL=$8
 
-if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_TYPE" ] || [ -z "$REGISTRY_URL" ] || [ -z "$REPOSITORY" ] || [ -z "$JOB_STATUS" ] || [ -z "$WORKFLOW_URL" ] || [ -z "$SLACK_CHANNEL" ]; then
+if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_TYPE" ] || [ -z "$REGISTRY_URL" ] || [ -z "$JOB_STATUS" ] || [ -z "$WORKFLOW_URL" ] || [ -z "$SLACK_CHANNEL" ]; then
     echo "Usage: $0 <ENVIRONMENT> <VERSION> <REGISTRY_TYPE> <REGISTRY_URL> <REPOSITORY> <JOB_STATUS> <WORKFLOW_URL> <SLACK_CHANNEL>"
     echo ""
     echo "Parameters:"
@@ -21,7 +21,7 @@ if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_TYPE" ] || [ -z
     echo "  VERSION        - Version tag (e.g., 25.10.1)"
     echo "  REGISTRY_TYPE  - Type of registry (ECR or DockerHub)"
     echo "  REGISTRY_URL   - Registry URL or 'mend' for Docker Hub"
-    echo "  REPOSITORY     - Repository name"
+    echo "  REPOSITORY     - Repository name (can be empty for DockerHub)"
     echo "  JOB_STATUS     - Job status (success, failure, etc.)"
     echo "  WORKFLOW_URL   - GitHub workflow run URL"
     echo "  SLACK_CHANNEL  - Slack channel (e.g., #base-images-stg, #base-images-prod)"
@@ -29,6 +29,12 @@ if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_TYPE" ] || [ -z
     echo "Examples:"
     echo "  STG: $0 STG 25.10.1 ECR 123456789012.dkr.ecr.us-east-1.amazonaws.com stg-ghe-base-images success https://github.com/... #base-images-stg"
     echo "  Prod: $0 Production 25.10.1 DockerHub mend '' success https://github.com/... #base-images-prod"
+    exit 1
+fi
+
+# Special handling for DockerHub - repository can be empty
+if [ "$REGISTRY_TYPE" = "ECR" ] && [ -z "$REPOSITORY" ]; then
+    echo "Error: Repository parameter is required for ECR registry type"
     exit 1
 fi
 

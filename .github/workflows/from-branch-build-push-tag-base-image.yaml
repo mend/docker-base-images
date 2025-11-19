@@ -55,7 +55,7 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          ./bin/build.sh ${{ github.event.inputs.Tag }} ${{ github.event.inputs.CopyVersionScript }}
+          ./bin/build.sh ${{ github.event.inputs.Tag }} "mend" ${{ github.event.inputs.CopyVersionScript }}
 
       - name: Publish to Docker Hub
         run: |

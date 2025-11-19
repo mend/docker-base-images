@@ -26,29 +26,27 @@ echo ""
 # Push controller image
 echo "📦 Publishing controller image..."
 docker push mend/controller:$VERSION
-docker push mend/controller:latest
 
 # Push scanner images
 echo "📦 Publishing scanner images..."
 docker push mend/scanner:$VERSION
-docker push mend/scanner:latest
 
 docker push mend/scanner-full:$VERSION
-docker push mend/scanner-full:latest
 
 docker push mend/scanner-sast:$VERSION
-docker push mend/scanner-sast:latest
 
 # Push remediate image
 echo "📦 Publishing remediate image..."
 docker push mend/remediate:$VERSION
-docker push mend/remediate:latest
 
 echo ""
 echo "✅ Successfully published all images to Mend Hub"
 echo "📦 Published images:"
-echo "  - mend/base-image:$VERSION & latest"
-echo "  - mend/controller:$VERSION & latest"
+echo "  - mend/controller:$VERSION"
+echo "  - mend/scanner:$VERSION"
+echo "  - mend/scanner-full:$VERSION"
+echo "  - mend/scanner-sast:$VERSION"
+echo "  - mend/remediate:$VERSION"
 echo "  - mend/scanner:$VERSION & latest"
 echo "  - mend/scanner-full:$VERSION & latest"
 echo "  - mend/scanner-sast:$VERSION & latest"
