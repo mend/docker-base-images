@@ -106,28 +106,16 @@ echo "$SLACK_MESSAGE"
 
 # Send to Slack using webhook with enhanced formatting
 if [ -n "$SLACK_WEBHOOK_URL" ]; then
-    curl -X POST -H 'Content-type: application/json' \
-        --data "{
-            \"channel\":\"$SLACK_CHANNEL\",
-            \"text\":\"$SLACK_MESSAGE\",
-            \"attachments\":[{
-                \"color\":\"$COLOR\",
-                \"fields\":[{
-                    \"title\":\"Environment\",
-                    \"value\":\"$ENVIRONMENT\",
-                    \"short\":true
-                },{
-                    \"title\":\"Version\",
-                    \"value\":\"$VERSION\",
-                    \"short\":true
-                },{
-                    \"title\":\"Status\",
-                    \"value\":\"$STATUS_MESSAGE\",
-                    \"short\":true
-                }]
-            }]
-        }" \
-        "$SLACK_WEBHOOK_URL"
+    local payload=$(jq -n \
+        --arg channel "$SLACK_CHANNEL" \
+        --arg text "$SLACK_MESSAGE" \
+        --arg color "$COLOR" \
+        --arg env "$ENVIRONMENT" \
+        --arg version "$VERSION" \
+        --arg status "$STATUS_MESSAGE" \
+        '{channel: $channel, text: $text, attachments: [{color: $color, fields: [{title: "Environment", value: $env, short: true}, {title: "Version", value: $version, short: true}, {title: "Status", value: $status, short: true}]}]}')
+
+    curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
 
     if [ $? -eq 0 ]; then
         echo "✅ Slack notification sent successfully to $SLACK_CHANNEL"
