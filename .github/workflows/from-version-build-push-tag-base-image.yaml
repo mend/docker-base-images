@@ -49,13 +49,13 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          ./bin/download-ecr-images.sh ${{ github.event.inputs.Version }} $ECR_REGISTRY $ECR_REPOSITORY
+          ./bin/download-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY" "$ECR_REPOSITORY"
 
       - name: Tag Images for Mend Hub
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          ./bin/tag-ecr-images.sh ${{ github.event.inputs.Version }} $ECR_REGISTRY $ECR_REPOSITORY
+          ./bin/tag-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY" "$ECR_REPOSITORY"
 
       - name: Publish All Images to Mend Hub
         run: |
