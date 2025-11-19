@@ -49,24 +49,44 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
+          set -e
           ./bin/download-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY" "$ECR_REPOSITORY"
+          if [ $? -ne 0 ]; then
+            echo "❌ Download ECR images script failed"
+            exit 1
+          fi
 
       - name: Tag Images for Mend Hub
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
+          set -e
           ./bin/tag-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY" "$ECR_REPOSITORY"
+          if [ $? -ne 0 ]; then
+            echo "❌ Tag ECR images script failed"
+            exit 1
+          fi
 
       - name: Publish All Images to Mend Hub
         run: |
-          ./bin/publish-to-mend-hub.sh ${{ github.event.inputs.Version }}
+          set -e
+          ./bin/publish-to-mend-hub.sh "${{ github.event.inputs.Version }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Publish to Mend Hub script failed"
+            exit 1
+          fi
 
       - name: Merge to Main Branch
         if: ${{ github.event.inputs.IsLatest == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          ./bin/merge-to-main.sh ${{ github.event.inputs.Version }}
+          set -e
+          ./bin/merge-to-main.sh "${{ github.event.inputs.Version }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Merge to main script failed"
+            exit 1
+          fi
 
       - name: Notify Slack - Images Ready
         if: always()

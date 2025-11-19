@@ -49,23 +49,43 @@ jobs:
 
       - name: Download Agent
         run: |
+          set -e
           ./bin/download.sh "${{ github.event.inputs.Tag }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Download script failed"
+            exit 1
+          fi
 
       - name: Copy Agent Files
         run: |
+          set -e
           ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Copy script failed"
+            exit 1
+          fi
 
       - name: Build Docker Images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
+          set -e
           ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY/$ECR_REPOSITORY" "${{ github.event.inputs.CopyVersionScript }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Build script failed"
+            exit 1
+          fi
 
       - name: Publish to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
+          set -e
           ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY/$ECR_REPOSITORY"
+          if [ $? -ne 0 ]; then
+            echo "❌ Publish script failed"
+            exit 1
+          fi
 
       - name: Branch, Commit, Push and Tag Changes
         env:
