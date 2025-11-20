@@ -106,7 +106,7 @@ echo "$SLACK_MESSAGE"
 
 # Send to Slack using webhook with enhanced formatting
 if [ -n "$SLACK_WEBHOOK_URL" ]; then
-    local payload=$(jq -n \
+    payload=$(jq -n \
         --arg channel "$SLACK_CHANNEL" \
         --arg text "$SLACK_MESSAGE" \
         --arg color "$COLOR" \
