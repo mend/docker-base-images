@@ -20,7 +20,7 @@ cd "$parent_path"
 if [ ! -f ../tmp/agent-4-github-enterprise-$RELEASE.zip ]; then
   echo "Downloading agent-4-github-enterprise-$RELEASE.zip"
   mkdir -p ../tmp
-  curl -o ../tmp/agent-4-github-enterprise-$RELEASE.zip https://integrations.mend.io/release/Agent-for-GitHub-Enterprise/agent-4-github-enterprise-$RELEASE.zip
+  curl -o ../tmp/agent-4-github-enterprise-$RELEASE.zip https://integrations.mend.io/release/Agent-for-GitHub-Enterprise/agent-4-github-enterprise-$RELEASE.zip ### TODO modify path to use AWS S3 bucket pre-release
 fi
 
 if [ ! -f ../tmp/agent-4-github-enterprise-$RELEASE.zip ]; then
