@@ -22,23 +22,23 @@ echo ""
 
 # Download controller image
 echo "📦 Downloading controller image..."
-docker pull $ECR_REGISTRY/base-repo-controller:$VERSION
+docker pull "$ECR_REGISTRY/base-repo-controller:$VERSION"
 echo "✅ Controller image downloaded"
 
 # Download scanner images
 echo "📦 Downloading scanner images..."
-docker pull $ECR_REGISTRY/base-repo-scanner:$VERSION
+docker pull "$ECR_REGISTRY/base-repo-scanner:$VERSION"
 echo "✅ Scanner image downloaded"
 
-docker pull $ECR_REGISTRY/base-repo-scanner-full:$VERSION
+docker pull "$ECR_REGISTRY/base-repo-scanner-full:$VERSION"
 echo "✅ Scanner-full image downloaded"
 
-docker pull $ECR_REGISTRY/base-repo-scanner-sast:$VERSION
+docker pull "$ECR_REGISTRY/base-repo-scanner-sast:$VERSION"
 echo "✅ Scanner-sast image downloaded"
 
 # Download remediate image
 echo "📦 Downloading remediate image..."
-docker pull $ECR_REGISTRY/base-repo-remediate:$VERSION
+docker pull "$ECR_REGISTRY/base-repo-remediate:$VERSION"
 echo "✅ Remediate image downloaded"
 
 echo ""
