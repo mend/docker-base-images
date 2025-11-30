@@ -1,7 +1,5 @@
 name: Staging Build and Push From Repo Integration Version
 
-env:
-  ECR_REPOSITORY: stg-ghe-base-images
 
 on:
   workflow_dispatch:
@@ -40,12 +38,15 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: "role" ## TODO change secret? role?
+          role-to-assume: "arn:aws:iam::472613559203:role/github-actions-repo-integration-docker-base-images-role"
           aws-region: us-east-1
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registries: "054331651301"
+          region: "us-east-1"
 
       - name: Download Agent
         run: |
@@ -70,7 +71,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           set -e
-          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY/$ECR_REPOSITORY" "${{ github.event.inputs.CopyVersionScript }}"
+          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
           if [ $? -ne 0 ]; then
             echo "❌ Build script failed"
             exit 1
@@ -81,7 +82,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           set -e
-          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY/$ECR_REPOSITORY"
+          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY"
           if [ $? -ne 0 ]; then
             echo "❌ Publish script failed"
             exit 1
@@ -138,8 +139,8 @@ jobs:
         if: always()
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.STG_SLACK_WEBHOOK_URL }}
         run: |
-          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "ECR" "$ECR_REGISTRY" "$ECR_REPOSITORY" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#repo-staging-release"
+          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "ECR" "$ECR_REGISTRY" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#repo-staging-release"
 
 

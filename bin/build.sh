@@ -1,26 +1,28 @@
 #!/bin/bash
 set -e
 
-if [ -z "$1" ]; then
+RELEASE=$1
+REGISTRY_PREFIX=$2
+COPY_VERSIONS_JSON=$3
+
+if [ -z "$RELEASE" ]; then
   echo "Error: No release argument provided."
   echo "Usage: $0 <release> <registry_prefix>"
   exit 1
 fi
 
-if [ "$1" = "1.1.1" ]; then
+if [ "$RELEASE" = "1.1.1" ]; then
   echo "Error: Default version tag provided. Please provide the correct tag"
   exit 1
 fi
 
-RELEASE=$1
-REGISTRY_PREFIX=$2
 
 if [ -z "$REGISTRY_PREFIX" ]; then
   echo "Error: Registry prefix is required for ECR builds"
   exit 1
 fi
 
-if [ "$3" = true ] ; then
+if [ "$COPY_VERSIONS_JSON" = true ] ; then
     cp tmp/agent-4-github-enterprise-${RELEASE}/wss-scanner/docker/docker-image-scanner/generate_versions_json.sh .
 fi
 

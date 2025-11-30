@@ -1,8 +1,5 @@
 name: Production Release - Build and Push From Prepared Tag/Branch
 
-env:
-  ECR_REPOSITORY: stg-ghe-base-images
-
 on:
   workflow_dispatch:
     inputs:
@@ -32,12 +29,15 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: "role" ## TODO change secret? role?
+          role-to-assume: "arn:aws:iam::472613559203:role/github-actions-repo-integration-docker-base-images-role"
           aws-region: us-east-1
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registries: "054331651301"
+          region: "us-east-1"
 
       - name: Log in to Docker Hub (Mend Hub)
         uses: docker/login-action@v2
@@ -50,7 +50,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           set -e
-          ./bin/download-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY" "$ECR_REPOSITORY"
+          ./bin/download-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY"
           if [ $? -ne 0 ]; then
             echo "❌ Download ECR images script failed"
             exit 1
@@ -61,7 +61,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           set -e
-          ./bin/tag-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY" "$ECR_REPOSITORY"
+          ./bin/tag-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY"
           if [ $? -ne 0 ]; then
             echo "❌ Tag ECR images script failed"
             exit 1
@@ -91,7 +91,7 @@ jobs:
       - name: Notify Slack - Images Ready
         if: always()
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.PRD_SLACK_WEBHOOK_URL }}
         run: |
           ./bin/notify-slack.sh "Production" "${{ github.event.inputs.Version }}" "DockerHub" "mend" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#repo_integration_prod_releases"
 
