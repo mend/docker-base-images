@@ -29,6 +29,46 @@ fi
 echo "Building images with registry prefix: ${REGISTRY_PREFIX}"
 
 docker pull ubuntu:24.04
+
+echo ""
+echo "🔍 ==================================="
+echo "🔍 DOCKERFILE CONTENT VALIDATION"
+echo "🔍 ==================================="
+
+echo ""
+echo "📄 Controller Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/controller/Dockerfile
+echo "-----------------------------------"
+
+echo ""
+echo "📄 Remediate Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/remediate/Dockerfile
+echo "-----------------------------------"
+
+echo ""
+echo "📄 Scanner Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/scanner/Dockerfile
+echo "-----------------------------------"
+
+echo ""
+echo "📄 Scanner Full Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/scanner/Dockerfile.full
+echo "-----------------------------------"
+
+echo ""
+echo "📄 Scanner SAST Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/scanner/DockerfileSast
+echo "-----------------------------------"
+
+echo ""
+echo "🔨 Starting Docker builds..."
+echo ""
+
 docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} -f repo-integrations/controller/Dockerfile .
 docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE} -f repo-integrations/remediate/Dockerfile .
 docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE} -f repo-integrations/scanner/Dockerfile .
@@ -38,6 +78,10 @@ docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} 
 #Validate built images successfully created
 if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} 2> /dev/null)" ]; then
   echo "${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} was not built successfully"
+  exit 1
+fi
+if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} 2> /dev/null)" ]; then
+  echo "${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} was not built successfully"
   exit 1
 fi
 if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE} 2> /dev/null)" ]; then
@@ -50,10 +94,6 @@ if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE} 2> /
 fi
 if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full 2> /dev/null)" ]; then
   echo "${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full was not built successfully"
-  exit 1
-fi
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} 2> /dev/null)" ]; then
-  echo "${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} was not built successfully"
   exit 1
 fi
 

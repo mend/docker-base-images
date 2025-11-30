@@ -28,3 +28,5 @@ RUN install-tool git
 
 ARG JAVA_VERSION=17.0.8+7
 RUN install-tool java
+
+# END OF BASE IMAGE
