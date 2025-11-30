@@ -29,6 +29,46 @@ fi
 echo "Building images with registry prefix: ${REGISTRY_PREFIX}"
 
 docker pull ubuntu:24.04
+
+echo ""
+echo "🔍 ==================================="
+echo "🔍 DOCKERFILE CONTENT VALIDATION"
+echo "🔍 ==================================="
+
+echo ""
+echo "📄 Controller Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/controller/Dockerfile
+echo "-----------------------------------"
+
+echo ""
+echo "📄 Remediate Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/remediate/Dockerfile
+echo "-----------------------------------"
+
+echo ""
+echo "📄 Scanner Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/scanner/Dockerfile
+echo "-----------------------------------"
+
+echo ""
+echo "📄 Scanner Full Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/scanner/Dockerfile.full
+echo "-----------------------------------"
+
+echo ""
+echo "📄 Scanner SAST Dockerfile content:"
+echo "-----------------------------------"
+cat repo-integrations/scanner/DockerfileSast
+echo "-----------------------------------"
+
+echo ""
+echo "🔨 Starting Docker builds..."
+echo ""
+
 docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} -f repo-integrations/controller/Dockerfile .
 docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE} -f repo-integrations/remediate/Dockerfile .
 docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE} -f repo-integrations/scanner/Dockerfile .
