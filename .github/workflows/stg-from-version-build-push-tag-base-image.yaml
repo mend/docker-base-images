@@ -1,0 +1,146 @@
+name: Staging Build and Push From Repo Integration Version
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      Tag:
+        description: "Tag: Repo Integration Version to pull, build, and push to ECR and S3."
+        default: "1.1.1"
+        type: string
+        required: true
+      IsLatest:
+        description: "IsLatest: (default true) If True, release branch will be merged back into develop and release will be set as latest."
+        default: true
+        type: boolean
+      SkipGit:
+        description: "SkipGit: (default false) If True, no changes will be made to repo. However, the new images will still be pushed to ECR!"
+        default: false
+        type: boolean
+      CopyVersionScript:
+        description: "CopyVersionScript: (default true) If True generate_versions.sh will be copied from the release and added to the docker image"
+        default: true
+        type: boolean
+permissions:
+  contents: write
+
+jobs:
+  Build_And_Push_Base_Image_From_Version:
+    runs-on: [ mend-self-hosted, profile=developer-platform-xlarge-od ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          ref: "develop"
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: "arn:aws:iam::472613559203:role/github-actions-repo-integration-docker-base-images-role"
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registries: "054331651301"
+          region: "us-east-1"
+
+      - name: Download Agent
+        run: |
+          set -e
+          ./bin/download.sh "${{ github.event.inputs.Tag }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Download script failed"
+            exit 1
+          fi
+
+      - name: Copy Agent Files
+        run: |
+          set -e
+          ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Copy script failed"
+            exit 1
+          fi
+
+      - name: Build Docker Images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          set -e
+          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Build script failed"
+            exit 1
+          fi
+
+      - name: Publish to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          set -e
+          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY"
+          if [ $? -ne 0 ]; then
+            echo "❌ Publish script failed"
+            exit 1
+          fi
+
+      - name: Branch, Commit, Push and Tag Changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # If SkipGet is true, don't modify repo
+          if [ "${{ github.event.inputs.SkipGit }}" = true ]; then
+            echo "SkipGit is true, skipping git changes"
+            exit 0
+          fi
+          
+          # Note: using Github
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Create Release branch
+          git checkout -b release/${{ github.event.inputs.Tag }}
+          git push --set-upstream origin release/${{ github.event.inputs.Tag }}
+          
+          # If files changed, add, commit and push
+          if [[ `git status --porcelain` ]]; then
+            echo "OK: Changes detected, committing and pushing."
+            git add .
+            git commit -m "Saving new files for ${{ github.event.inputs.Tag }}"
+            git push
+          else
+            echo "WARNING: No changes were detected. This is fine though, skipping commit"
+          fi
+          
+          # Create tag
+          git tag -a ${{ github.event.inputs.Tag }} -m "Automated Tag for Release ${{ github.event.inputs.Tag }}"
+          git push origin --tags
+          
+          # Create release
+          if [ "${{ github.event.inputs.IsLatest }}" = false ]; then
+            gh release create "${{ github.event.inputs.Tag }}" --latest=false --generate-notes --target release/${{ github.event.inputs.Tag }} --title "${{ github.event.inputs.Tag }}"
+            echo "IsLatest is false, not merging release branch back into develop"
+            exit 0
+          else
+            gh release create "${{ github.event.inputs.Tag }}" --latest --generate-notes --target release/${{ github.event.inputs.Tag }} --title "${{ github.event.inputs.Tag }}"
+          fi
+          
+          # Merge release branch back into develop
+          git checkout develop
+          git merge release/${{ github.event.inputs.Tag }} --commit --no-edit
+          git push
+        shell: bash
+
+      - name: Notify Slack - Images Ready
+        if: always()
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          SLACK_WEBHOOK_URL: ${{ secrets.STG_SLACK_WEBHOOK_URL }}
+        run: |
+          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "ECR" "$ECR_REGISTRY" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#repo-staging-release"
+
+

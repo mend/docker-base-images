@@ -1,0 +1,5 @@
+# Configuration file for remediate Dockerfile modifications
+# Format: ACTION:PATTERN:REPLACEMENT
+
+# No changes required for remediate (as per your requirement)
+# You can add modifications here if needed in the future
