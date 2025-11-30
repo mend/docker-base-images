@@ -80,6 +80,10 @@ if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} 2
   echo "${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} was not built successfully"
   exit 1
 fi
+if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} 2> /dev/null)" ]; then
+  echo "${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} was not built successfully"
+  exit 1
+fi
 if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE} 2> /dev/null)" ]; then
   echo "${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE} was not built successfully"
   exit 1
@@ -90,10 +94,6 @@ if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE} 2> /
 fi
 if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full 2> /dev/null)" ]; then
   echo "${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full was not built successfully"
-  exit 1
-fi
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} 2> /dev/null)" ]; then
-  echo "${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} was not built successfully"
   exit 1
 fi
 

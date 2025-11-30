@@ -59,6 +59,15 @@ fi
 sed '/# END OF BASE IMAGE/ q' $appdockerfile > repo-integrations/controller/Dockerfile
 #apply_dockerfile_modifications "repo-integrations/controller/Dockerfile" "controller"
 
+sastScannerDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/DockerfileSast
+
+if [ ! -f $sastScannerDockerfile ]; then
+  echo "Error: $sastScannerDockerfile not found."
+  exit 1
+fi
+
+sed '/# END OF BASE IMAGE/ q' $sastScannerDockerfile > repo-integrations/scanner/DockerfileSast
+
 scaScannerDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/Dockerfile
 
 if [ ! -f $scaScannerDockerfile ]; then
@@ -85,16 +94,6 @@ if [ "$2" = true ]; then
     append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
 fi
 
-sastScannerDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/DockerfileSast
-
-if [ ! -f $sastScannerDockerfile ]; then
-  echo "Error: $sastScannerDockerfile not found."
-  exit 1
-fi
-
-sed '/# END OF BASE IMAGE/ q' $sastScannerDockerfile > repo-integrations/scanner/DockerfileSast
-#apply_dockerfile_modificatio
-
 remediateDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-remediate/docker/Dockerfile
 
 if [ ! -f $remediateDockerfile ]; then
@@ -104,7 +103,6 @@ fi
 
 sed '/# END OF BASE IMAGE/ q' $remediateDockerfile > repo-integrations/remediate/Dockerfile
 #apply_dockerfile_modifications "repo-integrations/remediate/Dockerfile" "remediate"
-ns "repo-integrations/scanner/DockerfileSast" "scanner"
 
 echo ""
 echo "🔍 Validating all Docker file modifications..."
