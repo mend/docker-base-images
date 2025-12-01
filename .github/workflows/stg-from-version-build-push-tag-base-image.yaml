@@ -65,16 +65,20 @@ jobs:
         shell: bash
 
       - name: Build Docker Images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "🔨 Starting Docker build process..."
-          ./bin/build.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
+          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
           echo "✅ Docker build completed successfully"
         shell: bash
 
       - name: Publish to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "📤 Starting ECR publish process..."
-          ./bin/publish.sh "${{ github.event.inputs.Tag }}"
+          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY"
           echo "✅ ECR publish completed successfully"
         shell: bash
 
