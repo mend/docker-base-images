@@ -66,7 +66,23 @@ if [ ! -f $sastScannerDockerfile ]; then
   exit 1
 fi
 
+echo "🔍 Checking SAST scanner Dockerfile for base image marker..."
+if ! grep -q "# END OF BASE IMAGE" "$sastScannerDockerfile"; then
+  echo "❌ ERROR: '# END OF BASE IMAGE' marker not found in $sastScannerDockerfile"
+  echo "📄 First 40 lines of source file:"
+  head -40 "$sastScannerDockerfile"
+  exit 1
+fi
+
+echo "✅ Base image marker found, truncating SAST Dockerfile..."
 sed '/# END OF BASE IMAGE/ q' $sastScannerDockerfile > repo-integrations/scanner/DockerfileSast
+
+echo "🔍 Validating SAST Dockerfile truncation..."
+if ! grep -q "# END OF BASE IMAGE" repo-integrations/scanner/DockerfileSast; then
+  echo "❌ ERROR: Truncation failed for SAST Dockerfile"
+  exit 1
+fi
+echo "✅ SAST Dockerfile successfully truncated at base image marker"
 
 scaScannerDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/Dockerfile
 
@@ -89,6 +105,14 @@ if [ ! -f $scaScannerDockerfilefull ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations/scanner/Dockerfile.full
+
+echo "🔍 Validating SCA full Dockerfile truncation..."
+if ! grep -q "# END OF BASE IMAGE" repo-integrations/scanner/Dockerfile.full; then
+  echo "❌ ERROR: Truncation failed for SCA full Dockerfile"
+  exit 1
+fi
+echo "✅ SCA full Dockerfile successfully truncated at base image marker"
+
 apply_dockerfile_modifications "repo-integrations/scanner/Dockerfile.full" "scanner"
 if [ "$2" = true ]; then
     append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
@@ -102,9 +126,15 @@ if [ ! -f $remediateDockerfile ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $remediateDockerfile > repo-integrations/remediate/Dockerfile
+
+echo "🔍 Validating remediate Dockerfile truncation..."
+if ! grep -q "# END OF BASE IMAGE" repo-integrations/remediate/Dockerfile; then
+  echo "❌ ERROR: Truncation failed for remediate Dockerfile"
+  exit 1
+fi
+echo "✅ Remediate Dockerfile successfully truncated at base image marker"
 #apply_dockerfile_modifications "repo-integrations/remediate/Dockerfile" "remediate"
 
-echo ""
 echo "🔍 Validating all Docker file modifications..."
 # Validate that all modifications were applied correctly
 if ! validate_all_modifications; then
