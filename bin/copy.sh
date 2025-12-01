@@ -53,12 +53,23 @@ fi
 echo "release arg: $RELEASE"
 echo "COPY_VERSIONS_JSON arg: $COPY_VERSIONS_JSON"
 
+echo ""
+echo "🔍 Debugging downloaded Dockerfiles content..."
+
 appdockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-ghe-app/docker/Dockerfile
 
 if [ ! -f $appdockerfile ]; then
   echo "Error: $appdockerfile not found."
   exit 1
 fi
+
+echo "📄 Controller Dockerfile first 10 lines:"
+head -10 "$appdockerfile"
+echo "..."
+echo "📄 Controller Dockerfile last 10 lines:"
+tail -10 "$appdockerfile"
+echo "🔍 Base image marker check: $(grep -c '# END OF BASE IMAGE' "$appdockerfile" || echo "0") occurrences found"
+echo ""
 
 sed '/# END OF BASE IMAGE/ q' $appdockerfile > repo-integrations/controller/Dockerfile
 #apply_dockerfile_modifications "repo-integrations/controller/Dockerfile" "controller"
@@ -69,6 +80,14 @@ if [ ! -f $sastScannerDockerfile ]; then
   echo "Error: $sastScannerDockerfile not found."
   exit 1
 fi
+
+echo "📄 SAST Scanner Dockerfile first 15 lines:"
+head -15 "$sastScannerDockerfile"
+echo "..."
+echo "📄 SAST Scanner Dockerfile last 10 lines:"
+tail -10 "$sastScannerDockerfile"
+echo "🔍 Base image marker check: $(grep -c '# END OF BASE IMAGE' "$sastScannerDockerfile" || echo "0") occurrences found"
+echo ""
 
 echo "🔍 Checking SAST scanner Dockerfile for base image marker..."
 if ! grep -q "# END OF BASE IMAGE" "$sastScannerDockerfile"; then
@@ -150,4 +169,20 @@ fi
 
 echo ""
 echo "🎉 Pipeline completed successfully with all modifications validated!"
+
+echo ""
+echo "🔍 Final validation - Generated Dockerfile content:"
+echo "=========================================="
+echo "📄 Generated Controller Dockerfile (first 10 lines):"
+head -10 repo-integrations/controller/Dockerfile
+echo "..."
+echo "📄 Generated Controller Dockerfile (last 5 lines):"
+tail -5 repo-integrations/controller/Dockerfile
+echo ""
+echo "📄 Generated SAST Scanner Dockerfile (first 10 lines):"
+head -10 repo-integrations/scanner/DockerfileSast
+echo "..."
+echo "📄 Generated SAST Scanner Dockerfile (last 5 lines):"
+tail -5 repo-integrations/scanner/DockerfileSast
+echo "=========================================="
 
