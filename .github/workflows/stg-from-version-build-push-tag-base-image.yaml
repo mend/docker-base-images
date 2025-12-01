@@ -48,46 +48,43 @@ jobs:
         with:
           registries: "054331651301"
           region: "us-east-1"
+          mask-password: true
 
       - name: Download GHE ZIP from S3
         run: |
-          set -e
-          ./bin/download.sh "${{ github.event.inputs.Tag }}"
-          if [ $? -ne 0 ]; then
-            echo "❌ Download script failed"
-            exit 1
-          fi
+          set -ex
+          echo "🔽 Starting download process..."
+          ./bin/download.sh "${{ github.event.inputs.Tag }}" 2>&1
+          echo "✅ Download completed successfully"
+        shell: bash
 
       - name: Extract and Generate Base Image Dockerfiles
         run: |
-          set -e
-          ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
-          if [ $? -ne 0 ]; then
-            echo "❌ Copy script failed"
-            exit 1
-          fi
+          set -ex
+          echo "🔧 Starting Dockerfile generation process..."
+          ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}" 2>&1
+          echo "✅ Dockerfile generation completed successfully"
+        shell: bash
 
       - name: Build Docker Images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          set -e
-          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
-          if [ $? -ne 0 ]; then
-            echo "❌ Build script failed"
-            exit 1
-          fi
+          set -ex
+          echo "🔨 Starting Docker build process..."
+          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" 2>&1
+          echo "✅ Docker build completed successfully"
+        shell: bash
 
       - name: Publish to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          set -e
-          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY"
-          if [ $? -ne 0 ]; then
-            echo "❌ Publish script failed"
-            exit 1
-          fi
+          set -ex
+          echo "📤 Starting ECR publish process..."
+          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" 2>&1
+          echo "✅ ECR publish completed successfully"
+        shell: bash
 
       - name: Branch, Commit, Push and Tag Changes
         env:
