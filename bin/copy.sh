@@ -38,7 +38,7 @@ apply_dockerfile_modifications() {
 }
 
 RELEASE=$1
-COPY_VERSIONS_JSON=$3
+COPY_VERSIONS_JSON=$2
 
 if [ -z "$RELEASE" ]; then
   echo "Error: No release argument provided."
