@@ -67,7 +67,7 @@ jobs:
       - name: Extract and Generate Base Image Dockerfiles
         run: |
           echo "🔧 Starting Dockerfile generation process..."
-          bash -ex ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
+          bash -ex ./bin/copy2.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
           echo "✅ Dockerfile generation completed successfully"
         shell: bash
 
@@ -76,7 +76,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "🔨 Starting Docker build process..."
-          bash -ex ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
+          bash -ex ./bin/build2.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
           echo "✅ Docker build completed successfully"
         shell: bash
 
