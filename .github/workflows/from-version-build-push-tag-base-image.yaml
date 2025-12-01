@@ -23,7 +23,7 @@ jobs:
       - name: Checkout Prepared Version
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.Version }}
+          ref: "main"
           fetch-depth: 0
 
       - name: Configure AWS credentials
