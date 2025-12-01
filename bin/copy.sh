@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 # Source validation functions
 source ./bin/validate-modifications.sh
@@ -64,7 +64,7 @@ if [ ! -f $appdockerfile ]; then
   exit 1
 fi
 
-sed '/# END OF BASE IMAGE/ q' $appdockerfile > repo-integrations-new/controller/Dockerfile
+sed '/# END OF BASE IMAGE/ q' $appdockerfile > repo-integrations/controller/Dockerfile
 
 
 # ================================
@@ -78,7 +78,7 @@ if [ ! -f $sastScannerDockerfile ]; then
   exit 1
 fi
 
-sed '/# END OF BASE IMAGE/ q' $sastScannerDockerfile > repo-integrations-new/scanner/DockerfileSast
+sed '/# END OF BASE IMAGE/ q' $sastScannerDockerfile > repo-integrations/scanner/DockerfileSast
 
 # ================================
 # SCA SCANNER SERVICE PROCESSING
@@ -93,12 +93,12 @@ if [ ! -f $scaScannerDockerfile ]; then
 fi
 
 echo "✅ Base image marker found, truncating SCA Dockerfile..."
-sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfile > repo-integrations-new/scanner/Dockerfile
+sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfile > repo-integrations/scanner/Dockerfile
 
-apply_dockerfile_modifications "repo-integrations-new/scanner/Dockerfile" "scanner"
+apply_dockerfile_modifications "repo-integrations/scanner/Dockerfile" "scanner"
 
 if [ "$COPY_VERSIONS_JSON" = true ]; then
-    append_scanner_script_support "repo-integrations-new/scanner/Dockerfile"
+    append_scanner_script_support "repo-integrations/scanner/Dockerfile"
 fi
 
 # ================================
@@ -114,17 +114,17 @@ if [ ! -f $scaScannerDockerfilefull ]; then
 fi
 
 
-sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations-new/scanner/Dockerfile.full
+sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations/scanner/Dockerfile.full
 
 echo "🔍 Validating SCA full Dockerfile truncation..."
-if ! grep -q "# END OF BASE IMAGE" repo-integrations-new/scanner/Dockerfile.full; then
+if ! grep -q "# END OF BASE IMAGE" repo-integrations/scanner/Dockerfile.full; then
   echo "❌ ERROR: Truncation failed for SCA full Dockerfile"
   exit 1
 fi
 
-apply_dockerfile_modifications "repo-integrations-new/scanner/Dockerfile.full" "scanner"
+apply_dockerfile_modifications "repo-integrations/scanner/Dockerfile.full" "scanner"
 if [ "$COPY_VERSIONS_JSON" = true ]; then
-    append_scanner_script_support "repo-integrations-new/scanner/Dockerfile.full"
+    append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
 fi
 
 # ================================
@@ -138,7 +138,7 @@ if [ ! -f $remediateDockerfile ]; then
   exit 1
 fi
 
-sed '/# END OF BASE IMAGE/ q' $remediateDockerfile > repo-integrations-new/remediate/Dockerfile
+sed '/# END OF BASE IMAGE/ q' $remediateDockerfile > repo-integrations/remediate/Dockerfile
 # ================================
 # SUMMARY OUTPUT
 # ================================
@@ -146,18 +146,18 @@ echo ""
 echo "📋 Generated Dockerfile Summary:"
 echo "=========================================="
 echo "📄 Controller Dockerfile:"
-cat repo-integrations-new/controller/Dockerfile
+cat repo-integrations/controller/Dockerfile
 echo ""
 echo "📄 SAST Scanner Dockerfile:"
-cat repo-integrations-new/scanner/DockerfileSast
+cat repo-integrations/scanner/DockerfileSast
 echo ""
 echo "📄 SCA Scanner Dockerfile:"
-cat repo-integrations-new/scanner/Dockerfile
+cat repo-integrations/scanner/Dockerfile
 echo ""
 echo "📄 SCA Scanner Full Dockerfile:"
-cat repo-integrations-new/scanner/Dockerfile.full
+cat repo-integrations/scanner/Dockerfile.full
 echo ""
 echo "📄 Remediate Dockerfile:"
-cat repo-integrations-new/remediate/Dockerfile
+cat repo-integrations/remediate/Dockerfile
 echo "=========================================="
 

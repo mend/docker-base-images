@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 if [ -z "$1" ]; then
   echo "Error: No release argument provided."

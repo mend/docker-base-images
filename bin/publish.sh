@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 RELEASE=$1
 REGISTRY_PREFIX=$2

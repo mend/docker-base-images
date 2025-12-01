@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 # Script to send Slack notification for Docker images ready
 # Usage: ./bin/notify-slack.sh <ENVIRONMENT> <VERSION> <REGISTRY_TYPE> <REGISTRY_URL> <REPOSITORY> <JOB_STATUS> <WORKFLOW_URL>
