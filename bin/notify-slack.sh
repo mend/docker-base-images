@@ -2,39 +2,28 @@
 set -e
 
 # Script to send Slack notification for Docker images ready
-# Usage: ./bin/notify-slack.sh <ENVIRONMENT> <VERSION> <REGISTRY_TYPE> <REGISTRY_URL> <REPOSITORY> <JOB_STATUS> <WORKFLOW_URL>
 
 ENVIRONMENT=$1
 VERSION=$2
-REGISTRY_TYPE=$3
-REGISTRY_URL=$4
-REPOSITORY=$5
-JOB_STATUS=$6
-WORKFLOW_URL=$7
+REGISTRY_URL=$3
+JOB_STATUS=$4
+WORKFLOW_URL=$5
 
-if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_TYPE" ] || [ -z "$REGISTRY_URL" ] || [ -z "$JOB_STATUS" ] || [ -z "$WORKFLOW_URL" ]; then
-    echo "Usage: $0 <ENVIRONMENT> <VERSION> <REGISTRY_TYPE> <REGISTRY_URL> <REPOSITORY> <JOB_STATUS> <WORKFLOW_URL>"
+if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_URL" ] || [ -z "$JOB_STATUS" ] || [ -z "$WORKFLOW_URL" ]; then
+    echo "Usage: $0 <ENVIRONMENT> <VERSION> <REGISTRY_URL> <JOB_STATUS> <WORKFLOW_URL>"
     echo ""
     echo "Parameters:"
     echo "  ENVIRONMENT    - Environment (STG or Production)"
     echo "  VERSION        - Version tag (e.g., 25.10.1)"
-    echo "  REGISTRY_TYPE  - Type of registry (ECR or DockerHub)"
     echo "  REGISTRY_URL   - Registry URL or 'mend' for Docker Hub"
-    echo "  REPOSITORY     - Repository name (can be empty for DockerHub)"
     echo "  JOB_STATUS     - Job status (success, failure, etc.)"
     echo "  WORKFLOW_URL   - GitHub workflow run URL"
     echo ""
     echo "Note: Slack channel is determined by the webhook URL configuration"
     echo ""
     echo "Examples:"
-    echo "  STG: $0 STG 25.10.1 ECR 123456789012.dkr.ecr.us-east-1.amazonaws.com stg-ghe-base-images success https://github.com/..."
-    echo "  Prod: $0 Production 25.10.1 DockerHub mend '' success https://github.com/..."
-    exit 1
-fi
-
-# Special handling for DockerHub - repository can be empty
-if [ "$REGISTRY_TYPE" = "ECR" ] && [ -z "$REPOSITORY" ]; then
-    echo "Error: Repository parameter is required for ECR registry type"
+    echo "  STG: $0 STG 25.10.1 054331651301.dkr.ecr.us-east-1.amazonaws.com success https://github.com/..."
+    echo "  Prod: $0 Production 25.10.1 054331651301.dkr.ecr.us-east-1.amazonaws.com failure https://github.com/..."
     exit 1
 fi
 
@@ -55,27 +44,13 @@ fi
 
 # Build image list and status message based on registry type and job status
 if [ "$JOB_STATUS" = "success" ]; then
-    if [ "$REGISTRY_TYPE" = "ECR" ]; then
-        IMAGE_PREFIX="$REGISTRY_URL/$REPOSITORY"
-        READY_MESSAGE="ready in ECR for testing"
-        IMAGES="
-• \`$IMAGE_PREFIX:$VERSION\`
-• \`$IMAGE_PREFIX/controller:$VERSION\`
-• \`$IMAGE_PREFIX/scanner:$VERSION\`
-• \`$IMAGE_PREFIX/scanner-full:$VERSION\`
-• \`$IMAGE_PREFIX/scanner-sast:$VERSION\`
-• \`$IMAGE_PREFIX/remediate:$VERSION\`"
-    else
-        IMAGE_PREFIX="$REGISTRY_URL"
-        READY_MESSAGE="ready on Mend Hub"
-        IMAGES="
-• \`$IMAGE_PREFIX/base-image:$VERSION\`
-• \`$IMAGE_PREFIX/controller:$VERSION\`
-• \`$IMAGE_PREFIX/scanner:$VERSION\`
-• \`$IMAGE_PREFIX/scanner-full:$VERSION\`
-• \`$IMAGE_PREFIX/scanner-sast:$VERSION\`
-• \`$IMAGE_PREFIX/remediate:$VERSION\`"
-    fi
+    READY_MESSAGE="ready Images"
+    IMAGES="
+• \`$REGISTRY_URL/base-repo-controller:$VERSION\`
+• \`$REGISTRY_URL/base-repo-scanner:$VERSION\`
+• \`$REGISTRY_URL/base-repo-scanner:$VERSION-full\`
+• \`$REGISTRY_URL/base-repo-scanner-sast:$VERSION\`
+• \`$REGISTRY_URL/base-repo-remediate:$VERSION\`"
 
     # Create success message
     SLACK_MESSAGE="🚀 *$ENVIRONMENT Base Images Ready*
