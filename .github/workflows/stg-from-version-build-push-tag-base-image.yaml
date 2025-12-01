@@ -36,6 +36,13 @@ jobs:
           ref: "develop"
           fetch-depth: 0
 
+      - name: Make scripts executable
+        run: |
+          echo "🔧 Making all scripts executable..."
+          chmod +x bin/*.sh
+          echo "✅ Script permissions updated"
+          ls -la bin/
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -52,17 +59,15 @@ jobs:
 
       - name: Download GHE ZIP from S3
         run: |
-          set -ex
           echo "🔽 Starting download process..."
-          ./bin/download.sh "${{ github.event.inputs.Tag }}" 2>&1
+          bash -ex ./bin/download.sh "${{ github.event.inputs.Tag }}"
           echo "✅ Download completed successfully"
         shell: bash
 
       - name: Extract and Generate Base Image Dockerfiles
         run: |
-          set -ex
           echo "🔧 Starting Dockerfile generation process..."
-          ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}" 2>&1
+          bash -ex ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
           echo "✅ Dockerfile generation completed successfully"
         shell: bash
 
@@ -70,9 +75,8 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          set -ex
           echo "🔨 Starting Docker build process..."
-          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" 2>&1
+          bash -ex ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
           echo "✅ Docker build completed successfully"
         shell: bash
 
@@ -80,9 +84,8 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          set -ex
           echo "📤 Starting ECR publish process..."
-          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" 2>&1
+          bash -ex ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY"
           echo "✅ ECR publish completed successfully"
         shell: bash
 
@@ -139,6 +142,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           SLACK_WEBHOOK_URL: ${{ secrets.STG_SLACK_WEBHOOK_URL }}
         run: |
-          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "ECR" "$ECR_REGISTRY" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "#repo-staging-release"
+          echo "📤 Sending Slack notification..."
+          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "ECR" "$ECR_REGISTRY" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
 

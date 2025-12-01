@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # Function to validate Docker file modifications were applied correctly
 validate_dockerfile_modifications() {

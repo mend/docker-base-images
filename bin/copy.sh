@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # Source validation functions
 source ./bin/validate-modifications.sh
@@ -92,7 +92,6 @@ if ! grep -q "# END OF BASE IMAGE" repo-integrations/controller/Dockerfile; then
   exit 1
 fi
 echo "✅ Controller Dockerfile successfully truncated at base image marker"
-#apply_dockerfile_modifications "repo-integrations/controller/Dockerfile" "controller"
 
 # ================================
 # SAST SCANNER SERVICE PROCESSING
@@ -250,7 +249,6 @@ if ! grep -q "# END OF BASE IMAGE" repo-integrations/remediate/Dockerfile; then
   exit 1
 fi
 echo "✅ Remediate Dockerfile successfully truncated at base image marker"
-#apply_dockerfile_modifications "repo-integrations/remediate/Dockerfile" "remediate"
 
 apply_dockerfile_modifications "repo-integrations/scanner/DockerfileSast" "scanner"
 echo "✅ Remediate Dockerfile successfully truncated at base image marker"
