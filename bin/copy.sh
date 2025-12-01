@@ -158,6 +158,6 @@ echo "📄 SCA Scanner Full Dockerfile:"
 cat repo-integrations/scanner/Dockerfile.full
 echo ""
 echo "📄 Remediate Dockerfile:"
-cat repo-integrations/remediate/Docker
+cat repo-integrations/remediate/Dockerfile
 echo "=========================================="
 
