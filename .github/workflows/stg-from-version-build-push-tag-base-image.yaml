@@ -60,32 +60,28 @@ jobs:
       - name: Download GHE ZIP from S3
         run: |
           echo "🔽 Starting download process..."
-          bash -ex ./bin/download.sh "${{ github.event.inputs.Tag }}"
+          ./bin/download.sh "${{ github.event.inputs.Tag }}"
           echo "✅ Download completed successfully"
         shell: bash
 
       - name: Extract and Generate Base Image Dockerfiles
         run: |
           echo "🔧 Starting Dockerfile generation process..."
-          bash -ex ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
+          ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
           echo "✅ Dockerfile generation completed successfully"
         shell: bash
 
       - name: Build Docker Images
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "🔨 Starting Docker build process..."
-          bash -ex ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
+          ./bin/build.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
           echo "✅ Docker build completed successfully"
         shell: bash
 
       - name: Publish to ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "📤 Starting ECR publish process..."
-          bash -ex ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY"
+          ./bin/publish.sh "${{ github.event.inputs.Tag }}"
           echo "✅ ECR publish completed successfully"
         shell: bash
 
@@ -139,10 +135,9 @@ jobs:
       - name: Notify Slack - Images Ready
         if: always()
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           SLACK_WEBHOOK_URL: ${{ secrets.STG_SLACK_WEBHOOK_URL }}
         run: |
           echo "📤 Sending Slack notification..."
-          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "ECR" "$ECR_REGISTRY" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "054331651301.dkr.ecr.us-east-1.amazonaws.com" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
 
