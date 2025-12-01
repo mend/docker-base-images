@@ -37,17 +37,21 @@ apply_dockerfile_modifications() {
     fi
 }
 
-if [ -z "$1" ]; then
+RELEASE=$1
+COPY_VERSIONS_JSON=$3
+
+if [ -z "$RELEASE" ]; then
   echo "Error: No release argument provided."
   exit 1
 fi
 
-if [ "$1" = "1.1.1" ]; then
+if [ "$RELEASE" = "1.1.1" ]; then
   echo "Error: Default version tag provided. Please provide the correct tag"
   exit 1
-fi 
+fi
 
-RELEASE=$1
+echo "release arg: $RELEASE"
+echo "COPY_VERSIONS_JSON arg: $COPY_VERSIONS_JSON"
 
 appdockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-ghe-app/docker/Dockerfile
 
@@ -93,7 +97,7 @@ fi
 
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfile > repo-integrations/scanner/Dockerfile
 apply_dockerfile_modifications "repo-integrations/scanner/Dockerfile" "scanner"
-if [ "$2" = true ]; then
+if [ "$COPY_VERSIONS_JSON" = true ]; then
     append_scanner_script_support "repo-integrations/scanner/Dockerfile"
 fi
 
@@ -114,7 +118,7 @@ fi
 echo "✅ SCA full Dockerfile successfully truncated at base image marker"
 
 apply_dockerfile_modifications "repo-integrations/scanner/Dockerfile.full" "scanner"
-if [ "$2" = true ]; then
+if [ "$COPY_VERSIONS_JSON" = true ]; then
     append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
 fi
 
