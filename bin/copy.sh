@@ -56,6 +56,10 @@ echo "COPY_VERSIONS_JSON arg: $COPY_VERSIONS_JSON"
 echo ""
 echo "🔍 Debugging downloaded Dockerfiles content..."
 
+# ================================
+# CONTROLLER SERVICE PROCESSING
+# ================================
+echo "🎯 Processing Controller Service Dockerfile..."
 appdockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-ghe-app/docker/Dockerfile
 
 if [ ! -f $appdockerfile ]; then
@@ -71,9 +75,29 @@ tail -10 "$appdockerfile"
 echo "🔍 Base image marker check: $(grep -c '# END OF BASE IMAGE' "$appdockerfile" || echo "0") occurrences found"
 echo ""
 
+echo "🔍 Checking controller Dockerfile for base image marker..."
+if ! grep -q "# END OF BASE IMAGE" "$appdockerfile"; then
+  echo "❌ ERROR: '# END OF BASE IMAGE' marker not found in $appdockerfile"
+  echo "📄 First 20 lines of source file:"
+  head -20 "$appdockerfile"
+  exit 1
+fi
+
+echo "✅ Base image marker found, truncating controller Dockerfile..."
 sed '/# END OF BASE IMAGE/ q' $appdockerfile > repo-integrations/controller/Dockerfile
+
+echo "🔍 Validating controller Dockerfile truncation..."
+if ! grep -q "# END OF BASE IMAGE" repo-integrations/controller/Dockerfile; then
+  echo "❌ ERROR: Truncation failed for controller Dockerfile"
+  exit 1
+fi
+echo "✅ Controller Dockerfile successfully truncated at base image marker"
 #apply_dockerfile_modifications "repo-integrations/controller/Dockerfile" "controller"
 
+# ================================
+# SAST SCANNER SERVICE PROCESSING
+# ================================
+echo "🎯 Processing SAST Scanner Service Dockerfile..."
 sastScannerDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/DockerfileSast
 
 if [ ! -f $sastScannerDockerfile ]; then
@@ -107,6 +131,10 @@ if ! grep -q "# END OF BASE IMAGE" repo-integrations/scanner/DockerfileSast; the
 fi
 echo "✅ SAST Dockerfile successfully truncated at base image marker"
 
+# ================================
+# SCA SCANNER SERVICE PROCESSING
+# ================================
+echo "🎯 Processing SCA Scanner Service Dockerfile..."
 scaScannerDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/Dockerfile
 
 if [ ! -f $scaScannerDockerfile ]; then
@@ -114,12 +142,40 @@ if [ ! -f $scaScannerDockerfile ]; then
   exit 1
 fi
 
+echo "📄 SCA Scanner Dockerfile first 10 lines:"
+head -10 "$scaScannerDockerfile"
+echo "..."
+echo "📄 SCA Scanner Dockerfile last 10 lines:"
+tail -10 "$scaScannerDockerfile"
+echo "🔍 Base image marker check: $(grep -c '# END OF BASE IMAGE' "$scaScannerDockerfile" || echo "0") occurrences found"
+echo ""
+
+echo "🔍 Checking SCA scanner Dockerfile for base image marker..."
+if ! grep -q "# END OF BASE IMAGE" "$scaScannerDockerfile"; then
+  echo "❌ ERROR: '# END OF BASE IMAGE' marker not found in $scaScannerDockerfile"
+  echo "📄 First 20 lines of source file:"
+  head -20 "$scaScannerDockerfile"
+  exit 1
+fi
+
+echo "✅ Base image marker found, truncating SCA Dockerfile..."
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfile > repo-integrations/scanner/Dockerfile
+
+echo "🔍 Validating SCA Dockerfile truncation..."
+if ! grep -q "# END OF BASE IMAGE" repo-integrations/scanner/Dockerfile; then
+  echo "❌ ERROR: Truncation failed for SCA Dockerfile"
+  exit 1
+fi
+echo "✅ SCA Dockerfile successfully truncated at base image marker"
 apply_dockerfile_modifications "repo-integrations/scanner/Dockerfile" "scanner"
 if [ "$COPY_VERSIONS_JSON" = true ]; then
     append_scanner_script_support "repo-integrations/scanner/Dockerfile"
 fi
 
+# ================================
+# SCA SCANNER FULL SERVICE PROCESSING
+# ================================
+echo "🎯 Processing SCA Scanner Full Service Dockerfile..."
 scaScannerDockerfilefull=tmp/agent-4-github-enterprise-$RELEASE/wss-scanner/docker/Dockerfilefull
 
 if [ ! -f $scaScannerDockerfilefull ]; then
@@ -127,6 +183,23 @@ if [ ! -f $scaScannerDockerfilefull ]; then
   exit 1
 fi
 
+echo "📄 SCA Scanner Full Dockerfile first 10 lines:"
+head -10 "$scaScannerDockerfilefull"
+echo "..."
+echo "📄 SCA Scanner Full Dockerfile last 10 lines:"
+tail -10 "$scaScannerDockerfilefull"
+echo "🔍 Base image marker check: $(grep -c '# END OF BASE IMAGE' "$scaScannerDockerfilefull" || echo "0") occurrences found"
+echo ""
+
+echo "🔍 Checking SCA scanner full Dockerfile for base image marker..."
+if ! grep -q "# END OF BASE IMAGE" "$scaScannerDockerfilefull"; then
+  echo "❌ ERROR: '# END OF BASE IMAGE' marker not found in $scaScannerDockerfilefull"
+  echo "📄 First 20 lines of source file:"
+  head -20 "$scaScannerDockerfilefull"
+  exit 1
+fi
+
+echo "✅ Base image marker found, truncating SCA full Dockerfile..."
 sed '/# END OF BASE IMAGE/ q' $scaScannerDockerfilefull > repo-integrations/scanner/Dockerfile.full
 
 echo "🔍 Validating SCA full Dockerfile truncation..."
@@ -141,6 +214,10 @@ if [ "$COPY_VERSIONS_JSON" = true ]; then
     append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
 fi
 
+# ================================
+# REMEDIATE SERVICE PROCESSING
+# ================================
+echo "🎯 Processing Remediate Service Dockerfile..."
 remediateDockerfile=tmp/agent-4-github-enterprise-$RELEASE/wss-remediate/docker/Dockerfile
 
 if [ ! -f $remediateDockerfile ]; then
@@ -148,6 +225,23 @@ if [ ! -f $remediateDockerfile ]; then
   exit 1
 fi
 
+echo "📄 Remediate Dockerfile first 10 lines:"
+head -10 "$remediateDockerfile"
+echo "..."
+echo "📄 Remediate Dockerfile last 10 lines:"
+tail -10 "$remediateDockerfile"
+echo "🔍 Base image marker check: $(grep -c '# END OF BASE IMAGE' "$remediateDockerfile" || echo "0") occurrences found"
+echo ""
+
+echo "🔍 Checking remediate Dockerfile for base image marker..."
+if ! grep -q "# END OF BASE IMAGE" "$remediateDockerfile"; then
+  echo "❌ ERROR: '# END OF BASE IMAGE' marker not found in $remediateDockerfile"
+  echo "📄 First 20 lines of source file:"
+  head -20 "$remediateDockerfile"
+  exit 1
+fi
+
+echo "✅ Base image marker found, truncating remediate Dockerfile..."
 sed '/# END OF BASE IMAGE/ q' $remediateDockerfile > repo-integrations/remediate/Dockerfile
 
 echo "🔍 Validating remediate Dockerfile truncation..."
@@ -157,6 +251,9 @@ if ! grep -q "# END OF BASE IMAGE" repo-integrations/remediate/Dockerfile; then
 fi
 echo "✅ Remediate Dockerfile successfully truncated at base image marker"
 #apply_dockerfile_modifications "repo-integrations/remediate/Dockerfile" "remediate"
+
+apply_dockerfile_modifications "repo-integrations/scanner/DockerfileSast" "scanner"
+echo "✅ Remediate Dockerfile successfully truncated at base image marker"
 
 echo "🔍 Validating all Docker file modifications..."
 # Validate that all modifications were applied correctly
