@@ -128,9 +128,10 @@ jobs:
       - name: Notify Slack - Images Ready
         if: always()
         env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           SLACK_WEBHOOK_URL: ${{ secrets.STG_SLACK_WEBHOOK_URL }}
         run: |
           echo "📤 Sending Slack notification..."
-          ./bin/notify-slack.sh "STG" "${{ github.event.inputs.Tag }}" "054331651301.dkr.ecr.us-east-1.amazonaws.com" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          ./bin/notify-slack.sh "${{ github.event.inputs.Tag }}" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
 
