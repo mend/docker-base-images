@@ -1,8 +1,8 @@
 #!/bin/bash
-set -e
+set -ex
 
 # Script to send Slack notification for Docker images ready
-# Usage: ./bin/notify-slack.sh <ENVIRONMENT> <VERSION> <REGISTRY_TYPE> <REGISTRY_URL> <REPOSITORY> <JOB_STATUS> <WORKFLOW_URL> <SLACK_CHANNEL>
+# Usage: ./bin/notify-slack.sh <ENVIRONMENT> <VERSION> <REGISTRY_TYPE> <REGISTRY_URL> <REPOSITORY> <JOB_STATUS> <WORKFLOW_URL>
 
 ENVIRONMENT=$1
 VERSION=$2
@@ -11,10 +11,9 @@ REGISTRY_URL=$4
 REPOSITORY=$5
 JOB_STATUS=$6
 WORKFLOW_URL=$7
-SLACK_CHANNEL=$8
 
-if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_TYPE" ] || [ -z "$REGISTRY_URL" ] || [ -z "$JOB_STATUS" ] || [ -z "$WORKFLOW_URL" ] || [ -z "$SLACK_CHANNEL" ]; then
-    echo "Usage: $0 <ENVIRONMENT> <VERSION> <REGISTRY_TYPE> <REGISTRY_URL> <REPOSITORY> <JOB_STATUS> <WORKFLOW_URL> <SLACK_CHANNEL>"
+if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_TYPE" ] || [ -z "$REGISTRY_URL" ] || [ -z "$JOB_STATUS" ] || [ -z "$WORKFLOW_URL" ]; then
+    echo "Usage: $0 <ENVIRONMENT> <VERSION> <REGISTRY_TYPE> <REGISTRY_URL> <REPOSITORY> <JOB_STATUS> <WORKFLOW_URL>"
     echo ""
     echo "Parameters:"
     echo "  ENVIRONMENT    - Environment (STG or Production)"
@@ -24,11 +23,12 @@ if [ -z "$ENVIRONMENT" ] || [ -z "$VERSION" ] || [ -z "$REGISTRY_TYPE" ] || [ -z
     echo "  REPOSITORY     - Repository name (can be empty for DockerHub)"
     echo "  JOB_STATUS     - Job status (success, failure, etc.)"
     echo "  WORKFLOW_URL   - GitHub workflow run URL"
-    echo "  SLACK_CHANNEL  - Slack channel (e.g., #base-images-stg, #base-images-prod)"
+    echo ""
+    echo "Note: Slack channel is determined by the webhook URL configuration"
     echo ""
     echo "Examples:"
-    echo "  STG: $0 STG 25.10.1 ECR 123456789012.dkr.ecr.us-east-1.amazonaws.com stg-ghe-base-images success https://github.com/... #base-images-stg"
-    echo "  Prod: $0 Production 25.10.1 DockerHub mend '' success https://github.com/... #base-images-prod"
+    echo "  STG: $0 STG 25.10.1 ECR 123456789012.dkr.ecr.us-east-1.amazonaws.com stg-ghe-base-images success https://github.com/..."
+    echo "  Prod: $0 Production 25.10.1 DockerHub mend '' success https://github.com/..."
     exit 1
 fi
 
@@ -100,25 +100,23 @@ fi
 
 echo "Sending Slack notification for $ENVIRONMENT environment..."
 echo "Status: $JOB_STATUS"
-echo "Channel: $SLACK_CHANNEL"
 echo "Message preview:"
 echo "$SLACK_MESSAGE"
 
 # Send to Slack using webhook with enhanced formatting
 if [ -n "$SLACK_WEBHOOK_URL" ]; then
     payload=$(jq -n \
-        --arg channel "$SLACK_CHANNEL" \
         --arg text "$SLACK_MESSAGE" \
         --arg color "$COLOR" \
         --arg env "$ENVIRONMENT" \
         --arg version "$VERSION" \
         --arg status "$STATUS_MESSAGE" \
-        '{channel: $channel, text: $text, attachments: [{color: $color, fields: [{title: "Environment", value: $env, short: true}, {title: "Version", value: $version, short: true}, {title: "Status", value: $status, short: true}]}]}')
+        '{text: $text, attachments: [{color: $color, fields: [{title: "Environment", value: $env, short: true}, {title: "Version", value: $version, short: true}, {title: "Status", value: $status, short: true}]}]}')
 
     curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
 
     if [ $? -eq 0 ]; then
-        echo "✅ Slack notification sent successfully to $SLACK_CHANNEL"
+        echo "✅ Slack notification sent successfully"
     else
         echo "❌ Failed to send Slack notification"
         exit 1

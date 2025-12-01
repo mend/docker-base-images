@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # Function to modify Docker files based on commands
 modify_dockerfile() {
