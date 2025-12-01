@@ -49,7 +49,7 @@ jobs:
           registries: "054331651301"
           region: "us-east-1"
 
-      - name: Download Agent
+      - name: Download GHE ZIP from S3
         run: |
           set -e
           ./bin/download.sh "${{ github.event.inputs.Tag }}"
@@ -58,7 +58,7 @@ jobs:
             exit 1
           fi
 
-      - name: Copy Agent Files
+      - name: Extract and Generate Base Image Dockerfiles
         run: |
           set -e
           ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"

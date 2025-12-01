@@ -12,15 +12,18 @@ if [ "$1" = "1.1.1" ]; then
 fi 
 
 RELEASE=$1
+GHE_ZIP_PATH="s3://wsd-integration/pre-release/Agent-for-GitHub-Enterprise/agent-4-github-enterprise-$RELEASE.zip"
+
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
 
+
 # Check if ../tmp/agent-4-github-enterprise-$RELEASE.zip exists
 if [ ! -f ../tmp/agent-4-github-enterprise-$RELEASE.zip ]; then
-  echo "Downloading agent-4-github-enterprise-$RELEASE.zip"
+  echo "Downloading agent-4-github-enterprise-$RELEASE.zip from S3"
   mkdir -p ../tmp
-  curl -o ../tmp/agent-4-github-enterprise-$RELEASE.zip https://integrations.mend.io/release/Agent-for-GitHub-Enterprise/agent-4-github-enterprise-$RELEASE.zip ### TODO modify path to use AWS S3 bucket pre-release
+  aws s3 cp "$GHE_ZIP_PATH" ../tmp/agent-4-github-enterprise-$RELEASE.zip
 fi
 
 if [ ! -f ../tmp/agent-4-github-enterprise-$RELEASE.zip ]; then
