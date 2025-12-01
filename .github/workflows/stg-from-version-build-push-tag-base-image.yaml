@@ -48,6 +48,7 @@ jobs:
         with:
           registries: "054331651301"
           region: "us-east-1"
+          mask-password: true
 
       - name: Download GHE ZIP from S3
         run: |
