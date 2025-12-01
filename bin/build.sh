@@ -40,11 +40,11 @@ docker pull ubuntu:24.04
 #docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE} -f repo-integrations/scanner/Dockerfile .
 #docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full -f repo-integrations/scanner/Dockerfile.full .
 
-docker build --no-cache -t ${ECR_REGISTRY}/base-repo-scanner-sast:${RELEASE} -f repo-integrations/scanner/DockerfileSast .
-docker build --no-cache -t ${ECR_REGISTRY}/base-repo-controller:${RELEASE} -f repo-integrations/controller/Dockerfile .
-docker build --no-cache -t ${ECR_REGISTRY}/base-repo-remediate:${RELEASE} -f repo-integrations/remediate/Dockerfile .
-docker build --no-cache -t ${ECR_REGISTRY}/base-repo-scanner:${RELEASE} -f repo-integrations/scanner/Dockerfile .
-docker build --no-cache -t ${ECR_REGISTRY}/base-repo-scanner:${RELEASE}-full -f repo-integrations/scanner/Dockerfile.full .
+docker build --no-cache -t ${ECR_REGISTRY}/base-repo-scanner-sast:${RELEASE} -f repo-integrations-new/scanner/DockerfileSast .
+docker build --no-cache -t ${ECR_REGISTRY}/base-repo-controller:${RELEASE} -f repo-integrations-new/controller/Dockerfile .
+docker build --no-cache -t ${ECR_REGISTRY}/base-repo-remediate:${RELEASE} -f repo-integrations-new/remediate/Dockerfile .
+docker build --no-cache -t ${ECR_REGISTRY}/base-repo-scanner:${RELEASE} -f repo-integrations-new/scanner/Dockerfile .
+docker build --no-cache -t ${ECR_REGISTRY}/base-repo-scanner:${RELEASE}-full -f repo-integrations-new/scanner/Dockerfile.full .
 #
 ##Validate built images successfully created
 #echo "🔍 Validating built images..."
