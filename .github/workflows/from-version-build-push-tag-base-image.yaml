@@ -92,8 +92,9 @@ jobs:
       - name: Notify Slack - Images Ready
         if: always()
         env:
+          ECR_REGISTRY: "mend"
           SLACK_WEBHOOK_URL: ${{ secrets.PROD_SLACK_WEBHOOK_URL }}
         run: |
           echo "📤 Sending Slack notification..."
-          ./bin/notify-slack.sh "Production" "${{ github.event.inputs.Version }}" "DockerHub" "mend" "" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          ./bin/notify-slack.sh "${{ github.event.inputs.Version }}" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
