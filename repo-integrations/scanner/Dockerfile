@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:13.23.10@sha256:03cd965862ad066be8906e4b382aedf8758bcff1883b6be3ff1288f8058a200f AS containerbase
+FROM ghcr.io/containerbase/base:13.23.10 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
@@ -33,16 +33,21 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=docker depName=node versioning=node
-ARG NODE_VERSION=22.19.0
+ARG NODE_VERSION=24.0.0
 RUN install-tool node
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 1          │ CVE-2025-64756                                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm depName=npm versioning=npm
-ARG NPM_VERSION=10.5.2
+ARG NPM_VERSION=11.6.1
 RUN install-tool npm
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 1          │ CVE-2024-21538                                     │
+# │ High       │ 2          │ CVE-2025-64756, CVE-2025-64756                     │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm depName=yarn
@@ -50,8 +55,8 @@ ARG YARN_VERSION=1.22.22
 RUN install-tool yarn
 
 # renovate: datasource=npm depName=bower
-#ARG BOWER_VERSION=1.8.14
-#RUN install-tool bower
+ARG BOWER_VERSION=1.8.14
+RUN install-tool bower
 # ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
@@ -67,6 +72,7 @@ RUN install-tool yarn
 # │            │            │ CVE-2022-24999, CVE-2017-1000048, CVE-2022-21213, CVE-2020-7792    │
 # │            │            │ CVE-2021-43138, CVE-2022-29167, CVE-2022-21213, CVE-2020-7792      │
 # └────────────┴────────────┴────────────────────────────────────────────────────────────────────┘
+
 #ARG PNPM_VERSION=10.17.0
 #RUN install-tool pnpm
 
@@ -86,6 +92,9 @@ RUN install-tool java
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 ARG JAVA_VERSION=17.0.13+11
 RUN install-tool java
+ENV MEND_JAVA=/usr/local/bin/mend_java
+RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
+    chmod +x $MEND_JAVA
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=6.9.4
@@ -230,8 +239,8 @@ RUN install-tool python
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
-#ARG CHECKOV_VERSION=3.2.471
-#RUN install-tool checkov
+ARG CHECKOV_VERSION=3.2.471
+RUN install-tool checkov
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -266,17 +275,19 @@ RUN install-tool dotnet
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 5          │ CVE-2025-26646, CVE-2025-26646, CVE-2024-38095, CVE-2025-26646    │
-# │            │            │ CVE-2025-26646                                                    │
+# │ High       │ 11         │ CVE-2025-26646, CVE-2025-26646, CVE-2024-38095, CVE-2025-55247    │
+# │            │            │ CVE-2025-26646, CVE-2025-55247, CVE-2025-55247, CVE-2025-55247    │
+# │            │            │ CVE-2025-26646, CVE-2025-55247, CVE-2025-55247                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 ARG DOTNET_VERSION=9.0.101
 RUN install-tool dotnet
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2025-26646, CVE-2024-38095, CVE-2025-26646     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 6          │ CVE-2025-26646, CVE-2024-38095, CVE-2025-55247, CVE-2025-26646    │
+# │            │            │ CVE-2025-55247, CVE-2025-55247                                    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 ARG DOTNET_VERSION=7.0.410
 RUN install-tool dotnet
@@ -377,11 +388,6 @@ RUN apt-get update && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
 	rm -rf /tmp/*
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 1          │ CVE-2025-38666                                     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 
 ##### Install Conda
@@ -494,29 +500,30 @@ RUN apt-get update && \
 #
 #### Install Nuget CLI
 #RUN apt-get update && \
-#    apt-get install nuget
+# #    apt-get install nuget
 
 ## Install Paket
 #ENV PAKET_HOME=${USER_HOME}/.dotnet/tools
 #ENV PATH="${PATH}:${PAKET_HOME}"
 #RUN dotnet tool install Paket --version 7.2.1 --tool-path ${PAKET_HOME}
 
-## Install Bazel 6.1.1, 5.1.1 and set version 6.1.1 as default
-#RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list && \
-#    curl https://bazel.build/bazel-release.pub.gpg | apt-key add - && \
-#    apt-get update && \
-#    apt-get -y install bazel-6.1.1 && \
-#    apt-get -y upgrade bazel-6.1.1 && \
-#    apt-get -y install bazel-5.1.1 && \
-#    apt-get -y upgrade bazel-5.1.1 && \
-#    ln -s /usr/bin/bazel-6.1.1 /usr/local/bin/bazel
+## Install Bazel
+# renovate: datasource=github-releases packageName=bazelbuild/bazelisk
+#ARG BAZELISK_VERSION=v1.27.0
+#RUN install-tool bazelisk
+
+# Pre-download Bazel 6.1.1 to cache it in the image
+#RUN USE_BAZEL_VERSION=6.1.1 bazel version
+
+# Set Bazel 6.1.1 as the default version
+#ENV USE_BAZEL_VERSION=6.1.1
 
 # Install Swift (including SPM)
 #ARG SWIFT_VERSION=5.10.0
 #RUN install-tool swift
 
 # delete the partially populated directory /tmp/containerbase and recreate one with full content instead
-RUN rm -rf /tmp/* && containerbase-cli init tool all
+# RUN rm -rf /tmp/* && containerbase-cli init tool all
 
 # END OF BASE IMAGE
 

@@ -23,9 +23,12 @@ COPY --from=containerbase /usr/local/containerbase/ /usr/local/containerbase/
 RUN install-containerbase && \
     prepare-tool all
 
+# renovate: datasource=github-tags depName=git lookupName=git/git
 ARG GIT_VERSION=v2.41.0
 RUN install-tool git
 
+### !!! Install this version after the other versions, so that it is the default !!! ###
+# renovate: datasource=adoptium-java depName=java
 ARG JAVA_VERSION=17.0.8+7
 RUN install-tool java
 
