@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       Version:
-        description: "Version: Tag or Branch to checkout (e.g., 25.10.1 or release/25.10.1) with prepared Docker files"
+        description: "Version: Repo Integration Version to checkout"
         default: "25.10.1"
         type: string
         required: true
@@ -79,12 +79,11 @@ jobs:
           fi
 
       - name: Merge to Main Branch
-        if: ${{ github.event.inputs.IsLatest == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -e
-          ./bin/merge-to-main.sh "${{ github.event.inputs.Version }}"
+          ./bin/merge-to-main.sh "${{ github.event.inputs.Version }}" "${{ github.event.inputs.IsLatest }}"
           if [ $? -ne 0 ]; then
             echo "❌ Merge to main script failed"
             exit 1

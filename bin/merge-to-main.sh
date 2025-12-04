@@ -2,42 +2,56 @@
 set -e
 
 # Script to merge version to main branch after production publish
-# Usage: ./bin/merge-to-main.sh <VERSION>
+# Usage: ./bin/merge-to-main.sh <VERSION> <IS_LATEST>
 
 VERSION=$1
+IS_LATEST=$2
 
 if [ -z "$VERSION" ]; then
-    echo "Usage: $0 <VERSION>"
-    echo ""
-    echo "Parameters:"
-    echo "  VERSION - Version tag or branch (e.g., 25.10.1 or release/25.10.1)"
-    echo ""
-    echo "Example:"
-    echo "  $0 25.10.1"
-    echo "  $0 release/25.10.1"
-    exit 1
+  echo "Error: No ZIP version argument provided."
+  exit 1
 fi
 
-echo "🔄 Merging changes into main branch..."
+if [ -z "$IS_LATEST" ]; then
+  echo "Error: No IsLatest argument provided."
+  exit 1
+fi
+
+RELEASE_BRANCH="release/$VERSION"
+
+echo "Processing Git operations for Production release"
+echo "ZIP Version: $VERSION"
+echo "Is Latest: $IS_LATEST"
+echo "Release branch: $RELEASE_BRANCH"
 
 # Configure Git
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-echo "📋 Processing version: $VERSION"
+# If IsLatest is true, merge to main branch
+if [ "$IS_LATEST" = "true" ]; then
+    echo "IsLatest is true, merging changes to main branch"
 
-# Check if it's a release branch pattern
-if [[ "$VERSION" =~ ^release/.* ]]; then
-    echo "📋 Detected release branch: $VERSION"
+    # Fetch latest changes
+    git fetch origin
+
+    # Verify release branch exists
+    if ! git rev-parse --verify "origin/$RELEASE_BRANCH" >/dev/null 2>&1; then
+        echo "Error: Release branch $RELEASE_BRANCH does not exist"
+        exit 1
+    fi
+
+    # Checkout and update main
     git checkout main
     git pull origin main
-    git merge "origin/$VERSION" --commit --no-edit -m "Merge $VERSION into main after production publish"
+
+    # Merge release branch
+    git merge "origin/$RELEASE_BRANCH" --no-ff -m "feat: Merge production release $VERSION"
     git push origin main
-    echo "✅ Successfully merged $VERSION into main"
+
+    echo "Successfully merged release branch to main"
 else
-    echo "📋 Detected tag or other branch: $VERSION"
-    echo "ℹ️ For tags, no merge is needed as they represent finalized code"
-    echo "ℹ️ For feature branches, manual merge is recommended"
+    echo "IsLatest is false, skipping merge to main branch"
 fi
 
-echo "🎉 Merge process completed!"
+echo "Script completed successfully"
