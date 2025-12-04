@@ -26,19 +26,19 @@ echo ""
 
 # Tag controller image
 echo "Tagging controller image..."
-docker tag "$ECR_REGISTRY/base-repo-controller:$VERSION" "mend/controller:$VERSION"
+docker tag "$ECR_REGISTRY/base-repo-controller:$VERSION" "mend/base-repo-controller:$VERSION"
 
 # Tag scanner images
 echo "Tagging scanner images..."
-docker tag "$ECR_REGISTRY/base-repo-scanner:$VERSION" "mend/scanner:$VERSION"
+docker tag "$ECR_REGISTRY/base-repo-scanner:$VERSION" "mend/ase-repo-scanner:$VERSION"
 
-docker tag "$ECR_REGISTRY/base-repo-scanner-full:$VERSION" "mend/scanner-full:$VERSION"
+docker tag "$ECR_REGISTRY/base-repo-scanner-full:$VERSION" "mend/base-repo-scanner:$VERSION-full"
 
-docker tag "$ECR_REGISTRY/base-repo-scanner-sast:$VERSION" "mend/scanner-sast:$VERSION"
+docker tag "$ECR_REGISTRY/base-repo-scanner-sast:$VERSION" "mend/base-repo-scanner-sast:$VERSION"
 
 # Tag remediate image
 echo "Tagging remediate image..."
-docker tag "$ECR_REGISTRY/base-repo-remediate:$VERSION" "mend/remediate:$VERSION"
+docker tag "$ECR_REGISTRY/base-repo-remediate:$VERSION" "mend/base-repo-remediate:$VERSION"
 
 echo "✅ All images tagged successfully for Mend Hub!"
 echo ""
