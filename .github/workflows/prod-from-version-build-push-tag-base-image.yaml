@@ -47,36 +47,36 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#      - name: Download All Images from ECR
-#        env:
-#          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-#        run: |
-#          set -e
-#          ./bin/download-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY"
-#          if [ $? -ne 0 ]; then
-#            echo "❌ Download ECR images script failed"
-#            exit 1
-#          fi
-#
-#      - name: Tag Images for Mend Hub
-#        env:
-#          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-#        run: |
-#          set -e
-#          ./bin/tag-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY"
-#          if [ $? -ne 0 ]; then
-#            echo "❌ Tag ECR images script failed"
-#            exit 1
-#          fi
-#
-#      - name: Publish All Images to Mend Hub
-#        run: |
-#          set -e
-#          ./bin/publish-to-mend-hub.sh "${{ github.event.inputs.Version }}"
-#          if [ $? -ne 0 ]; then
-#            echo "❌ Publish to Mend Hub script failed"
-#            exit 1
-#          fi
+      - name: Download All Images from ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          set -e
+          ./bin/download-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY"
+          if [ $? -ne 0 ]; then
+            echo "❌ Download ECR images script failed"
+            exit 1
+          fi
+
+      - name: Tag Images for Mend Hub
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          set -e
+          ./bin/tag-ecr-images.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY"
+          if [ $? -ne 0 ]; then
+            echo "❌ Tag ECR images script failed"
+            exit 1
+          fi
+
+      - name: Publish All Images to Mend Hub
+        run: |
+          set -e
+          ./bin/publish-to-mend-hub.sh "${{ github.event.inputs.Version }}"
+          if [ $? -ne 0 ]; then
+            echo "❌ Publish to Mend Hub script failed"
+            exit 1
+          fi
 
       - name: Merge to Main Branch
         env:
@@ -89,12 +89,12 @@ jobs:
             exit 1
           fi
 
-#      - name: Notify Slack - Images Ready
-#        if: always()
-#        env:
-#          ECR_REGISTRY: "mend"
-#          SLACK_WEBHOOK_URL: ${{ secrets.PRD_SLACK_WEBHOOK_URL }}
-#        run: |
-#          echo "📤 Sending Slack notification..."
-#          ./bin/notify-slack.sh "${{ github.event.inputs.Version }}" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Notify Slack - Images Ready
+        if: always()
+        env:
+          ECR_REGISTRY: "mend"
+          SLACK_WEBHOOK_URL: ${{ secrets.PRD_SLACK_WEBHOOK_URL }}
+        run: |
+          echo "📤 Sending Slack notification..."
+          ./bin/notify-slack.sh "${{ github.event.inputs.Version }}" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
