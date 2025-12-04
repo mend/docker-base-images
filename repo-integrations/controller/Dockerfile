@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # This buildpack is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:13.23.10@sha256:03cd965862ad066be8906e4b382aedf8758bcff1883b6be3ff1288f8058a200f AS containerbase
+FROM ghcr.io/containerbase/base:13.24.2 AS containerbase
 
 FROM ${BASE_IMAGE} as base
 
