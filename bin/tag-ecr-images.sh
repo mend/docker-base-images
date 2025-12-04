@@ -30,9 +30,9 @@ docker tag "$ECR_REGISTRY/base-repo-controller:$VERSION" "mend/base-repo-control
 
 # Tag scanner images
 echo "Tagging scanner images..."
-docker tag "$ECR_REGISTRY/base-repo-scanner:$VERSION" "mend/ase-repo-scanner:$VERSION"
+docker tag "$ECR_REGISTRY/base-repo-scanner:$VERSION" "mend/base-repo-scanner:$VERSION"
 
-docker tag "$ECR_REGISTRY/base-repo-scanner-full:$VERSION" "mend/base-repo-scanner:$VERSION-full"
+docker tag "$ECR_REGISTRY/base-repo-scanner:$VERSION-full" "mend/base-repo-scanner:$VERSION-full"
 
 docker tag "$ECR_REGISTRY/base-repo-scanner-sast:$VERSION" "mend/base-repo-scanner-sast:$VERSION"
 
