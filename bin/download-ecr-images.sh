@@ -30,7 +30,7 @@ echo "📦 Downloading scanner images..."
 docker pull "$ECR_REGISTRY/base-repo-scanner:$VERSION"
 echo "✅ Scanner image downloaded"
 
-docker pull "$ECR_REGISTRY/base-repo-scanner-full:$VERSION"
+docker pull "$ECR_REGISTRY/base-repo-scanner:$VERSION-full"
 echo "✅ Scanner-full image downloaded"
 
 docker pull "$ECR_REGISTRY/base-repo-scanner-sast:$VERSION"
