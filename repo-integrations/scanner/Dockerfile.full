@@ -310,6 +310,10 @@ RUN install-tool pipenv
 USER 0
 
 # renovate: datasource=pypi
+ARG UV_VERSION=0.9.7
+RUN install-tool uv
+
+# renovate: datasource=pypi
 
 ARG POETRY_VERSION=2.0.1
 RUN install-tool poetry

@@ -23,6 +23,11 @@ COPY --from=containerbase /usr/local/sbin/ /usr/local/sbin/
 COPY --from=containerbase /usr/local/containerbase/ /usr/local/containerbase/
 RUN install-containerbase && \
     prepare-tool all
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 2          │ CVE-2025-66471, CVE-2025-66418                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-tags depName=git packageName=git/git
 ARG GIT_VERSION=v2.41.3
@@ -173,7 +178,7 @@ RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2024-6345, CVE-2024-53899, CVE-2025-47273      │
+# │ High       │ 3          │ CVE-2025-47273, CVE-2024-6345, CVE-2024-53899      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
@@ -182,7 +187,7 @@ RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2024-53899, CVE-2024-6345, CVE-2025-47273      │
+# │ High       │ 3          │ CVE-2024-6345, CVE-2025-47273, CVE-2024-53899      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
@@ -241,11 +246,11 @@ RUN install-tool python
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
 ARG CHECKOV_VERSION=3.2.471
 RUN install-tool checkov
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2025-24359, GHSA-vp47-9734-prjw                │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                                   │
+# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────────┤
+# │ High       │ 4          │ CVE-2025-66471, CVE-2025-66418, CVE-2025-24359, GHSA-vp47-9734-prjw    │
+# └────────────┴────────────┴────────────────────────────────────────────────────────────────────────┘
 
 #ARG PHP_VERSION=8.4.8
 #RUN install-tool php
@@ -317,6 +322,10 @@ RUN install-tool pipenv
 
 
 USER 0
+
+# renovate: datasource=pypi
+#ARG UV_VERSION=0.9.7
+#RUN install-tool uv
 
 # renovate: datasource=pypi
 
