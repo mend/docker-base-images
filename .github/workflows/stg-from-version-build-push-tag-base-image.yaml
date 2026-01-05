@@ -1,6 +1,5 @@
 name: Staging Build and Push From Repo Integration Version
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -27,7 +26,7 @@ permissions:
 
 jobs:
   Staging_Build_And_Push_Base_Image_From_Version:
-    runs-on: [ mend-self-hosted, profile=developer-platform-xlarge-od ]
+    runs-on: [mend-self-hosted, profile=developer-platform-xlarge-od]
 
     steps:
       - name: Check out code
@@ -64,6 +63,12 @@ jobs:
           echo "✅ Dockerfile generation completed successfully"
         shell: bash
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build Docker Images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -91,15 +96,15 @@ jobs:
             echo "SkipGit is true, skipping git changes"
             exit 0
           fi
-          
+
           # Note: using Github
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
+
           # Create Release branch
           git checkout -b release/${{ github.event.inputs.Tag }}
           git push --set-upstream origin release/${{ github.event.inputs.Tag }}
-          
+
           # If files changed, add, commit and push
           if [[ `git status --porcelain` ]]; then
             echo "OK: Changes detected, committing and pushing."
@@ -109,11 +114,11 @@ jobs:
           else
             echo "WARNING: No changes were detected. This is fine though, skipping commit"
           fi
-          
+
           # Create tag
           git tag -a ${{ github.event.inputs.Tag }} -m "Automated Tag for Release ${{ github.event.inputs.Tag }}"
           git push origin --tags
-          
+
           # Create release
           if [ "${{ github.event.inputs.IsLatest }}" = false ]; then
             gh release create "${{ github.event.inputs.Tag }}" --latest=false --generate-notes --target release/${{ github.event.inputs.Tag }} --title "${{ github.event.inputs.Tag }}"
@@ -122,7 +127,7 @@ jobs:
           else
             gh release create "${{ github.event.inputs.Tag }}" --latest --generate-notes --target release/${{ github.event.inputs.Tag }} --title "${{ github.event.inputs.Tag }}"
           fi
-          
+
           # Merge release branch back into develop
           git checkout develop
           git merge release/${{ github.event.inputs.Tag }} --commit --no-edit
@@ -137,5 +142,3 @@ jobs:
         run: |
           echo "📤 Sending Slack notification..."
           ./bin/notify-slack.sh "${{ github.event.inputs.Tag }}" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
-
