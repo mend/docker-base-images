@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=amd64/ubuntu:24.04@sha256:8e82b2ef5516aafa350b523585f6bbcda7789be4582986c3139496cd8f4ee78d
 
 # This containerbase is used for tool intallation and user/directory setup
-FROM ghcr.io/containerbase/base:13.25.2@sha256:3d2629931b300cea60ed88fe80c0aa2678c7aa78bf34311511f50960de6b7cb5 AS containerbase
+FROM ghcr.io/containerbase/base:13.25.16@sha256:17ef41f5b3c2c6ee9aff68ad76b8edc2e094a022c8167c3364c21a1e0a14d962 AS containerbase
 
 FROM ${BASE_IMAGE} AS base
 
@@ -72,15 +72,15 @@ ARG GRADLE_VERSION=9.2.1
 RUN install-tool gradle
 
 # renovate: datasource=github-releases depName=erlang packageName=containerbase/erlang-prebuild versioning=docker
-ARG ERLANG_VERSION=27.3.4.3
+ARG ERLANG_VERSION=27.3.4.6
 RUN install-tool erlang
 
 # renovate: datasource=docker depName=elixir versioning=docker
-ARG ELIXIR_VERSION=1.19.3
+ARG ELIXIR_VERSION=1.19.4
 RUN install-tool elixir
 
 # renovate: datasource=github-releases depName=php packageName=containerbase/php-prebuild
-ARG PHP_VERSION=8.5.0
+ARG PHP_VERSION=8.5.1
 RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer packageName=composer/composer
@@ -88,18 +88,18 @@ ARG COMPOSER_VERSION=2.9.2
 RUN install-tool composer
 
 # renovate: datasource=docker depName=golang versioning=docker
-ARG GOLANG_VERSION=1.25.4
+ARG GOLANG_VERSION=1.25.5
 RUN install-tool golang
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.14.0
+ARG PYTHON_VERSION=3.14.2
 RUN install-tool python
 
 # renovate: datasource=pypi
-RUN install-tool conan 2.22.2
+RUN install-tool conan 2.24.0
 
 # renovate: datasource=pypi depName=pipenv
-ARG PIPENV_VERSION=2025.0.4
+ARG PIPENV_VERSION=2025.1.3
 RUN install-tool pipenv
 
 # renovate: datasource=github-releases depName=poetry packageName=python-poetry/poetry
@@ -107,7 +107,7 @@ ARG POETRY_VERSION=1.8.5
 RUN install-tool poetry
 
 # renovate: datasource=pypi
-RUN install-tool uv 0.9.11
+RUN install-tool uv 0.9.18
 
 # renovate: datasource=pypi depName=hashin
 ARG HASHIN_VERSION=1.0.5
@@ -120,11 +120,11 @@ RUN install-tool pdm 2.26.2
 RUN install-tool pip-tools 7.5.2
 
 # renovate: datasource=docker depName=rust versioning=docker
-ARG RUST_VERSION=1.91.1
+ARG RUST_VERSION=1.92.0
 RUN install-tool rust
 
 # renovate: datasource=github-releases depName=ruby packageName=containerbase/ruby-prebuild versioning=ruby
-ARG RUBY_VERSION=3.4.7
+ARG RUBY_VERSION=3.4.8
 RUN install-tool ruby
 
 # renovate: datasource=rubygems depName=bundler
@@ -136,7 +136,7 @@ ARG COCOAPODS_VERSION=1.16.2
 RUN install-tool cocoapods
 
 # renovate: datasource=npm depName=pnpm versioning=npm
-ARG PNPM_VERSION=10.22.0
+ARG PNPM_VERSION=10.25.0
 RUN install-tool pnpm
 
 # renovate: datasource=docker depName=dotnet packageName=mcr.microsoft.com/dotnet/sdk
@@ -144,17 +144,17 @@ ARG DOTNET_VERSION=8.0.416
 RUN install-tool dotnet
 
 # renovate: datasource=github-releases depName=helm packageName=helm/helm
-ARG HELM_VERSION=v3.19.2
+ARG HELM_VERSION=v3.19.4
 RUN install-tool helm
 
 # renovate: datasource=github-releases packageName=jsonnet-bundler/jsonnet-bundler
 RUN install-tool jb v0.6.0
 
 # renovate: datasource=npm
-RUN install-tool bun 1.3.2
+RUN install-tool bun 1.3.4
 
 # renovate: datasource=github-releases packageName=containerbase/nix-prebuild
-RUN install-tool nix 2.32.4
+RUN install-tool nix 2.33.0
 
 # renovate: datasource=github-releases packageName=jetify-com/devbox
 RUN install-tool devbox 0.16.0
@@ -163,9 +163,9 @@ RUN install-tool devbox 0.16.0
 RUN install-tool bazelisk v1.27.0
 
 # renovate: datasource=dart-version
-RUN install-tool dart 3.10.1
+RUN install-tool dart 3.10.6
 
 # renovate: datasource=flutter-version
-RUN install-tool flutter 3.38.3
+RUN install-tool flutter 3.38.5
 
 # END OF BASE IMAGE
