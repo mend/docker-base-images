@@ -12,10 +12,6 @@ on:
         description: "IsLatest: (default true) If True, merge changes into main branch after successful publish"
         default: true
         type: boolean
-      SkipGit:
-        description: "SkipGit: (default false) If True, no changes will be made to repo. However, the new images will still be pushed to Mend Hub! (- Used for refresh OS)"
-        default: false
-        type: boolean
 permissions:
   contents: write
   id-token: write
@@ -87,7 +83,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -e
-          ./bin/merge-to-main.sh "${{ github.event.inputs.Version }}" "${{ github.event.inputs.IsLatest }}" "${{ github.event.inputs.SkipGit }}"
+          ./bin/merge-to-main.sh "${{ github.event.inputs.Version }}" "${{ github.event.inputs.IsLatest }}"
           if [ $? -ne 0 ]; then
             echo "❌ Merge to main script failed"
             exit 1
