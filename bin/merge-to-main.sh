@@ -6,6 +6,12 @@ set -e
 
 VERSION=$1
 IS_LATEST=$2
+SKIP_GIT=${3:-false}
+
+if [ "$SKIP_GIT" = "true" ]; then
+   echo "SkipGit is true, skipping git changes"
+   exit 0
+fi
 
 if [ -z "$VERSION" ]; then
   echo "Error: No ZIP version argument provided."
