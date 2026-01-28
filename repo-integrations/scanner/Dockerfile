@@ -26,7 +26,7 @@ RUN install-containerbase && \
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2025-66471, CVE-2025-66418                     │
+# │ High       │ 3          │ CVE-2025-66471, CVE-2025-66418, CVE-2026-21441     │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-tags depName=git packageName=git/git
@@ -43,7 +43,7 @@ RUN install-tool node
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 1          │ CVE-2025-64756                                     │
+# │ High       │ 3          │ CVE-2026-23745, CVE-2025-64756, CVE-2026-23745     │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm depName=npm versioning=npm
@@ -52,7 +52,7 @@ RUN install-tool npm
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2025-64756, CVE-2025-64756                     │
+# │ High       │ 3          │ CVE-2025-64756, CVE-2025-64756, CVE-2026-23745     │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm depName=yarn
@@ -62,21 +62,22 @@ RUN install-tool yarn
 # renovate: datasource=npm depName=bower
 ARG BOWER_VERSION=1.8.14
 RUN install-tool bower
-# ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 11         │ CVE-2023-26136, CVE-2019-10744, CVE-2021-23807, CVE-2025-7783      │
-# │            │            │ CVE-2023-26136, CVE-2019-10744, CVE-2025-7783, CVE-2021-23383      │
-# │            │            │ CVE-2021-3918, CVE-2021-23369, CVE-2021-44906                      │
-# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
-# │ High       │ 28         │ CVE-2022-24999, CVE-2022-3517, CVE-2020-8116, CVE-2020-8203        │
-# │            │            │ CVE-2021-23337, CVE-2021-23343, CVE-2020-36604, CVE-2018-3728      │
-# │            │            │ CVE-2022-3517, CVE-2016-10540, CVE-2022-25883, CVE-2015-8855       │
-# │            │            │ CVE-2022-25883, CVE-2020-8203, CVE-2021-23337, CVE-2017-15010      │
-# │            │            │ CVE-2017-15010, CVE-2024-12905, CVE-2025-48387, CVE-2025-59343     │
-# │            │            │ CVE-2022-24999, CVE-2017-1000048, CVE-2022-21213, CVE-2020-7792    │
-# │            │            │ CVE-2021-43138, CVE-2022-29167, CVE-2022-21213, CVE-2020-7792      │
-# └────────────┴────────────┴────────────────────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                                │
+# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 11         │ CVE-2023-26136, CVE-2019-10744, CVE-2021-23807, CVE-2025-7783       │
+# │            │            │ CVE-2023-26136, CVE-2019-10744, CVE-2021-23383, CVE-2021-23369      │
+# │            │            │ CVE-2025-7783, CVE-2021-3918, CVE-2021-44906                        │
+# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
+# │ High       │ 30         │ CVE-2022-21213, CVE-2022-3517, CVE-2020-8116, CVE-2020-8203         │
+# │            │            │ CVE-2021-23337, CVE-2021-23343, CVE-2020-36604, CVE-2018-3728       │
+# │            │            │ CVE-2022-3517, CVE-2016-10540, CVE-2022-25883, CVE-2020-8203        │
+# │            │            │ CVE-2021-23337, CVE-2017-15010, CVE-2017-15010, CVE-2024-12905      │
+# │            │            │ CVE-2025-48387, CVE-2025-59343, CVE-2022-24999, CVE-2017-1000048    │
+# │            │            │ CVE-2025-15284, CVE-2020-7792, CVE-2021-43138, CVE-2022-29167       │
+# │            │            │ CVE-2022-21213, CVE-2020-7792, CVE-2022-24999, CVE-2025-15284       │
+# │            │            │ CVE-2022-25883, CVE-2015-8855                                       │
+# └────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
 
 #ARG PNPM_VERSION=10.17.0
 #RUN install-tool pnpm
@@ -107,24 +108,18 @@ RUN install-tool gradle
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 5          │ CVE-2025-4949, CVE-2021-26291, CVE-2021-26291, CVE-2022-1471      │
-# │            │            │ CVE-2020-7692                                                     │
+# │ Critical   │ 4          │ CVE-2020-7692, CVE-2021-26291, CVE-2021-26291, CVE-2022-1471      │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 18         │ CVE-2021-46877, CVE-2020-36518, CVE-2022-42003, CVE-2022-42004    │
-# │            │            │ CVE-2022-46751, CVE-2022-37866, CVE-2022-25647, CVE-2023-2976     │
-# │            │            │ CVE-2021-36090, CVE-2024-21634, CVE-2024-47554, CVE-2025-52999    │
-# │            │            │ CVE-2022-25857, CVE-2021-35516, CVE-2021-35515, CVE-2021-35517    │
-# │            │            │ CVE-2021-22573, CVE-2023-4759                                     │
+# │ High       │ 18         │ CVE-2021-22573, CVE-2023-4759, CVE-2021-36090, CVE-2021-46877     │
+# │            │            │ CVE-2020-36518, CVE-2022-42003, CVE-2021-35516, CVE-2022-46751    │
+# │            │            │ CVE-2022-37866, CVE-2022-25647, CVE-2023-2976, CVE-2024-21634     │
+# │            │            │ CVE-2024-47554, CVE-2025-52999, CVE-2022-42004, CVE-2022-25857    │
+# │            │            │ CVE-2021-35515, CVE-2021-35517                                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.6
 RUN install-tool gradle
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2025-4949                                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=9.1.0
@@ -134,11 +129,6 @@ RUN install-tool gradle
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
 ARG GRADLE_VERSION=8.14.3
 RUN install-tool gradle
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2025-4949                                      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=docker depName=golang versioning=docker
 #ARG GOLANG_VERSION=1.24.7
@@ -148,15 +138,15 @@ RUN install-tool gradle
 
 #USER ${USER_ID}
 ## Install package managers
-#RUN go install github.com/tools/godep@latest
-#RUN go install github.com/LK4D4/vndr@latest
-#RUN go install  github.com/kardianos/govendor@latest
+#RUN go install github.com/tools/godep@latest && \
+#    go install github.com/LK4D4/vndr@latest && \
+#    go install  github.com/kardianos/govendor@latest
 
 #All Deparacted/archived go package managers
-# RUN go install  github.com/gpmgo/gopm@latest
-# RUN go install  github.com/golang/dep/cmd/dep@latest
-# RUN go install github.com/Masterminds/glide@latest
-# RUN curl https://glide.sh/get | sh
+# RUN go install  github.com/gpmgo/gopm@latest && \
+#     go install  github.com/golang/dep/cmd/dep@latest && \
+#     go install github.com/Masterminds/glide@latest && \
+#     curl https://glide.sh/get | sh
 #USER 0
 #RUN chgrp -R 0 /go && chmod -R g=u /go
 
@@ -178,7 +168,7 @@ RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2025-47273, CVE-2024-6345, CVE-2024-53899      │
+# │ High       │ 3          │ CVE-2024-6345, CVE-2024-53899, CVE-2025-47273      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
@@ -187,7 +177,7 @@ RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2024-6345, CVE-2025-47273, CVE-2024-53899      │
+# │ High       │ 3          │ CVE-2025-47273, CVE-2024-6345, CVE-2024-53899      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
@@ -246,11 +236,12 @@ RUN install-tool python
 # renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
 ARG CHECKOV_VERSION=3.2.471
 RUN install-tool checkov
-# ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                                   │
-# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────────┤
-# │ High       │ 4          │ CVE-2025-66471, CVE-2025-66418, CVE-2025-24359, GHSA-vp47-9734-prjw    │
-# └────────────┴────────────┴────────────────────────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 5          │ CVE-2025-66471, CVE-2025-66418, CVE-2026-21441, CVE-2025-24359    │
+# │            │            │ GHSA-vp47-9734-prjw                                               │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 #ARG PHP_VERSION=8.4.8
 #RUN install-tool php
@@ -260,8 +251,8 @@ RUN install-tool checkov
 #RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
-# RUN curl -o /tmp/libssl1.1.deb https://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb
-# RUN dpkg -i /tmp/libssl1.1.deb
+# RUN curl -o /tmp/libssl1.1.deb https://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb && \
+#     dpkg -i /tmp/libssl1.1.deb
 
 #ARG DOTNET_VERSION=2.2.207
 #RUN install-tool dotnet
@@ -367,8 +358,8 @@ RUN install-tool poetry
 
 # renovate: datasource=rubygems depName=cocoapods versioning=ruby
 # ARG COCOAPODS_VERSION=1.16.2
-# RUN install-tool cocoapods
-# RUN adduser cocoapods
+# RUN install-tool cocoapods && \
+#     adduser cocoapods
 # USER cocoapods
 # RUN pod setup
 # USER 0
@@ -397,6 +388,11 @@ RUN apt-get update && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
 	rm -rf /tmp/*
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 1          │ CVE-2025-37899                                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 
 ##### Install Conda
@@ -409,15 +405,14 @@ RUN apt-get update && \
 # Use conda-forge strictly
 # conda config --set channel_priority strict
 #
-#USER ${USER_ID}
-#RUN cd ${USER_HOME} && \
+#RUN  su - ${USER_NAME} -c "cd ${USER_HOME} && \
 #        mkdir -p ${USER_HOME}/miniconda3 && \
 #        wget https://repo.anaconda.com/miniconda/Miniconda3-py39_24.1.2-0-Linux-x86_64.sh -O ${USER_HOME}/miniconda3/miniconda.sh && \
 #        bash ${USER_HOME}/miniconda3/miniconda.sh -b -u -p ${USER_HOME}/miniconda3 && \
-#        rm -rf ${USER_HOME}/miniconda3/miniconda.sh
+#        rm -rf ${USER_HOME}/miniconda3/miniconda.sh" && \
+#        chgrp -R 0 ${USER_HOME}/miniconda3 && \
+#        chmod -R g=u ${USER_HOME}/miniconda3
 #
-#
-#USER 0
 #RUN echo '#!/usr/bin/env bash' >> /usr/bin/conda && \
 #        echo 'source ${USER_HOME}/miniconda3/etc/profile.d/conda.sh' >> /usr/bin/conda && \
 #        echo '${USER_HOME}/miniconda3/bin/conda "$@"' >> /usr/bin/conda && \
@@ -486,15 +481,13 @@ RUN apt-get update && \
 #	rm -rf /var/lib/apt/lists/* && \
 #	rm -rf /tmp/*
 #
-#USER ${USER_ID}
-#
-#RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh && \
+#RUN su - ${USER_NAME} -c "curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh && \
 #	source /home/wss-scanner/.ghcup/env && \
 #	echo "source /home/wss-scanner/.ghcup/env" >> /home/wss-scanner/.bashrc && \
 #	ghcup install cabal ${CABAL_VERSION} &&\
-#	cabal update
-#
-#USER 0
+#	cabal update" && \
+#   chgrp -R 0 ${USER_HOME}/.cabal ${USER_HOME}/.ghcup && \
+#   chmod -R g=u ${USER_HOME}/.cabal ${USER_HOME}/.ghcup
 
 #### Install Mono
 #RUN apt-get update && \
