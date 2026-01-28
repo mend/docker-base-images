@@ -22,10 +22,20 @@ COPY --from=containerbase /usr/local/sbin/ /usr/local/sbin/
 COPY --from=containerbase /usr/local/containerbase/ /usr/local/containerbase/
 RUN install-containerbase && \
     prepare-tool all
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 3          │ CVE-2025-66471, CVE-2025-66418, CVE-2026-21441     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-tags depName=git lookupName=git/git
 ARG GIT_VERSION=v2.41.0
 RUN install-tool git
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 1          │ CVE-2025-37899                                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 ### !!! Install this version after the other versions, so that it is the default !!! ###
 # renovate: datasource=adoptium-java depName=java
