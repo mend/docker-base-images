@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=amd64/ubuntu:24.04@sha256:c8af0e28cf94b1995f4d650e38c07cccf21d1c093168f14cd183720b8a326cd3
 
 # This containerbase is used for tool intallation and user/directory setup
-FROM ghcr.io/containerbase/base:13.26.4@sha256:f5f4a7010d9ab7045d5717d04168db411c453e0504fce8084590206d1dc3eabc AS containerbase
+FROM ghcr.io/containerbase/base:13.26.23@sha256:973af9b7c0f52f7c125ea7da011b3654e61b1a893a276e9ee2f611986caba140 AS containerbase
 
 FROM ${BASE_IMAGE} AS base
 
@@ -29,7 +29,7 @@ RUN install-containerbase && \
 # --------------------------------------------------------------
 
 # renovate: datasource=github-tags depName=git packageName=git/git
-ARG GIT_VERSION=v2.52.0
+ARG GIT_VERSION=v2.53.0
 RUN install-tool git
 
 # install git-lfs
@@ -64,11 +64,11 @@ RUN install-tool yarn
 RUN install-tool docker v28.5.2
 
 # renovate: datasource=adoptium-java depName=java
-ARG JAVA_VERSION=11.0.29+7
+ARG JAVA_VERSION=11.0.30+7
 RUN install-tool java
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.3.0
+ARG GRADLE_VERSION=9.3.1
 RUN install-tool gradle
 
 # renovate: datasource=github-releases depName=erlang packageName=containerbase/erlang-prebuild versioning=docker
@@ -80,23 +80,23 @@ ARG ELIXIR_VERSION=1.19.5
 RUN install-tool elixir
 
 # renovate: datasource=github-releases depName=php packageName=containerbase/php-prebuild
-ARG PHP_VERSION=8.5.2
+ARG PHP_VERSION=8.5.3
 RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer packageName=composer/composer
-ARG COMPOSER_VERSION=2.9.3
+ARG COMPOSER_VERSION=2.9.5
 RUN install-tool composer
 
 # renovate: datasource=docker depName=golang versioning=docker
-ARG GOLANG_VERSION=1.25.6
+ARG GOLANG_VERSION=1.26.0
 RUN install-tool golang
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.14.2
+ARG PYTHON_VERSION=3.14.3
 RUN install-tool python
 
 # renovate: datasource=pypi
-RUN install-tool conan 2.24.0
+RUN install-tool conan 2.25.2
 
 # renovate: datasource=pypi depName=pipenv
 ARG PIPENV_VERSION=2025.1.3
@@ -107,20 +107,20 @@ ARG POETRY_VERSION=1.8.5
 RUN install-tool poetry
 
 # renovate: datasource=pypi
-RUN install-tool uv 0.9.26
+RUN install-tool uv 0.10.3
 
 # renovate: datasource=pypi depName=hashin
 ARG HASHIN_VERSION=1.0.5
 RUN install-tool hashin
 
 # renovate: datasource=pypi
-RUN install-tool pdm 2.26.4
+RUN install-tool pdm 2.26.6
 
 # renovate: datasource=pypi
-RUN install-tool pip-tools 7.5.2
+RUN install-tool pip-tools 7.5.3
 
 # renovate: datasource=docker depName=rust versioning=docker
-ARG RUST_VERSION=1.92.0
+ARG RUST_VERSION=1.93.1
 RUN install-tool rust
 
 # renovate: datasource=github-releases depName=ruby packageName=containerbase/ruby-prebuild versioning=ruby
@@ -136,36 +136,36 @@ ARG COCOAPODS_VERSION=1.16.2
 RUN install-tool cocoapods
 
 # renovate: datasource=npm depName=pnpm versioning=npm
-ARG PNPM_VERSION=10.28.0
+ARG PNPM_VERSION=10.29.2
 RUN install-tool pnpm
 
 # renovate: datasource=docker depName=dotnet packageName=mcr.microsoft.com/dotnet/sdk
-ARG DOTNET_VERSION=8.0.417
+ARG DOTNET_VERSION=8.0.418
 RUN install-tool dotnet
 
 # renovate: datasource=github-releases depName=helm packageName=helm/helm
-ARG HELM_VERSION=v3.19.5
+ARG HELM_VERSION=v3.20.0
 RUN install-tool helm
 
 # renovate: datasource=github-releases packageName=jsonnet-bundler/jsonnet-bundler
 RUN install-tool jb v0.6.0
 
 # renovate: datasource=npm
-RUN install-tool bun 1.3.5
+RUN install-tool bun 1.3.9
 
 # renovate: datasource=github-releases packageName=containerbase/nix-prebuild
-RUN install-tool nix 2.33.1
+RUN install-tool nix 2.33.3
 
 # renovate: datasource=github-releases packageName=jetify-com/devbox
 RUN install-tool devbox 0.16.0
 
 # renovate: datasource=github-releases packageName=bazelbuild/bazelisk
-RUN install-tool bazelisk v1.28.0
+RUN install-tool bazelisk v1.28.1
 
 # renovate: datasource=dart-version
-RUN install-tool dart 3.10.7
+RUN install-tool dart 3.11.0
 
 # renovate: datasource=flutter-version
-RUN install-tool flutter 3.38.7
+RUN install-tool flutter 3.41.1
 
 # END OF BASE IMAGE
