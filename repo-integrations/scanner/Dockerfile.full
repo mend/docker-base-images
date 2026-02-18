@@ -2,7 +2,8 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:13.23.10 AS containerbase
+FROM ghcr.io/containerbase/base:13.26.7@sha256:5a7aace53413ad8e98fbb87cbe1aa6727ce2ad225356a46a58ea9171ae8966d1 AS containerbase
+
 
 FROM ${BASE_IMAGE} as base
 
@@ -24,27 +25,28 @@ COPY --from=containerbase /usr/local/containerbase/ /usr/local/containerbase/
 RUN install-containerbase && \
     prepare-tool all
 
-# renovate: datasource=github-tags depName=git lookupName=git/git
+# renovate: datasource=github-tags packageName=git/git
 ARG GIT_VERSION=v2.41.3
 RUN install-tool git
 
 # install git lfs
+# renovate: datasource=github-releases packageName=git-lfs/git-lfs
 #ARG GIT_LFS_VERSION=v3.5.1
 #RUN install-tool git-lfs
 
-# renovate: datasource=docker depName=node versioning=docker
+# renovate: datasource=github-releases packageName=containerbase/node-prebuild versioning=node
 ARG NODE_VERSION=24.0.0
 RUN install-tool node
 
-# renovate: datasource=npm depName=npm versioning=npm
+# renovate: datasource=npm versioning=npm
 ARG NPM_VERSION=11.6.1
 RUN install-tool npm
 
-# renovate: datasource=npm depName=yarn
+# renovate: datasource=npm packageName=@yarnpkg/cli-dist
 ARG YARN_VERSION=1.22.22
 RUN install-tool yarn
 
-# renovate: datasource=npm depName=bower
+# renovate: datasource=npm
 ARG BOWER_VERSION=1.8.14
 RUN install-tool bower
 # ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────┐
@@ -63,6 +65,7 @@ RUN install-tool bower
 # │            │            │ CVE-2021-43138, CVE-2022-29167, CVE-2022-21213, CVE-2020-7792      │
 # └────────────┴────────────┴────────────────────────────────────────────────────────────────────┘
 
+# renovate: datasource=npm
 ARG PNPM_VERSION=10.17.0
 RUN install-tool pnpm
 
@@ -70,23 +73,27 @@ RUN install-tool pnpm
 RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
 
-ARG JAVA_VERSION=8.0.432+6
+# renovate: datasource=java-version packageName=java-jre
+ARG JAVA_VERSION=8.0.472+8
 RUN install-tool java
 
-ARG JAVA_VERSION=11.0.25+9
+# renovate: datasource=java-version packageName=java-jre
+ARG JAVA_VERSION=11.0.29+7
 RUN install-tool java
 
-ARG JAVA_VERSION=21.0.5+11.0.LTS
+# renovate: datasource=java-version packageName=java-jre
+ARG JAVA_VERSION=21.0.10+7.0.LTS
 RUN install-tool java
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
-ARG JAVA_VERSION=17.0.13+11
+# renovate: datasource=java-version packageName=java-jre
+ARG JAVA_VERSION=17.0.18+8
 RUN install-tool java
 ENV MEND_JAVA=/usr/local/bin/mend_java
 RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
     chmod +x $MEND_JAVA
 
-# renovate: datasource=gradle-version depName=gradle versioning=gradle
+# renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=6.9.4
 RUN install-tool gradle
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
@@ -102,8 +109,8 @@ RUN install-tool gradle
 # │            │            │ CVE-2021-22573, CVE-2023-4759                                     │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
-# renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=7.6.4
+# renovate: datasource=gradle-version packageName=gradle versioning=gradle
+ARG GRADLE_VERSION=7.6.6
 RUN install-tool gradle
 # ┌────────────┬────────────┬────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -111,13 +118,13 @@ RUN install-tool gradle
 # │ Critical   │ 1          │ CVE-2025-4949                                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.1.0
+# renovate: datasource=gradle-version packageName=gradle versioning=gradle
+ARG GRADLE_VERSION=9.3.0
 RUN install-tool gradle
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
-# renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.14.3
+# renovate: datasource=gradle-version packageName=gradle versioning=gradle
+ARG GRADLE_VERSION=8.14.4
 RUN install-tool gradle
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -125,7 +132,7 @@ RUN install-tool gradle
 # │ Critical   │ 1          │ CVE-2025-4949                                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=docker depName=golang versioning=docker
+# renovate: datasource=github-releases packageName=containerbase/golang-prebuild
 ARG GOLANG_VERSION=1.24.7
 RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
@@ -145,19 +152,19 @@ RUN go install github.com/tools/godep@latest && \
 #     curl https://glide.sh/get | sh
 USER 0
 
-# renovate: datasource=maven depName=maven lookupName=org.apache.maven:maven
-ARG MAVEN_VERSION=3.9.11
+# renovate: datasource=maven packageName=org.apache.maven:maven
+ARG MAVEN_VERSION=3.9.12
 RUN install-tool maven
 
-# renovate: datasource=github-releases depName=scala lookupName=scala/scala
+# renovate: datasource=github-releases packageName=scala/scala
 ARG SCALA_VERSION=v2.13.16
 RUN install-tool scala
 
-# renovate: datasource=github-releases depName=sbt lookupName=sbt/sbt
-ARG SBT_VERSION=1.5.8
+# renovate: datasource=github-releases packageName=sbt/sbt
+ARG SBT_VERSION=1.9.9
 RUN install-tool sbt
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.6.15
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
@@ -166,7 +173,7 @@ RUN install-tool python
 # │ High       │ 3          │ CVE-2024-6345, CVE-2024-53899, CVE-2025-47273      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=2.7.18
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
@@ -175,8 +182,8 @@ RUN install-tool python
 # │ High       │ 3          │ CVE-2024-53899, CVE-2024-6345, CVE-2025-47273      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.11.13
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.11.14
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -184,12 +191,12 @@ RUN install-tool python
 # │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.12.9
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.12.12
 RUN install-tool python
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.10.18
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.10.19
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -197,7 +204,7 @@ RUN install-tool python
 # │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.7.17
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
@@ -206,7 +213,7 @@ RUN install-tool python
 # │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.20
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
@@ -215,12 +222,12 @@ RUN install-tool python
 # │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.13.7
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.13.11
 RUN install-tool python
 
-# renovate: datasource=github-releases depName=python lookupName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.9.21
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.9.25
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -228,7 +235,7 @@ RUN install-tool python
 # │ High       │ 2          │ CVE-2024-6345, CVE-2025-47273                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
-# renovate: datasource=pypi depName=checkov ; Must be installed after python and before python version 3.7.17
+# renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
 ARG CHECKOV_VERSION=3.2.471
 RUN install-tool checkov
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
@@ -237,11 +244,12 @@ RUN install-tool checkov
 # │ High       │ 2          │ CVE-2025-24359, GHSA-vp47-9734-prjw                │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
+# renovate: datasource=github-releases packageName=containerbase/php-prebuild
 ARG PHP_VERSION=8.4.10
 RUN install-tool php
 
-# renovate: datasource=github-releases depName=composer lookupName=composer/composer
-ARG COMPOSER_VERSION=2.0.14
+# renovate: datasource=github-releases packageName=containerbase/composer-prebuild
+ARG COMPOSER_VERSION=2.5.8
 RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
@@ -249,19 +257,24 @@ RUN curl -o /tmp/libssl1.1.deb https://security.ubuntu.com/ubuntu/pool/main/o/op
     dpkg -i /tmp/libssl1.1.deb
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
-ARG DOTNET_VERSION=2.2.207
+# renovate: datasource=dotnet packageName=dotnet-sdk
+ARG DOTNET_VERSION=2.2.402
 RUN install-tool dotnet
 
+# renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=3.1.426
 RUN install-tool dotnet
 
+# renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=5.0.408
 RUN install-tool dotnet
 
+# renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=6.0.428
 RUN install-tool dotnet
 
-ARG DOTNET_VERSION=8.0.413
+# renovate: datasource=dotnet packageName=dotnet-sdk
+ARG DOTNET_VERSION=8.0.417
 RUN install-tool dotnet
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -271,7 +284,8 @@ RUN install-tool dotnet
 # │            │            │ CVE-2025-26646, CVE-2025-55247, CVE-2025-55247                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
-ARG DOTNET_VERSION=9.0.101
+# renovate: datasource=dotnet packageName=dotnet-sdk
+ARG DOTNET_VERSION=9.0.310
 RUN install-tool dotnet
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -280,6 +294,7 @@ RUN install-tool dotnet
 # │            │            │ CVE-2025-55247, CVE-2025-55247                                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
+# renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=7.0.410
 RUN install-tool dotnet
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
@@ -295,13 +310,14 @@ RUN install-tool dotnet
 # Set .NET SDK 7.0.405 as the default version
 RUN echo '{ "sdk": { "version": "7.0.410" } }' > ${USER_HOME}/global.json
 
+# renovate: datasource=docker versioning=docker
 ARG RUST_VERSION=1.58.1
 RUN install-tool rust
 
 # pip user install (so available for all python versions)
 USER ${USER_ID}
 
-# renovate: datasource=pypi depName=pipenv
+# renovate: datasource=pypi
 ARG PIPENV_VERSION=2023.7.23
 RUN install-tool pipenv
 
@@ -314,27 +330,28 @@ ARG UV_VERSION=0.9.7
 RUN install-tool uv
 
 # renovate: datasource=pypi
-
 ARG POETRY_VERSION=2.0.1
 RUN install-tool poetry
 
+# renovate: datasource=pypi
 ARG POETRY_VERSION=1.6.1
 RUN install-tool poetry
 
 ENV GEM_HOME=/tmp/containerbase/cache/.ruby
 ENV GEM_PATH="${GEM_HOME}"
-# renovate: datasource=github-releases depName=ruby lookupName=containerbase/ruby-prebuild
+# renovate: datasource=github-releases packageName=containerbase/ruby-prebuild versioning=ruby
 ARG RUBY_VERSION=3.2.9
 RUN install-tool ruby && \
     gem install rubygems-update -v 3.3.0 && \
     gem update --system
 ENV PATH="${GEM_HOME}/bin:${PATH}"
 
-# renovate: datasource=rubygems depName=bundler versioning=ruby
+# renovate: datasource=rubygems versioning=ruby
 ARG BUNDLER_VERSION=2.4.22
 RUN install-tool bundler
 
-ARG CONAN_VERSION=2.20.1
+# renovate: datasource=pypi
+ARG CONAN_VERSION=2.24.0
 RUN install-tool conan
 
 RUN install-tool erlang 24.3.3.0
@@ -351,7 +368,7 @@ RUN install-tool elixir 1.13.4
 #	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.rbenv ${USER_HOME}/.bashrc
 # ENV PATH ${USER_HOME}/.rbenv/bin:$PATH
 
-# renovate: datasource=rubygems depName=cocoapods versioning=ruby
+# renovate: datasource=rubygems versioning=ruby
 ARG COCOAPODS_VERSION=1.16.2
 RUN install-tool cocoapods && \
     adduser cocoapods
@@ -359,6 +376,7 @@ USER cocoapods
 RUN pod setup
 USER 0
 
+# renovate: datasource=github-releases packageName=helm/helm
 ARG HELM_VERSION=3.19.0
 RUN install-tool helm
 
@@ -410,6 +428,7 @@ RUN echo '#!/usr/bin/env bash' >> /usr/bin/conda && \
         chmod +x /usr/bin/conda
 
 # Upgrade cryptography package to fix CVE-2024-26130 (affects versions 38.0.0-42.0.3)
+# renovate: datasource=pypi
 ARG CRYPTOGRAPHY_VERSION=46.0.3
 RUN ${USER_HOME}/miniconda3/bin/pip install --upgrade "cryptography>=${CRYPTOGRAPHY_VERSION}"
 
@@ -515,6 +534,7 @@ RUN USE_BAZEL_VERSION=6.1.1 bazel version
 ENV USE_BAZEL_VERSION=6.1.1
 
 # Install Swift (including SPM)
+# renovate: datasource=docker versioning=docker
 ARG SWIFT_VERSION=5.10.1
 RUN install-tool swift
 

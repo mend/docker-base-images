@@ -20,6 +20,10 @@ on:
         description: "CopyVersionScript: (default true) If True generate_versions.sh will be copied from the release and added to the docker image"
         default: true
         type: boolean
+      TriggeredBy:
+        description: "TriggeredBy: (default manual) Indicates what triggered this workflow. Set to 'ubuntu-refresh' to suppress Slack notifications."
+        default: "manual"
+        type: string
 permissions:
   contents: write
   id-token: write
@@ -135,7 +139,7 @@ jobs:
         shell: bash
 
       - name: Notify Slack - Images Ready
-        if: always()
+        if: always() && github.event.inputs.TriggeredBy != 'ubuntu-refresh'
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           SLACK_WEBHOOK_URL: ${{ secrets.STG_SLACK_WEBHOOK_URL }}
