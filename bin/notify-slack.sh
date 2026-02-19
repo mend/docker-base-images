@@ -6,6 +6,16 @@ set -e
 VERSION=$1
 JOB_STATUS=$2
 WORKFLOW_URL=$3
+PLATFORM_INFO=$4  # Optional: "ARM64" or empty
+
+# Set platform prefix and tag suffix if platform info provided
+PLATFORM_PREFIX=""
+PLATFORM_TAG_SUFFIX=""
+
+if [ -n "$PLATFORM_INFO" ]; then
+  PLATFORM_PREFIX="[${PLATFORM_INFO}] "
+  PLATFORM_TAG_SUFFIX="-arm64"
+fi
 
 # Determine status emoji and message
 if [ "$JOB_STATUS" = "success" ]; then
@@ -26,25 +36,25 @@ fi
 if [ "$JOB_STATUS" = "success" ]; then
     READY_MESSAGE="ready Images"
     IMAGES="
-• \`$ECR_REGISTRY/base-repo-controller:$VERSION\`
-• \`$ECR_REGISTRY/base-repo-scanner:$VERSION\`
-• \`$ECR_REGISTRY/base-repo-scanner:$VERSION-full\`
-• \`$ECR_REGISTRY/base-repo-scanner-sast:$VERSION\`
-• \`$ECR_REGISTRY/base-repo-remediate:$VERSION\`"
+• \`$ECR_REGISTRY/base-repo-controller:$VERSION${PLATFORM_TAG_SUFFIX}\`
+• \`$ECR_REGISTRY/base-repo-scanner:$VERSION${PLATFORM_TAG_SUFFIX}\`
+• \`$ECR_REGISTRY/base-repo-scanner:$VERSION${PLATFORM_TAG_SUFFIX}-full\`
+• \`$ECR_REGISTRY/base-repo-scanner-sast:$VERSION${PLATFORM_TAG_SUFFIX}\`
+• \`$ECR_REGISTRY/base-repo-remediate:$VERSION${PLATFORM_TAG_SUFFIX}\`"
 
     # Create success message
-    SLACK_MESSAGE="🚀 * Base Images Ready*
+    SLACK_MESSAGE="🚀 *${PLATFORM_PREFIX}Base Images Ready*
 
-📦 *Tag:* \`$VERSION\`
+📦 *Tag:* \`$VERSION${PLATFORM_TAG_SUFFIX}\`
 📋 *Images Published:*$IMAGES
 
 $STATUS_EMOJI All base images for services are now $READY_MESSAGE
 🔗 Workflow: <$WORKFLOW_URL|View Run>"
 else
     # Create failure message
-    SLACK_MESSAGE="💥 * Base Images Pipeline $STATUS_MESSAGE*
+    SLACK_MESSAGE="💥 *${PLATFORM_PREFIX}Base Images Pipeline $STATUS_MESSAGE*
 
-📦 *Tag:* \`$VERSION\`
+📦 *Tag:* \`$VERSION${PLATFORM_TAG_SUFFIX}\`
 $STATUS_EMOJI Pipeline failed during base images build/publish process
 
 Please check the workflow logs for details:
