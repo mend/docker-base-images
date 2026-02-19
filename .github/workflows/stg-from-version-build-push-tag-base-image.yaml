@@ -89,7 +89,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: sleep debug
-        uses: mend/gh-actions/.github/actions/debug-sleep@v1.0.66
+        run: sleep 999999
 
       - name: Build Docker Images (${{ matrix.arch }})
         env:
