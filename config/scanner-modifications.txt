@@ -10,8 +10,12 @@ COMMENT_BLOCK:Install Nuget CLI
 # Comment out only the specific nuget install line - precise and safe
 COMMENT:apt-get install.*nuget
 
-# Example: Add a custom comment after the base image
-# ADD_AFTER:FROM.*AS base:# Custom modifications applied
+# ARM64 compatibility fixes
 
-# Example: Replace a specific version
-# REPLACE:ARG NODE_VERSION=.*:ARG NODE_VERSION=18.0.0
+# Fix libssl package to use architecture-aware download
+# Detects runtime architecture and downloads the correct .deb package
+REPLACE:curl -o /tmp/libssl1.1.deb https://security.ubuntu.com.*_amd64.deb:RUN ARCH_SUFFIX=$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/') && curl -o /tmp/libssl1.1.deb "https://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_${ARCH_SUFFIX}.deb" && dpkg -i /tmp/libssl1.1.deb
+
+# Fix Miniconda installer to use architecture-aware download
+# Detects runtime architecture (x86_64 or aarch64) and downloads matching installer
+REPLACE:wget https://repo.anaconda.com/miniconda/Miniconda3.*-Linux-x86_64.sh:ARCH_NAME=$(uname -m) && wget https://repo.anaconda.com/miniconda/Miniconda3-py39_24.1.2-0-Linux-${ARCH_NAME}.sh
