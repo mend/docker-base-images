@@ -139,6 +139,9 @@ if [ ! -f $remediateDockerfile ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $remediateDockerfile > repo-integrations/remediate/Dockerfile
+
+apply_dockerfile_modifications "repo-integrations/remediate/Dockerfile" "remediate"
+
 # ================================
 # SUMMARY OUTPUT
 # ================================
