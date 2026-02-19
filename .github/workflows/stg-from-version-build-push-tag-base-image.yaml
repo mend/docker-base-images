@@ -39,7 +39,7 @@ jobs:
             runner_profile: developer-platform-xlarge-od
             tag_suffix: ""
             platform_info: ""
-            handle_git: true
+            handle_git: false
           - arch: arm64
             runner_profile: renovate-arm-od
             tag_suffix: "-arm64"
@@ -86,6 +86,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: sleep debug
+        uses: mend/gh-actions/.github/actions/debug-sleep@v1.0.66
 
       - name: Build Docker Images (${{ matrix.arch }})
         env:
