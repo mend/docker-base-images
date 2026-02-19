@@ -24,13 +24,14 @@ on:
         description: "TriggeredBy: (default manual) Indicates what triggered this workflow. Set to 'ubuntu-refresh' to suppress Slack notifications."
         default: "manual"
         type: string
+
 permissions:
   contents: write
   id-token: write
 
 jobs:
   Staging_Build_And_Push_Base_Image_From_Version:
-    runs-on: [mend-self-hosted, profile=${{ matrix.runner_profile }}]
+    runs-on: [mend-self-hosted, "profile=${{ matrix.runner_profile }}"]
     strategy:
       fail-fast: false
       matrix:
