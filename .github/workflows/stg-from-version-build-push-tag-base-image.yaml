@@ -88,9 +88,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: sleep debug
-        run: sleep 999999
-
       - name: Build Docker Images (${{ matrix.arch }})
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
