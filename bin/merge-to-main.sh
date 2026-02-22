@@ -28,6 +28,13 @@ echo "Release branch: $RELEASE_BRANCH"
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+# Mark this version as production-released.
+# The CVE monitor queries these tags to determine which versions are eligible for OS refreshes,
+# preventing it from promoting staging-only versions to production.
+# Silently skip if the tag already exists (e.g., during CVE refresh cycles).
+git tag "prod-$VERSION" 2>/dev/null || echo "Tag prod-$VERSION already exists, skipping"
+git push origin "prod-$VERSION" 2>/dev/null || echo "Tag prod-$VERSION already pushed, skipping"
+
 # If IsLatest is true, merge to main branch
 if [ "$IS_LATEST" = "true" ]; then
     echo "IsLatest is true, merging changes to main branch"
