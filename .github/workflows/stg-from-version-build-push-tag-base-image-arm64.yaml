@@ -1,4 +1,4 @@
-name: Staging Build and Push From Repo Integration Version (ARM64)
+name: (ARM64) Staging Build and Push From Repo Integration Version 
 
 on:
   workflow_dispatch:
