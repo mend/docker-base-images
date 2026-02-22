@@ -8,14 +8,6 @@ on:
         default: "1.1.1"
         type: string
         required: true
-      IsLatest:
-        description: "IsLatest: (default true) If True, release branch will be merged back into develop and release will be set as latest."
-        default: true
-        type: boolean
-      SkipGit:
-        description: "SkipGit: (default false) If True, no changes will be made to repo. However, the new images will still be pushed to ECR!"
-        default: false
-        type: boolean
       CopyVersionScript:
         description: "CopyVersionScript: (default true) If True generate_versions.sh will be copied from the release and added to the docker image"
         default: true
