@@ -1,5 +1,6 @@
 # Configuration file for remediate Dockerfile modifications
 # Format: ACTION:PATTERN:REPLACEMENT
 
-# No changes required for remediate (as per your requirement)
-# You can add modifications here if needed in the future
+# Fix ARM64 compatibility: Remove amd64-specific base image reference
+# This makes the base image multi-arch compatible (pulls correct arch automatically)
+REPLACE:BASE_IMAGE=amd64:ARG BASE_IMAGE=ubuntu:24.04

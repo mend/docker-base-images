@@ -9,9 +9,3 @@ COMMENT_BLOCK:Install Nuget CLI
 
 # Comment out only the specific nuget install line - precise and safe
 COMMENT:apt-get install.*nuget
-
-# Example: Add a custom comment after the base image
-# ADD_AFTER:FROM.*AS base:# Custom modifications applied
-
-# Example: Replace a specific version
-# REPLACE:ARG NODE_VERSION=.*:ARG NODE_VERSION=18.0.0

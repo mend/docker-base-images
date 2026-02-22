@@ -4,6 +4,7 @@ set -e
 RELEASE=$1
 REGISTRY_PREFIX=$2
 COPY_VERSIONS_JSON=$3
+TAG_SUFFIX=$4  # Optional: "-arm64" or empty for AMD64
 
 
 if [ -z "$RELEASE" ]; then
@@ -32,41 +33,41 @@ echo "Building images with registry prefix: ${REGISTRY_PREFIX}"
 docker pull ubuntu:24.04
 
 
-docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} -f repo-integrations/scanner/DockerfileSast .
-docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} -f repo-integrations/controller/Dockerfile .
-docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE} -f repo-integrations/remediate/Dockerfile .
-docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE} -f repo-integrations/scanner/Dockerfile .
-docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full -f repo-integrations/scanner/Dockerfile.full .
+docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE}${TAG_SUFFIX} -f repo-integrations/scanner/DockerfileSast .
+docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE}${TAG_SUFFIX} -f repo-integrations/controller/Dockerfile .
+docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE}${TAG_SUFFIX} -f repo-integrations/remediate/Dockerfile .
+docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}${TAG_SUFFIX} -f repo-integrations/scanner/Dockerfile .
+docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}${TAG_SUFFIX}-full -f repo-integrations/scanner/Dockerfile.full .
 
 
 #Validate built images successfully created
 echo "🔍 Validating built images..."
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE} was not built successfully"
+if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE}${TAG_SUFFIX} 2> /dev/null)" ]; then
+  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE}${TAG_SUFFIX} was not built successfully"
   exit 1
 fi
 echo "✅ SAST scanner image validated"
 
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE} was not built successfully"
+if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE}${TAG_SUFFIX} 2> /dev/null)" ]; then
+  echo "❌ ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE}${TAG_SUFFIX} was not built successfully"
   exit 1
 fi
 echo "✅ Controller image validated"
 
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE} 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE} was not built successfully"
+if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE}${TAG_SUFFIX} 2> /dev/null)" ]; then
+  echo "❌ ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE}${TAG_SUFFIX} was not built successfully"
   exit 1
 fi
 echo "✅ Remediate image validated"
 
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE} 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE} was not built successfully"
+if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}${TAG_SUFFIX} 2> /dev/null)" ]; then
+  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}${TAG_SUFFIX} was not built successfully"
   exit 1
 fi
 echo "✅ SCA scanner image validated"
 
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full was not built successfully"
+if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}${TAG_SUFFIX}-full 2> /dev/null)" ]; then
+  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}${TAG_SUFFIX}-full was not built successfully"
   exit 1
 fi
 

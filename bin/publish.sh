@@ -3,6 +3,7 @@ set -e
 
 RELEASE=$1
 REGISTRY_PREFIX=$2
+TAG_SUFFIX=$3  # Optional: "-arm64" or empty
 
 if [ -z "$RELEASE" ]; then
   echo "Error: No release argument provided."
@@ -25,10 +26,10 @@ fi
 echo "Pushing images to registry: ${REGISTRY_PREFIX}"
 
 # Push all images directly
-docker push ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE}
-docker push ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE}
-docker push ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}
-docker push ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}-full
-docker push ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE}
+docker push ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE}${TAG_SUFFIX}
+docker push ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE}${TAG_SUFFIX}
+docker push ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}${TAG_SUFFIX}
+docker push ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE}${TAG_SUFFIX}-full
+docker push ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE}${TAG_SUFFIX}
 
 echo "All images pushed successfully!"

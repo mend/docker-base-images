@@ -122,7 +122,7 @@ if ! grep -q "# END OF BASE IMAGE" repo-integrations/scanner/Dockerfile.full; th
   exit 1
 fi
 
-apply_dockerfile_modifications "repo-integrations/scanner/Dockerfile.full" "scanner"
+apply_dockerfile_modifications "repo-integrations/scanner/Dockerfile.full" "scanner-full"
 if [ "$COPY_VERSIONS_JSON" = true ]; then
     append_scanner_script_support "repo-integrations/scanner/Dockerfile.full"
 fi
@@ -139,6 +139,9 @@ if [ ! -f $remediateDockerfile ]; then
 fi
 
 sed '/# END OF BASE IMAGE/ q' $remediateDockerfile > repo-integrations/remediate/Dockerfile
+
+apply_dockerfile_modifications "repo-integrations/remediate/Dockerfile" "remediate"
+
 # ================================
 # SUMMARY OUTPUT
 # ================================

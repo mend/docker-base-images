@@ -35,11 +35,13 @@ modify_dockerfile() {
         case "$action" in
             "REMOVE")
                 # Remove lines matching pattern
-                sed -i.bak "/${pattern}/d" "$temp_file"
+                # Use @ as delimiter to avoid conflicts with / in paths and | in pipes
+                sed -i.bak "\\@${pattern}@d" "$temp_file"
                 ;;
             "COMMENT")
                 # Comment out lines matching pattern - simple single line
-                sed -i.bak "s/^\(.*${pattern}.*\)$/# \1/" "$temp_file"
+                # Use @ as delimiter to avoid conflicts with / in paths and | in pipes
+                sed -i.bak "s@^\(.*${pattern}.*\)$@# \1@" "$temp_file"
                 ;;
             "COMMENT_BLOCK")
                 # Comment out multi-line blocks - handle both pattern in RUN line and in preceding comments
@@ -128,17 +130,20 @@ EOF
                 ;;
             "ADD_AFTER")
                 # Add replacement after line matching pattern
-                sed -i.bak "/${pattern}/a\\
+                # Use @ as delimiter to avoid conflicts with / in paths and | in pipes
+                sed -i.bak "\\@${pattern}@a\\
 ${replacement}" "$temp_file"
                 ;;
             "ADD_BEFORE")
                 # Add replacement before line matching pattern
-                sed -i.bak "/${pattern}/i\\
+                # Use @ as delimiter to avoid conflicts with / in paths and | in pipes
+                sed -i.bak "\\@${pattern}@i\\
 ${replacement}" "$temp_file"
                 ;;
             "REPLACE")
                 # Replace entire line matching pattern
-                sed -i.bak "s/.*${pattern}.*/${replacement}/" "$temp_file"
+                # Use @ as delimiter to avoid conflicts with / in paths and | in pipes
+                sed -i.bak "s@.*${pattern}.*@${replacement}@" "$temp_file"
                 ;;
             *)
                 echo "  Warning: Unknown action '$action', skipping"
