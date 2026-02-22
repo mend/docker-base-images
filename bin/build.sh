@@ -42,6 +42,8 @@ if [ "$TAG_SUFFIX" = "-arm64" ]; then
   # Scanner Dockerfile.full has hardcoded amd64 libssl1.1 URL. arm64 is on ports.ubuntu.com (same version 2.24).
   if [ -f repo-integrations/scanner/Dockerfile.full ]; then
     sed -i.bak 's|https://security\.ubuntu\.com/ubuntu/pool/main/o/openssl/libssl1\.1_1\.1\.1f-1ubuntu2\.24_amd64\.deb|https://ports.ubuntu.com/ubuntu-ports/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_arm64.deb|g' repo-integrations/scanner/Dockerfile.full
+    # Miniconda: Dockerfile uses x86_64 installer; on arm64 use aarch64 (same version if available, else use known-good py39 aarch64).
+    sed -i.bak 's|Miniconda3-py39_24\.1\.2-0-Linux-x86_64\.sh|Miniconda3-py39_25.7.0-2-Linux-aarch64.sh|g' repo-integrations/scanner/Dockerfile.full
     # Prebuild assets use "aarch64"; v2 install scripts use ARCHITECTURE. Set so golang (and others) use prebuild, keep same versions.
     sed -i.bak '/# renovate: datasource=github-tags packageName=git\/git/i\
 # Use aarch64 so containerbase prebuild URLs match (e.g. golang-1.24.7-aarch64.tar.xz)\
