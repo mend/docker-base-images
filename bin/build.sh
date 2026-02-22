@@ -39,9 +39,10 @@ docker pull ubuntu:24.04
 REMEDIATE_BASE_ARG=""
 if [ "$TAG_SUFFIX" = "-arm64" ]; then
   REMEDIATE_BASE_ARG="--build-arg BASE_IMAGE=ubuntu:24.04"
-  # Scanner Dockerfile.full has hardcoded amd64 .deb URL; use arm64 package for native build
+  # Scanner Dockerfile.full has hardcoded amd64 libssl1.1 URL. Version 1.1.1f-1ubuntu2.24 has no arm64
+  # in security.ubuntu.com; use Focal's 1.1.1f-1ubuntu2.22 arm64 from archive.ubuntu.com (same ABI).
   if [ -f repo-integrations/scanner/Dockerfile.full ]; then
-    sed -i.bak 's/_amd64\.deb/_arm64.deb/g' repo-integrations/scanner/Dockerfile.full
+    sed -i.bak 's|https://security\.ubuntu\.com/ubuntu/pool/main/o/openssl/libssl1\.1_1\.1\.1f-1ubuntu2\.24_amd64\.deb|https://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_arm64.deb|g' repo-integrations/scanner/Dockerfile.full
   fi
 fi
 
