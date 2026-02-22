@@ -3,4 +3,4 @@
 
 # Fix ARM64 compatibility: Remove amd64-specific base image reference
 # This makes the base image multi-arch compatible (pulls correct arch automatically)
-REPLACE:ARG BASE_IMAGE=amd64/ubuntu.*:ARG BASE_IMAGE=ubuntu:24.04
+REPLACE:BASE_IMAGE=amd64:ARG BASE_IMAGE=ubuntu:24.04
