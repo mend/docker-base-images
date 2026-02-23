@@ -1,0 +1,84 @@
+name: (ARM64) Staging Build and Push From Repo Integration Version 
+
+on:
+  workflow_dispatch:
+    inputs:
+      Tag:
+        description: "Tag: Repo Integration Version to pull, build, and push to ECR and S3."
+        default: "1.1.1"
+        type: string
+        required: true
+      CopyVersionScript:
+        description: "CopyVersionScript: (default true) If True generate_versions.sh will be copied from the release and added to the docker image"
+        default: true
+        type: boolean
+      TriggeredBy:
+        description: "TriggeredBy: (default manual) Indicates what triggered this workflow. Set to 'ubuntu-refresh' to suppress Slack notifications."
+        default: "manual"
+        type: string
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  Staging_Build_And_Push_Base_Image_From_Version_ARM64:
+    runs-on: [mend-self-hosted, profile=repo-integration-arm-od]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          ref: "main"
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: "arn:aws:iam::472613559203:role/github-actions-repo-integration-docker-base-images-role"
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registries: "054331651301"
+          region: "us-east-1"
+          mask-password: true
+
+      - name: Download GHE ZIP from S3
+        run: |
+          echo "🔽 Starting download process..."
+          ./bin/download.sh "${{ github.event.inputs.Tag }}"
+          echo "✅ Download completed successfully"
+        shell: bash
+
+      - name: Extract and Generate Base Image Dockerfiles
+        run: |
+          echo "🔧 Starting Dockerfile generation process..."
+          ./bin/copy.sh "${{ github.event.inputs.Tag }}" "${{ github.event.inputs.CopyVersionScript }}"
+          echo "✅ Dockerfile generation completed successfully"
+        shell: bash
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker Images (ARM64)
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          echo "🔨 Starting ARM64 Docker build process..."
+          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" "-arm64"
+          echo "✅ ARM64 Docker build completed successfully"
+        shell: bash
+
+      - name: Publish to ECR (ARM64)
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          echo "📤 Starting ARM64 ECR publish process..."
+          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "-arm64"
+          echo "✅ ARM64 ECR publish completed successfully"
+        shell: bash
