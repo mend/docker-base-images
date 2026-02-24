@@ -414,7 +414,7 @@ RUN apt-get update && \
 # conda config --add channels conda-forge
 # Use conda-forge strictly
 # conda config --set channel_priority strict
-RUN su - ${USER_NAME} -c "cd ${USER_HOME} && \
+RUN su -p ${USER_NAME} -c "cd ${USER_HOME} && \
         mkdir -p ${USER_HOME}/miniconda3 && \
         wget https://repo.anaconda.com/miniconda/Miniconda3-py39_24.1.2-0-Linux-x86_64.sh -O ${USER_HOME}/miniconda3/miniconda.sh && \
         bash ${USER_HOME}/miniconda3/miniconda.sh -b -u -p ${USER_HOME}/miniconda3 && \
@@ -494,7 +494,7 @@ RUN apt-get update &&\
 	rm -rf /var/lib/apt/lists/* && \
 	rm -rf /tmp/*
 
-RUN su - ${USER_NAME} -c "curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh && \
+RUN su -p ${USER_NAME} -c "curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh && \
 	source /home/wss-scanner/.ghcup/env && \
 	echo "source /home/wss-scanner/.ghcup/env" >> /home/wss-scanner/.bashrc && \
 	ghcup install cabal ${CABAL_VERSION} &&\
