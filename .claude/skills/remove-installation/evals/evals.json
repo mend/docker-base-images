@@ -1,0 +1,23 @@
+{
+  "skill_name": "remove-installation",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "/remove-installation bower",
+      "expected_output": "Appends three entries to config/scanner-modifications.txt: COMMENT:BOWER_VERSION, COMMENT:install-tool bower, and COMMENT:\\.bowerrc. The diff of Dockerfile shows ARG BOWER_VERSION, RUN install-tool bower, and both lines of the .bowerrc RUN block commented out. The diff of Dockerfile.full shows the same four lines commented out (ARG, RUN install-tool, and the two-line bowerrc block). No other lines change. Report confirms patterns are version-agnostic and CVE comment tables were intentionally left unchanged.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "/remove-installation pnpm",
+      "expected_output": "Appends two entries to config/scanner-modifications.txt: COMMENT:PNPM_VERSION and COMMENT:install-tool pnpm. The diff of Dockerfile shows no changes (ARG PNPM_VERSION and RUN install-tool pnpm are already commented out in that file). The diff of Dockerfile.full shows ARG PNPM_VERSION=10.17.0 and RUN install-tool pnpm commented out. Report notes that Dockerfile had no active pnpm lines to change, and confirms patterns are version-agnostic.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "/remove-installation yarn",
+      "expected_output": "Appends two entries to config/scanner-modifications.txt: COMMENT:YARN_VERSION and COMMENT:install-tool yarn. The diff of Dockerfile shows ARG YARN_VERSION=1.22.22 and RUN install-tool yarn commented out. The diff of Dockerfile.full shows the same two lines commented out. No other lines change. Report confirms patterns are version-agnostic and that there were no associated permission blocks or ENV lines to handle.",
+      "files": []
+    }
+  ]
+}
