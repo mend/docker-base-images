@@ -20,6 +20,11 @@ on:
         description: "CopyVersionScript: (default true) If True generate_versions.sh will be copied from the release and added to the docker image"
         default: true
         type: boolean
+      VersionSuffix:
+        description: "Optional suffix appended to the version tag (e.g. 'c1' produces image tag '26.3.1-c1'). ZIP is still downloaded using the base Tag."
+        default: ""
+        type: string
+        required: false
       TriggeredBy:
         description: "TriggeredBy: (default manual) Indicates what triggered this workflow. Set to 'ubuntu-refresh' to suppress Slack notifications."
         default: "manual"
@@ -38,6 +43,18 @@ jobs:
         with:
           ref: "main"
           fetch-depth: 0
+
+      - name: Compute full version tag
+        run: |
+          SUFFIX="${{ github.event.inputs.VersionSuffix }}"
+          if [ -n "$SUFFIX" ]; then
+            FULL_TAG="${{ github.event.inputs.Tag }}-$SUFFIX"
+          else
+            FULL_TAG="${{ github.event.inputs.Tag }}"
+          fi
+          echo "FULL_TAG=$FULL_TAG" >> $GITHUB_ENV
+          echo "Full version tag: $FULL_TAG"
+        shell: bash
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -78,7 +95,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "🔨 Starting Docker build process..."
-          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
+          ./bin/build.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
           echo "✅ Docker build completed successfully"
         shell: bash
 
@@ -87,7 +104,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "📤 Starting ECR publish process..."
-          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY"
+          ./bin/publish.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY"
           echo "✅ ECR publish completed successfully"
         shell: bash
 
@@ -106,35 +123,35 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # Create Release branch
-          git checkout -b release/${{ github.event.inputs.Tag }}
-          git push --set-upstream origin release/${{ github.event.inputs.Tag }}
+          git checkout -b release/${{ env.FULL_TAG }}
+          git push --set-upstream origin release/${{ env.FULL_TAG }}
 
           # If files changed, add, commit and push
           if [[ `git status --porcelain` ]]; then
             echo "OK: Changes detected, committing and pushing."
             git add .
-            git commit -m "Saving new files for ${{ github.event.inputs.Tag }}"
+            git commit -m "Saving new files for ${{ env.FULL_TAG }}"
             git push
           else
             echo "WARNING: No changes were detected. This is fine though, skipping commit"
           fi
 
           # Create tag
-          git tag -a ${{ github.event.inputs.Tag }} -m "Automated Tag for Release ${{ github.event.inputs.Tag }}"
+          git tag -a ${{ env.FULL_TAG }} -m "Automated Tag for Release ${{ env.FULL_TAG }}"
           git push origin --tags
 
           # Create release
           if [ "${{ github.event.inputs.IsLatest }}" = false ]; then
-            gh release create "${{ github.event.inputs.Tag }}" --latest=false --generate-notes --target release/${{ github.event.inputs.Tag }} --title "${{ github.event.inputs.Tag }}"
+            gh release create "${{ env.FULL_TAG }}" --latest=false --generate-notes --target release/${{ env.FULL_TAG }} --title "${{ env.FULL_TAG }}"
             echo "IsLatest is false, not merging release branch back into develop"
             exit 0
           else
-            gh release create "${{ github.event.inputs.Tag }}" --latest --generate-notes --target release/${{ github.event.inputs.Tag }} --title "${{ github.event.inputs.Tag }}"
+            gh release create "${{ env.FULL_TAG }}" --latest --generate-notes --target release/${{ env.FULL_TAG }} --title "${{ env.FULL_TAG }}"
           fi
 
           # Merge release branch back into develop
           git checkout develop
-          git merge release/${{ github.event.inputs.Tag }} --commit --no-edit
+          git merge release/${{ env.FULL_TAG }} --commit --no-edit
           git push
         shell: bash
 
@@ -145,4 +162,4 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.STG_SLACK_WEBHOOK_URL }}
         run: |
           echo "📤 Sending Slack notification..."
-          ./bin/notify-slack.sh "${{ github.event.inputs.Tag }}" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          ./bin/notify-slack.sh "${{ env.FULL_TAG }}" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
