@@ -1,0 +1,82 @@
+name: Refresh Base Image (Ubuntu CVE Rebuild)
+
+# This workflow rebuilds and republishes Docker images for an already-released version.
+# It checks out the frozen release branch (release/<version>) so Dockerfiles are exactly
+# as originally shipped — no re-extraction, no re-application of config modifications.
+#
+# Purpose: Pick up Ubuntu OS-level CVE fixes without mutating Dockerfile content.
+# Called by: ubuntu-cve-monitor.yaml (automated) or manually.
+
+on:
+  workflow_dispatch:
+    inputs:
+      Version:
+        description: "Version: Released version to rebuild (must have a release/<version> branch)"
+        required: true
+        type: string
+      TriggeredBy:
+        description: "TriggeredBy: (default manual) Indicates what triggered this workflow. Set to 'ubuntu-refresh' to suppress Slack notifications."
+        default: "manual"
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  Refresh_Base_Image:
+    runs-on: [mend-self-hosted, profile=developer-platform-xlarge-od]
+
+    steps:
+      - name: Checkout Release Branch
+        uses: actions/checkout@v3
+        with:
+          ref: "release/${{ github.event.inputs.Version }}"
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: "arn:aws:iam::472613559203:role/github-actions-repo-integration-docker-base-images-role"
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registries: "054331651301"
+          region: "us-east-1"
+          mask-password: true
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker Images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          echo "🔨 Building images from frozen release branch: release/${{ github.event.inputs.Version }}"
+          ./bin/build.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY" false
+          echo "✅ Docker build completed successfully"
+        shell: bash
+
+      - name: Publish to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          echo "📤 Publishing images to ECR..."
+          ./bin/publish.sh "${{ github.event.inputs.Version }}" "$ECR_REGISTRY"
+          echo "✅ ECR publish completed successfully"
+        shell: bash
+
+      - name: Notify Slack - Images Ready
+        if: always() && github.event.inputs.TriggeredBy != 'ubuntu-refresh'
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          SLACK_WEBHOOK_URL: ${{ secrets.STG_SLACK_WEBHOOK_URL }}
+        run: |
+          echo "📤 Sending Slack notification..."
+          ./bin/notify-slack.sh "${{ github.event.inputs.Version }}" "${{ job.status }}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
