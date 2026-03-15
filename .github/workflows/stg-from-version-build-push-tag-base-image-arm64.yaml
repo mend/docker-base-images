@@ -87,7 +87,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "🔨 Starting ARM64 Docker build process..."
-          ./bin/build.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" "-arm64"
+          ./bin/build.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" "-arm64" "${{ github.event.inputs.Tag }}"
           echo "✅ ARM64 Docker build completed successfully"
         shell: bash
 

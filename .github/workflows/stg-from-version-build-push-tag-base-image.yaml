@@ -95,7 +95,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "🔨 Starting Docker build process..."
-          ./bin/build.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}"
+          ./bin/build.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" "" "${{ github.event.inputs.Tag }}"
           echo "✅ Docker build completed successfully"
         shell: bash
 
