@@ -42,9 +42,24 @@ You can also pass a raw Dockerfile path (e.g. `repo-integrations/scanner/Dockerf
 REPO=$(git rev-parse --show-toplevel)
 ```
 
-Parse `$ARGUMENTS` to extract the tool name and optional target. The target is everything after the first word. If no target is given, use `scanner`.
+Parse `$ARGUMENTS` to extract the tool name, optional version, and optional target. The format is `<tool-name> [version] [target]` where version is a semver-like string (e.g., `2.7.18`, `v1.27.0`, `6.9.4`). The target is the last word if it matches a known target keyword (`scanner`, `controller`, `remediate`, `sast`) or a file path; otherwise, it defaults to `scanner`.
 
 Resolve the target to a list of Dockerfiles and a config file using the table above. All paths are relative to `$REPO`.
+
+## Step 1b: Clarify version scope (when a version is provided)
+
+If a version was detected in `$ARGUMENTS`, ask the user before proceeding:
+
+> "You specified version **X.Y.Z** for **[tool]**. Should I remove:
+> 1. **Any version** of [tool] (version-agnostic pattern — safe if Renovate bumps the version later)
+> 2. **Only version X.Y.Z** (comments just the specific ARG line; the following `RUN install-tool` stays and will fall back to the previous ARG value)
+
+Wait for the user's answer before continuing.
+
+- If **any version**: proceed with version-agnostic patterns (e.g., `COMMENT:TOOL_VERSION`).
+- If **specific version only**: use a full-line ARG pattern in the config: `COMMENT:ARG TOOL_VERSION=X\.Y\.Z` (escaping dots). This is precise — it only matches that exact line and nothing else. Note in the Step 7 report that the adjacent `RUN install-tool` line is intentionally left in place.
+
+If no version was provided, assume **any version** and proceed without asking.
 
 ## Step 2: Discover all lines related to the tool
 
