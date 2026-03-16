@@ -23,7 +23,7 @@ Comment out all installation lines for a given tool in one or more Dockerfiles b
 | `scanner` *(default)* | `repo-integrations/scanner/Dockerfile` + `Dockerfile.full` | `config/scanner-modifications.txt` |
 | `controller` | `repo-integrations/controller/Dockerfile` | `config/controller-modifications.txt` |
 | `remediate` | `repo-integrations/remediate/Dockerfile` | `config/remediate-modifications.txt` |
-| `sast` | `repo-integrations/scanner/DockerfileSast` | `config/scanner-modifications.txt` |
+| `sast` | `repo-integrations/scanner/DockerfileSast` | `config/scanner-sast-modifications.txt` |
 
 You can also pass a raw Dockerfile path (e.g. `repo-integrations/scanner/Dockerfile`). Infer the config by matching the path to the table above — if none match, ask the user which config to use.
 
@@ -84,7 +84,7 @@ Read the resolved config file in full before appending. For each pattern you pla
 
 Add a clearly labelled section to the resolved config file:
 
-```
+```text
 # Comment out <tool> installation
 COMMENT:<TOOL>_VERSION
 COMMENT:install-tool <tool>
@@ -134,7 +134,7 @@ Bower appears in both scanner Dockerfiles as:
 Both continuation lines of the bowerrc block contain `.bowerrc`, so one pattern covers the full block. Dots must be escaped.
 
 Resulting config entries:
-```
+```text
 # Comment out bower installation
 COMMENT:BOWER_VERSION
 COMMENT:install-tool bower
