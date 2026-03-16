@@ -57,7 +57,7 @@ If a version was detected in `$ARGUMENTS`, ask the user before proceeding:
 Wait for the user's answer before continuing.
 
 - If **any version**: proceed with version-agnostic patterns (e.g., `COMMENT:TOOL_VERSION`).
-- If **specific version only**: use a full-line ARG pattern in the config: `COMMENT:ARG TOOL_VERSION=X\.Y\.Z` (escaping dots). This is precise — it only matches that exact line and nothing else. Note in the Step 7 report that the adjacent `RUN install-tool` line is intentionally left in place.
+- If **specific version only**: use `COMMENT_PAIR:ARG TOOL_VERSION=X\.Y\.Z:install-tool <tool>` (escaping dots). This comments the ARG line **and** the immediately following `RUN install-tool` line, but only when the next line matches `install-tool <tool>` — preventing false positives. This also avoids the orphaned RUN problem (falling back to the previous version, or failing if it's the first definition).
 
 If no version was provided, assume **any version** and proceed without asking.
 
@@ -79,6 +79,7 @@ Also search for tool-specific artifacts by name (e.g. bower has a `.bowerrc` per
 |---|---|
 | `ARG <TOOL>_VERSION=x.y.z` | `COMMENT:<TOOL>_VERSION` — uppercase, **no version number** (stays valid after Renovate bumps the version) |
 | `RUN install-tool <tool>` (single line, no `\`) | `COMMENT:install-tool <tool>` — lowercase tool name |
+| `ARG <TOOL>_VERSION=x.y.z` + immediately following `RUN install-tool <tool>` (specific version pair) | `COMMENT_PAIR:ARG <TOOL>_VERSION=x\.y\.z:install-tool <tool>` — comments both lines only when they appear adjacent; safe if structure changes |
 | Multi-line RUN block where continuation lines share a unique string | `COMMENT:<unique-string>` with literal dots escaped as `\.` |
 | `ENV <VAR>=...` that is tool-specific | `COMMENT:<VAR>` |
 | `# Install <Tool>` comment header above a `\`-continued multi-line RUN | `COMMENT_BLOCK:Install <Tool>` — only if ALL lines of the block are connected by `\` |

@@ -52,8 +52,8 @@ COMMENT:install-tool elixir
 # Comment out erlang installation
 COMMENT:install-tool erlang
 
-# Comment out python 2.7.18 only (specific version — adjacent RUN intentionally left)
-COMMENT:ARG PYTHON_VERSION=2\.7\.18
+# Comment out python 2.7.18 only (ARG + adjacent RUN pair — other python versions unaffected)
+COMMENT_PAIR:ARG PYTHON_VERSION=2\.7\.18:install-tool python
 
-# Comment out gradle 6.9.4 only (specific version — adjacent RUN intentionally left)
-COMMENT:ARG GRADLE_VERSION=6\.9\.4
+# Comment out gradle 6.9.4 only (ARG + adjacent RUN pair — other gradle versions unaffected)
+COMMENT_PAIR:ARG GRADLE_VERSION=6\.9\.4:install-tool gradle
