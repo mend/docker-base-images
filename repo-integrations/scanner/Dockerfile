@@ -64,8 +64,8 @@ ARG YARN_VERSION=1.22.22
 RUN install-tool yarn
 
 # renovate: datasource=npm
-ARG BOWER_VERSION=1.8.14
-RUN install-tool bower
+# ARG BOWER_VERSION=1.8.14
+# RUN install-tool bower
 # ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                                │
 # ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
@@ -88,8 +88,8 @@ RUN install-tool bower
 #RUN install-tool pnpm
 
 ### provide permissions
-RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
-	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
+# RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
+# 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
 
 ARG JAVA_VERSION=8.0.472+8
 RUN install-tool java
