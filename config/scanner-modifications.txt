@@ -10,6 +10,14 @@ COMMENT_BLOCK:Install Nuget CLI
 # Comment out only the specific nuget install line - precise and safe
 COMMENT:apt-get install.*nuget
 
+# Comment out bower 1.8.14 installation (CVE-ridden, no longer needed)
+# ARG and RUN are separate Docker commands so two COMMENT entries are required
+COMMENT:BOWER_VERSION
+COMMENT:install-tool bower
+
+# Comment out the bower config permissions block (matches both continuation lines)
+COMMENT:\.bowerrc
+
 # Example: Add a custom comment after the base image
 # ADD_AFTER:FROM.*AS base:# Custom modifications applied
 
