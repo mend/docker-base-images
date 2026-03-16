@@ -5,10 +5,11 @@ RELEASE=$1
 REGISTRY_PREFIX=$2
 COPY_VERSIONS_JSON=$3
 TAG_SUFFIX=${4:-}
+BASE_RELEASE=${5:-$RELEASE}
 
 if [ -z "$RELEASE" ]; then
   echo "Error: No release argument provided."
-  echo "Usage: $0 <release> <registry_prefix> [copy_versions_json] [tag_suffix]"
+  echo "Usage: $0 <release> <registry_prefix> [copy_versions_json] [tag_suffix] [base_release]"
   exit 1
 fi
 
@@ -24,7 +25,7 @@ if [ -z "$REGISTRY_PREFIX" ]; then
 fi
 
 if [ "$COPY_VERSIONS_JSON" = true ] ; then
-  cp tmp/agent-4-github-enterprise-${RELEASE}/wss-scanner/docker/docker-image-scanner/generate_versions_json.sh .
+  cp tmp/agent-4-github-enterprise-${BASE_RELEASE}/wss-scanner/docker/docker-image-scanner/generate_versions_json.sh .
 fi
 
 # Tag suffix (e.g. -arm64) for multi-arch; empty means default tags

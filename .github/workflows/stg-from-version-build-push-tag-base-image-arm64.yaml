@@ -12,6 +12,11 @@ on:
         description: "CopyVersionScript: (default true) If True generate_versions.sh will be copied from the release and added to the docker image"
         default: true
         type: boolean
+      VersionSuffix:
+        description: "Optional suffix appended to the version tag (e.g. 'c1' produces image tag '26.3.1-c1'). ZIP is still downloaded using the base Tag."
+        default: ""
+        type: string
+        required: false
       TriggeredBy:
         description: "TriggeredBy: (default manual) Indicates what triggered this workflow. Set to 'ubuntu-refresh' to suppress Slack notifications."
         default: "manual"
@@ -30,6 +35,18 @@ jobs:
         with:
           ref: "main"
           fetch-depth: 0
+
+      - name: Compute full version tag
+        run: |
+          SUFFIX="${{ github.event.inputs.VersionSuffix }}"
+          if [ -n "$SUFFIX" ]; then
+            FULL_TAG="${{ github.event.inputs.Tag }}-$SUFFIX"
+          else
+            FULL_TAG="${{ github.event.inputs.Tag }}"
+          fi
+          echo "FULL_TAG=$FULL_TAG" >> $GITHUB_ENV
+          echo "Full version tag: $FULL_TAG"
+        shell: bash
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -70,7 +87,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "🔨 Starting ARM64 Docker build process..."
-          ./bin/build.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" "-arm64"
+          ./bin/build.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" "-arm64" "${{ github.event.inputs.Tag }}"
           echo "✅ ARM64 Docker build completed successfully"
         shell: bash
 
@@ -79,6 +96,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           echo "📤 Starting ARM64 ECR publish process..."
-          ./bin/publish.sh "${{ github.event.inputs.Tag }}" "$ECR_REGISTRY" "-arm64"
+          ./bin/publish.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY" "-arm64"
           echo "✅ ARM64 ECR publish completed successfully"
         shell: bash
