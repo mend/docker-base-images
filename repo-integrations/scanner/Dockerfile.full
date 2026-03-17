@@ -47,8 +47,8 @@ ARG YARN_VERSION=1.22.22
 RUN install-tool yarn
 
 # renovate: datasource=npm
-ARG BOWER_VERSION=1.8.14
-RUN install-tool bower
+# ARG BOWER_VERSION=1.8.14
+# RUN install-tool bower
 # ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
@@ -70,8 +70,8 @@ ARG PNPM_VERSION=10.17.0
 RUN install-tool pnpm
 
 ### provide permissions
-RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
-	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
+# RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
+# 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
 
 # renovate: datasource=java-version packageName=java-jre
 ARG JAVA_VERSION=8.0.472+8
@@ -94,8 +94,8 @@ RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
     chmod +x $MEND_JAVA
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=6.9.4
-RUN install-tool gradle
+# ARG GRADLE_VERSION=6.9.4
+# RUN install-tool gradle
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
@@ -174,8 +174,8 @@ RUN install-tool python
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=2.7.18
-RUN install-tool python
+# ARG PYTHON_VERSION=2.7.18
+# RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -236,8 +236,8 @@ RUN install-tool python
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-ARG CHECKOV_VERSION=3.2.471
-RUN install-tool checkov
+# ARG CHECKOV_VERSION=3.2.471
+# RUN install-tool checkov
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -245,12 +245,12 @@ RUN install-tool checkov
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/php-prebuild
-ARG PHP_VERSION=8.4.10
-RUN install-tool php
+# ARG PHP_VERSION=8.4.10
+# RUN install-tool php
 
 # renovate: datasource=github-releases packageName=containerbase/composer-prebuild
-ARG COMPOSER_VERSION=2.5.8
-RUN install-tool composer
+# ARG COMPOSER_VERSION=2.5.8
+# RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
 RUN curl -o /tmp/libssl1.1.deb https://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb && \
@@ -354,9 +354,9 @@ RUN install-tool bundler
 ARG CONAN_VERSION=2.24.0
 RUN install-tool conan
 
-RUN install-tool erlang 24.3.3.0
+# RUN install-tool erlang 24.3.3.0
 
-RUN install-tool elixir 1.13.4
+# RUN install-tool elixir 1.13.4
 
 #### Install rbenv and ruby-build
 ### or maybe be saved to /etc/profile instead of /etc/profile.d/
@@ -377,8 +377,8 @@ RUN pod setup
 USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-ARG HELM_VERSION=3.19.0
-RUN install-tool helm
+# ARG HELM_VERSION=3.19.0
+# RUN install-tool helm
 
 ## No renovate datasource exists yet
 ARG HASKELL_GHC_VERSION=8.6.5
@@ -447,12 +447,12 @@ RUN apt-get update && \
 	rm -rf /tmp/*
 
 ## Install PHP Plugins
-RUN apt-get update && \
-	apt-get install -y php-mbstring && \
-	apt-get install -y php-dom && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* && \
-	rm -rf /tmp/*
+# RUN apt-get update && \
+# 	apt-get install -y php-mbstring && \
+# 	apt-get install -y php-dom && \
+# 	apt-get clean && \
+# 	rm -rf /var/lib/apt/lists/* && \
+# 	rm -rf /tmp/*
 
 
 #### Install R and Packrat
@@ -524,14 +524,14 @@ RUN dotnet tool install Paket --version 7.2.1 --tool-path ${PAKET_HOME}
 
 ## Install Bazel
 # renovate: datasource=github-releases packageName=bazelbuild/bazelisk
-ARG BAZELISK_VERSION=v1.27.0
-RUN install-tool bazelisk
+# ARG BAZELISK_VERSION=v1.27.0
+# RUN install-tool bazelisk
 
 # Pre-download Bazel 6.1.1 to cache it in the image
-RUN USE_BAZEL_VERSION=6.1.1 bazel version
+# RUN USE_BAZEL_VERSION=6.1.1 bazel version
 
 # Set Bazel 6.1.1 as the default version
-ENV USE_BAZEL_VERSION=6.1.1
+# ENV USE_BAZEL_VERSION=6.1.1
 
 # Install Swift (including SPM)
 # renovate: datasource=docker versioning=docker
