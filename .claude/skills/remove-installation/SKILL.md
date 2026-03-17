@@ -77,9 +77,9 @@ Also search for tool-specific artifacts by name (e.g. bower has a `.bowerrc` per
 
 | Line type | Config action |
 |---|---|
-| `ARG <TOOL>_VERSION=x.y.z` | `COMMENT:<TOOL>_VERSION` — uppercase, **no version number** (stays valid after Renovate bumps the version) |
-| `RUN install-tool <tool>` (single line, no `\`) | `COMMENT:install-tool <tool>` — lowercase tool name |
-| `ARG <TOOL>_VERSION=x.y.z` + immediately following `RUN install-tool <tool>` (specific version pair) | `COMMENT_PAIR:ARG <TOOL>_VERSION=x\.y\.z:install-tool <tool>` — comments both lines only when they appear adjacent; safe if structure changes |
+| `ARG <TOOL>_VERSION=x.y.z` *(any-version mode)* | `COMMENT:<TOOL>_VERSION` — uppercase, **no version number** (stays valid after Renovate bumps the version) |
+| `RUN install-tool <tool>` *(any-version mode, single line, no `\`)* | `COMMENT:install-tool <tool>` — lowercase tool name |
+| `ARG <TOOL>_VERSION=x.y.z` + immediately following `RUN install-tool <tool>` *(specific-version mode)* | `COMMENT_PAIR:ARG <TOOL>_VERSION=x\.y\.z:install-tool <tool>` — comments both lines only when they appear adjacent; safe if structure changes |
 | Multi-line RUN block where continuation lines share a unique string | `COMMENT:<unique-string>` with literal dots escaped as `\.` |
 | `ENV <VAR>=...` that is tool-specific | `COMMENT:<VAR>` |
 | `# Install <Tool>` comment header above a `\`-continued multi-line RUN | `COMMENT_BLOCK:Install <Tool>` — only if ALL lines of the block are connected by `\` |
@@ -87,7 +87,7 @@ Also search for tool-specific artifacts by name (e.g. bower has a `.bowerrc` per
 **Rules:**
 
 - `COMMENT_BLOCK` only extends across lines connected by `\`. `ARG` and `RUN` are separate Docker commands — never use a single `COMMENT_BLOCK` for both; always use separate `COMMENT` entries.
-- For `ARG` lines: use `COMMENT:<TOOL>_VERSION` (uppercase, no `=x.y.z`) so the pattern remains valid after future version bumps.
+- For `ARG` lines in **any-version mode**: use `COMMENT:<TOOL>_VERSION` (uppercase, no `=x.y.z`) so the pattern remains valid after future version bumps. **Exception (specific-version mode)**: use `COMMENT_PAIR:ARG <TOOL>_VERSION=x\.y\.z:install-tool <tool>` instead — this pins to the exact version and also comments the adjacent RUN (see Step 1b).
 - Escape literal dots in patterns as `\.` (e.g. `.bowerrc` → `\.bowerrc`).
 - Use `COMMENT` (not `COMMENT_BLOCK`) for single-line RUN commands.
 - CVE comment tables (the `┌──┬──┐` blocks) are already comments — do not add patterns targeting them.
@@ -98,13 +98,20 @@ Read the resolved config file in full before appending. For each pattern you pla
 
 ## Step 5: Append to config
 
-Add a clearly labelled section to the resolved config file:
+Add a clearly labelled section to the resolved config file.
 
+**Any-version mode:**
 ```text
 # Comment out <tool> installation
 COMMENT:<TOOL>_VERSION
 COMMENT:install-tool <tool>
 # ... any additional patterns for related blocks
+```
+
+**Specific-version mode:**
+```text
+# Comment out <tool> X.Y.Z only (ARG + adjacent RUN pair — other versions unaffected)
+COMMENT_PAIR:ARG <TOOL>_VERSION=x\.y\.z:install-tool <tool>
 ```
 
 Leave a blank line before the new section for readability.
@@ -134,7 +141,8 @@ Inspect every diff:
 Summarise:
 - Each pattern added to the config (with exact text).
 - For each Dockerfile: which lines were commented (line numbers and content).
-- Confirmation that patterns are version-agnostic.
+- **Any-version mode**: confirm patterns are version-agnostic (no version number in pattern).
+- **Specific-version mode**: confirm only the exact ARG+RUN pair for that version was commented; note that all other versions of the tool remain active.
 - Anything intentionally left unchanged (e.g. CVE comment tables).
 - Any patterns skipped because they already existed in the config.
 
