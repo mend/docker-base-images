@@ -57,7 +57,9 @@ If a version was detected in `$ARGUMENTS`, ask the user before proceeding:
 Wait for the user's answer before continuing.
 
 - If **any version**: proceed with version-agnostic patterns (e.g., `COMMENT:TOOL_VERSION`).
-- If **specific version only**: use `COMMENT_PAIR:ARG TOOL_VERSION=X\.Y\.Z:install-tool <tool>` (escaping dots). This comments the ARG line **and** the immediately following `RUN install-tool` line, but only when the next line matches `install-tool <tool>` — preventing false positives. This also avoids the orphaned RUN problem (falling back to the previous version, or failing if it's the first definition).
+- If **specific version only**: inspect the Dockerfile to check whether the ARG line is immediately followed by `RUN install-tool <tool>`:
+  - **ARG + adjacent RUN**: use `COMMENT_PAIR:ARG TOOL_VERSION=X\.Y\.Z:install-tool <tool>` — comments both lines together, preventing the orphaned RUN from falling back to a previous version or failing if it's the first definition.
+  - **ARG only** (no adjacent `RUN install-tool`, or followed by something unrelated): use `COMMENT:ARG TOOL_VERSION=X\.Y\.Z` — a single-line comment targeting only that exact ARG line.
 
 If no version was provided, assume **any version** and proceed without asking.
 
@@ -79,7 +81,8 @@ Also search for tool-specific artifacts by name (e.g. bower has a `.bowerrc` per
 |---|---|
 | `ARG <TOOL>_VERSION=x.y.z` *(any-version mode)* | `COMMENT:<TOOL>_VERSION` — uppercase, **no version number** (stays valid after Renovate bumps the version) |
 | `RUN install-tool <tool>` *(any-version mode, single line, no `\`)* | `COMMENT:install-tool <tool>` — lowercase tool name |
-| `ARG <TOOL>_VERSION=x.y.z` + immediately following `RUN install-tool <tool>` *(specific-version mode)* | `COMMENT_PAIR:ARG <TOOL>_VERSION=x\.y\.z:install-tool <tool>` — comments both lines only when they appear adjacent; safe if structure changes |
+| `ARG <TOOL>_VERSION=x.y.z` + immediately following `RUN install-tool <tool>` *(specific-version mode)* | `COMMENT_PAIR:ARG <TOOL>_VERSION=x\.y\.z:install-tool <tool>` — comments both lines only when they appear adjacent |
+| `ARG <TOOL>_VERSION=x.y.z` with no adjacent `RUN install-tool` *(specific-version mode)* | `COMMENT:ARG <TOOL>_VERSION=x\.y\.z` — single-line comment targeting only that exact ARG line |
 | Multi-line RUN block where continuation lines share a unique string | `COMMENT:<unique-string>` with literal dots escaped as `\.` |
 | `ENV <VAR>=...` that is tool-specific | `COMMENT:<VAR>` |
 | `# Install <Tool>` comment header above a `\`-continued multi-line RUN | `COMMENT_BLOCK:Install <Tool>` — only if ALL lines of the block are connected by `\` |
@@ -110,8 +113,11 @@ COMMENT:install-tool <tool>
 
 **Specific-version mode:**
 ```text
-# Comment out <tool> X.Y.Z only (ARG + adjacent RUN pair — other versions unaffected)
+# If ARG is immediately followed by RUN install-tool <tool>:
 COMMENT_PAIR:ARG <TOOL>_VERSION=x\.y\.z:install-tool <tool>
+
+# If ARG has no adjacent RUN install-tool:
+COMMENT:ARG <TOOL>_VERSION=x\.y\.z
 ```
 
 Leave a blank line before the new section for readability.
