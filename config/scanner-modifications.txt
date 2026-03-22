@@ -10,8 +10,54 @@ COMMENT_BLOCK:Install Nuget CLI
 # Comment out only the specific nuget install line - precise and safe
 COMMENT:apt-get install.*nuget
 
+# Comment out bower 1.8.14 installation (CVE-ridden, no longer needed)
+# ARG and RUN are separate Docker commands so two COMMENT entries are required
+COMMENT:BOWER_VERSION
+COMMENT:install-tool bower
+
+# Comment out the bower config permissions block (matches both continuation lines)
+COMMENT:\.bowerrc
+
 # Example: Add a custom comment after the base image
 # ADD_AFTER:FROM.*AS base:# Custom modifications applied
 
 # Example: Replace a specific version
 # REPLACE:ARG NODE_VERSION=.*:ARG NODE_VERSION=18.0.0
+
+# Comment out composer installation
+COMMENT:COMPOSER_VERSION
+COMMENT:install-tool composer
+
+# Comment out checkov installation
+COMMENT:CHECKOV_VERSION
+COMMENT:install-tool checkov
+
+# Comment out php installation
+COMMENT:PHP_VERSION
+COMMENT:install-tool php
+COMMENT_BLOCK:Install PHP Plugins
+
+# Comment out helm installation
+COMMENT:HELM_VERSION
+COMMENT:install-tool helm
+
+# Comment out bazelisk installation and bazel-related config
+COMMENT:BAZELISK_VERSION
+COMMENT:install-tool bazelisk
+COMMENT:USE_BAZEL_VERSION
+
+# Comment out elixir installation
+COMMENT:install-tool elixir
+
+# Comment out erlang installation
+COMMENT:install-tool erlang
+
+# Comment out python 2.7.18 only (ARG + adjacent RUN pair — other python versions unaffected)
+COMMENT_PAIR:ARG PYTHON_VERSION=2\.7\.18:install-tool python
+
+# Comment out gradle 6.9.4 only (ARG + adjacent RUN pair — other gradle versions unaffected)
+COMMENT_PAIR:ARG GRADLE_VERSION=6\.9\.4:install-tool gradle
+
+# Comment out .NET 3.1.426 and 5.0.408 only (ARG + adjacent RUN pairs — other dotnet versions unaffected)
+COMMENT_PAIR:ARG DOTNET_VERSION=3\.1\.426:install-tool dotnet
+COMMENT_PAIR:ARG DOTNET_VERSION=5\.0\.408:install-tool dotnet

@@ -41,6 +41,45 @@ modify_dockerfile() {
                 # Comment out lines matching pattern - simple single line
                 sed -i.bak "s/^\(.*${pattern}.*\)$/# \1/" "$temp_file"
                 ;;
+            "COMMENT_PAIR")
+                # Comment out a matched line AND the immediately following non-empty line,
+                # but only when that next line also matches the second pattern (replacement field).
+                # Safe: if the next line doesn't match, neither line is touched.
+                python3 << EOF
+import re
+
+with open("$temp_file", 'r') as f:
+    lines = f.readlines()
+
+pattern1 = r"$pattern"
+pattern2 = r"$replacement"
+result_lines = []
+i = 0
+
+while i < len(lines):
+    line = lines[i].rstrip('\n')
+    if re.search(pattern1, line) and not line.lstrip().startswith('#'):
+        # Peek at the next non-empty line
+        j = i + 1
+        while j < len(lines) and not lines[j].strip():
+            j += 1
+        if j < len(lines):
+            next_line = lines[j].rstrip('\n')
+            if re.search(pattern2, next_line) and not next_line.lstrip().startswith('#'):
+                # Both lines match — comment them out, preserving any blank lines between
+                result_lines.append('# ' + line + '\n')
+                for k in range(i + 1, j):
+                    result_lines.append(lines[k])
+                result_lines.append('# ' + next_line + '\n')
+                i = j + 1
+                continue
+    result_lines.append(lines[i])
+    i += 1
+
+with open("$temp_file", 'w') as f:
+    f.writelines(result_lines)
+EOF
+                ;;
             "COMMENT_BLOCK")
                 # Comment out multi-line blocks - handle both pattern in RUN line and in preceding comments
                 python3 << EOF
@@ -163,6 +202,7 @@ if [ $# -lt 2 ]; then
     echo "Commands file format (one command per line):"
     echo "  REMOVE:pattern"
     echo "  COMMENT:pattern                 # Comments single lines matching pattern"
+    echo "  COMMENT_PAIR:pattern1:pattern2  # Comments adjacent ARG+RUN pair only when both lines match"
     echo "  COMMENT_BLOCK:pattern           # Comments multi-line blocks (use with caution!)"
     echo "  ADD_AFTER:pattern:new_line"
     echo "  ADD_BEFORE:pattern:new_line"

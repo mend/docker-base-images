@@ -46,6 +46,7 @@ The repository uses a custom modification system to customize Dockerfiles:
 - Format: `ACTION:PATTERN:REPLACEMENT`
 - Actions:
   - `COMMENT`: Comment out single lines matching pattern
+  - `COMMENT_PAIR`: Comment out a matched line and the immediately following non-empty line, only when both match their respective patterns (format: `COMMENT_PAIR:pattern1:pattern2`). Use for `ARG + RUN` version pairs.
   - `COMMENT_BLOCK`: Comment out entire multi-line RUN blocks (searches for pattern in comments or RUN commands)
   - `REMOVE`: Delete lines matching pattern
   - `REPLACE`: Replace entire line with new content
