@@ -57,3 +57,7 @@ COMMENT_PAIR:ARG PYTHON_VERSION=2\.7\.18:install-tool python
 
 # Comment out gradle 6.9.4 only (ARG + adjacent RUN pair — other gradle versions unaffected)
 COMMENT_PAIR:ARG GRADLE_VERSION=6\.9\.4:install-tool gradle
+
+# Comment out .NET 3.1.426 and 5.0.408 only (ARG + adjacent RUN pairs — other dotnet versions unaffected)
+COMMENT_PAIR:ARG DOTNET_VERSION=3\.1\.426:install-tool dotnet
+COMMENT_PAIR:ARG DOTNET_VERSION=5\.0\.408:install-tool dotnet
