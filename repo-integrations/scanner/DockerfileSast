@@ -32,6 +32,11 @@ RUN install-containerbase && \
 # renovate: datasource=github-tags depName=git lookupName=git/git
 ARG GIT_VERSION=v2.41.0
 RUN install-tool git
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 1          │ CVE-2026-23111                                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 ### !!! Install this version after the other versions, so that it is the default !!! ###
 # renovate: datasource=adoptium-java depName=java
