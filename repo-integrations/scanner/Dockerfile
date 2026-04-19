@@ -204,7 +204,7 @@ ARG PYTHON_VERSION=3.9.25
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.2.471
+# ARG CHECKOV_VERSION=3.2.520
 # RUN install-tool checkov
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -280,7 +280,7 @@ RUN echo '{ "sdk": { "version": "7.0.410" } }' > ${USER_HOME}/global.json
 USER ${USER_ID}
 
 # renovate: datasource=pypi
-ARG PIPENV_VERSION=2023.7.23
+ARG PIPENV_VERSION=2024.4.1
 RUN install-tool pipenv
 
 
@@ -339,7 +339,7 @@ RUN install-tool poetry
 # USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# #ARG HELM_VERSION=3.19.0
+# #ARG HELM_VERSION=3.20.2
 # #RUN install-tool helm
 
 ## No renovate datasource exists yet
