@@ -63,7 +63,14 @@ jobs:
           curl -s ifconfig.me
 
       - name: Debug Sleep
-        uses: mend/gh-actions/.github/actions/debug-sleep@main
+        run: |
+          echo "Waiting for /tmp/continue to exist..."
+          echo "run the command to continue: touch /tmp/continue"
+          while [ ! -f /tmp/continue ]; do
+            sleep 30
+          done
+          echo "Continuing pipeline..."
+          rm /tmp/continue
 
       - name: Build Docker Images
         env:
