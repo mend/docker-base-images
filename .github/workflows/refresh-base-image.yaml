@@ -54,6 +54,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Debug PPA connectivity
+        run: |
+          curl -v --connect-timeout 10 http://ppa.launchpad.net/git-core/ppa/ubuntu/dists/noble/InRelease
+          curl -v --connect-timeout 10 https://ppa.launchpad.net/git-core/ppa/ubuntu/dists/noble/InRelease
+          dig ppa.launchpad.net
+          ip route
+          curl -s ifconfig.me
+
+      - name: Debug Sleep
+        uses: mend/gh-actions/.github/actions/debug-sleep@main
+
       - name: Build Docker Images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
