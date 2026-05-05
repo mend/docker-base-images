@@ -34,6 +34,25 @@ jobs:
           ref: "release/${{ github.event.inputs.Version }}"
           fetch-depth: 0
 
+
+      - name: Debug PPA connectivity
+        run: |
+          curl -v --connect-timeout 10 http://ppa.launchpad.net/git-core/ppa/ubuntu/dists/noble/InRelease
+          curl -v --connect-timeout 10 https://ppa.launchpad.net/git-core/ppa/ubuntu/dists/noble/InRelease
+          dig ppa.launchpad.net
+          ip route
+          curl -s ifconfig.me
+
+      - name: Debug Sleep
+        run: |
+          echo "Waiting for /tmp/continue to exist..."
+          echo "run the command to continue: touch /tmp/continue"
+          while [ ! -f /tmp/continue ]; do
+            sleep 30
+          done
+          echo "Continuing pipeline..."
+          rm /tmp/continue
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -54,23 +73,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Debug PPA connectivity
-        run: |
-          curl -v --connect-timeout 10 http://ppa.launchpad.net/git-core/ppa/ubuntu/dists/noble/InRelease
-          curl -v --connect-timeout 10 https://ppa.launchpad.net/git-core/ppa/ubuntu/dists/noble/InRelease
-          dig ppa.launchpad.net
-          ip route
-          curl -s ifconfig.me
-
-      - name: Debug Sleep
-        run: |
-          echo "Waiting for /tmp/continue to exist..."
-          echo "run the command to continue: touch /tmp/continue"
-          while [ ! -f /tmp/continue ]; do
-            sleep 30
-          done
-          echo "Continuing pipeline..."
-          rm /tmp/continue
 
       - name: Build Docker Images
         env:
