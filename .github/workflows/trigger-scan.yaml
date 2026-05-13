@@ -7,13 +7,6 @@ on:
         description: "Base image version (e.g. 26.3.1.2-c1)"
         required: true
         type: string
-      environment:
-        description: "ECR environment"
-        required: true
-        type: choice
-        options:
-          - staging
-          - production
       image_to_scan:
         description: "Which image to scan"
         required: true
@@ -41,7 +34,6 @@ jobs:
           GH_TOKEN: ${{ secrets.SCAN_DISPATCH_TOKEN }}
           TARGET_REPO: ${{ vars.SCAN_TARGET_REPO }}
           VERSION: ${{ github.event.inputs.image_version }}
-          ENV: ${{ github.event.inputs.environment }}
           IMAGE: ${{ github.event.inputs.image_to_scan }}
           ANNOTATE: ${{ github.event.inputs.annotate }}
         run: |
@@ -49,8 +41,7 @@ jobs:
           gh api "repos/${TARGET_REPO}/actions/workflows/scan-base-images.yaml/dispatches" \
             -F ref=main \
             -F "inputs[image_version]=${VERSION}" \
-            -F "inputs[environment]=${ENV}" \
             -F "inputs[image_to_scan]=${IMAGE}" \
             -F "inputs[annotate]=${ANNOTATE}" \
             --silent
-          echo "✅ Scan triggered for ${IMAGE} ${VERSION} (${ENV})"
+          echo "✅ Scan triggered for ${IMAGE} ${VERSION}"
