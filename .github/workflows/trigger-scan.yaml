@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   trigger:
-    runs-on: ubuntu-latest
+    runs-on: [ mend-self-hosted, profile=developer-platform-small ]
     steps:
       - name: Fire scan
         env:
@@ -39,7 +39,7 @@ jobs:
         run: |
           set -euo pipefail
           gh api "repos/${TARGET_REPO}/actions/workflows/scan-base-images.yaml/dispatches" \
-            -F ref=main \
+            -F ref=OPS-5761-annotation-fix \
             -F "inputs[image_version]=${VERSION}" \
             -F "inputs[image_to_scan]=${IMAGE}" \
             -F "inputs[annotate]=${ANNOTATE}" \
