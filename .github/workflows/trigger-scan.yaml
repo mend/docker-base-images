@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   trigger:
-    runs-on: ubuntu-latest
+    runs-on: [ mend-self-hosted, profile=developer-platform-small ]
     steps:
       - name: Fire scan
         env:

@@ -155,6 +155,22 @@ jobs:
           git push
         shell: bash
 
+      - name: Trigger base image scan
+        if: github.event.inputs.SkipGit != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.SCAN_DISPATCH_TOKEN }}
+          TARGET_REPO: ${{ vars.SCAN_TARGET_REPO }}
+          VERSION: ${{ env.FULL_TAG }}
+        run: |
+          set -euo pipefail
+          gh api "repos/${TARGET_REPO}/actions/workflows/scan-base-images.yaml/dispatches" \
+            -F ref=main \
+            -F "inputs[image_version]=${VERSION}" \
+            -F "inputs[image_to_scan]=all" \
+            -F "inputs[annotate]=true" \
+            --silent
+          echo "✅ Scan triggered for ${VERSION}"
+
       - name: Notify Slack - Images Ready
         if: always() && github.event.inputs.TriggeredBy != 'ubuntu-refresh'
         env:
