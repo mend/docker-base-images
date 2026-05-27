@@ -1,0 +1,47 @@
+name: Trigger Base Image Scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_version:
+        description: "Base image version (e.g. 26.3.1.2-c1)"
+        required: true
+        type: string
+      image_to_scan:
+        description: "Which image to scan"
+        required: true
+        type: choice
+        options:
+          - all
+          - scanner-base
+          - scanner-full-base
+          - scanner-sast-base
+      annotate:
+        description: "Open annotation PR back to this repo"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  trigger:
+    runs-on: [ mend-self-hosted, profile=developer-platform-small ]
+    steps:
+      - name: Fire scan
+        env:
+          GH_TOKEN: ${{ secrets.SCAN_DISPATCH_TOKEN }}
+          TARGET_REPO: ${{ vars.SCAN_TARGET_REPO }}
+          VERSION: ${{ github.event.inputs.image_version }}
+          IMAGE: ${{ github.event.inputs.image_to_scan }}
+          ANNOTATE: ${{ github.event.inputs.annotate }}
+        run: |
+          set -euo pipefail
+          gh api "repos/${TARGET_REPO}/actions/workflows/scan-base-images.yaml/dispatches" \
+            -F ref=main \
+            -F "inputs[image_version]=${VERSION}" \
+            -F "inputs[image_to_scan]=${IMAGE}" \
+            -F "inputs[annotate]=${ANNOTATE}" \
+            --silent
+          echo "✅ Scan triggered for ${IMAGE} ${VERSION}"

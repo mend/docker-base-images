@@ -32,6 +32,9 @@ COMMENT:install-tool composer
 COMMENT:CHECKOV_VERSION
 COMMENT:install-tool checkov
 
+# Comment out checkov config setup block (irrelevant since checkov itself is commented out)
+COMMENT_BLOCK:/etc/checkov
+
 # Comment out php installation
 COMMENT:PHP_VERSION
 COMMENT:install-tool php
