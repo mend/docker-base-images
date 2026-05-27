@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:13.26.7@sha256:5a7aace53413ad8e98fbb87cbe1aa6727ce2ad225356a46a58ea9171ae8966d1 AS containerbase
+FROM ghcr.io/containerbase/base:14.9.5@sha256:2852f7e2784fb21e745325a81c9beb1906be51b79956376eecf9ce57dacf6fd0 AS containerbase
 
 
 FROM ${BASE_IMAGE} as base
@@ -26,36 +26,33 @@ RUN install-containerbase && \
     prepare-tool all
 
 # renovate: datasource=github-tags packageName=git/git
-ARG GIT_VERSION=v2.41.3
+ARG GIT_VERSION=v2.54.0
 RUN install-tool git
 
 # install git lfs
 # renovate: datasource=github-releases packageName=git-lfs/git-lfs
-#ARG GIT_LFS_VERSION=v3.5.1
+#ARG GIT_LFS_VERSION=v3.7.1
 #RUN install-tool git-lfs
 
 # renovate: datasource=github-releases packageName=containerbase/node-prebuild versioning=node
-ARG NODE_VERSION=24.0.0
+ARG NODE_VERSION=24.15.0
 RUN install-tool node
-# Layer 7 (instruction #8): RUN |6 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_P
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 7          │ CVE-2026-26960, CVE-2026-24842, CVE-2026-26960, CVE-2026-33750    │
-# │            │            │ CVE-2026-24842, CVE-2026-24001, CVE-2026-33671                    │
+# │ High       │ 5          │ CVE-2026-24001, CVE-2026-33750, CVE-2026-24842, CVE-2026-26960    │
+# │            │            │ CVE-2026-33671                                                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
-ARG NPM_VERSION=11.6.1
+ARG NPM_VERSION=11.13.0
 RUN install-tool npm
-# Layer 8 (instruction #9): RUN |7 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_P
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 14         │ CVE-2026-26996, CVE-2026-27903, CVE-2026-27904, CVE-2025-64756    │
-# │            │            │ CVE-2026-24001, CVE-2025-64756, CVE-2026-26996, CVE-2026-27903    │
-# │            │            │ CVE-2026-27904, CVE-2026-25547, CVE-2026-33750, CVE-2026-33671    │
-# │            │            │ CVE-2026-24842, CVE-2026-26960                                    │
+# │ High       │ 9          │ CVE-2026-25547, CVE-2026-24001, CVE-2025-64756, CVE-2026-26996    │
+# │            │            │ CVE-2026-27903, CVE-2026-27904, CVE-2026-33671, CVE-2026-24842    │
+# │            │            │ CVE-2026-26960                                                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm packageName=@yarnpkg/cli-dist
@@ -65,14 +62,46 @@ RUN install-tool yarn
 # renovate: datasource=npm
 # ARG BOWER_VERSION=1.8.14
 # RUN install-tool bower
+# ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                                │
+# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 13         │ CVE-2021-23383, CVE-2021-44906, CVE-2026-4800, CVE-2021-23807       │
+# │            │            │ CVE-2023-26136, CVE-2026-33937, CVE-2021-3918, CVE-2019-10744       │
+# │            │            │ CVE-2023-26136, CVE-2025-7783, CVE-2025-7783, CVE-2019-10744        │
+# │            │            │ CVE-2021-23369                                                      │
+# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
+# │ High       │ 39         │ CVE-2026-33938, CVE-2021-43138, CVE-2026-33750, CVE-2020-8116       │
+# │            │            │ CVE-2026-33941, CVE-2026-33939, CVE-2026-33940, CVE-2021-23337      │
+# │            │            │ CVE-2020-8203, CVE-2021-23337, CVE-2022-3517, CVE-2016-10540        │
+# │            │            │ CVE-2026-26996, CVE-2026-27903, CVE-2026-27904, CVE-2022-3517       │
+# │            │            │ CVE-2026-26996, CVE-2026-27903, CVE-2026-27904, CVE-2022-21213      │
+# │            │            │ CVE-2020-7792, CVE-2022-21213, CVE-2020-7792, CVE-2021-23343        │
+# │            │            │ CVE-2022-24999, CVE-2017-1000048, CVE-2022-24999, CVE-2022-25883    │
+# │            │            │ CVE-2015-8855, CVE-2022-25883, CVE-2024-12905, CVE-2025-48387       │
+# │            │            │ CVE-2025-59343, CVE-2017-15010, CVE-2017-15010, CVE-2022-29167      │
+# │            │            │ CVE-2020-36604, CVE-2018-3728, CVE-2020-8203                        │
+# └────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm
-#ARG PNPM_VERSION=10.17.0
+#ARG PNPM_VERSION=10.33.2
 #RUN install-tool pnpm
+
+# renovate: datasource=npm
+#ARG BUN_VERSION=1.3.14
+#RUN install-tool bun
 
 ### provide permissions
 # RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
 # 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 1          │ CVE-2025-69264                                                    │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 9          │ CVE-2026-27904, CVE-2025-69262, CVE-2025-69263, CVE-2026-24842    │
+# │            │            │ CVE-2026-26960, CVE-2025-64756, CVE-2026-33750, CVE-2026-27903    │
+# │            │            │ CVE-2026-26996                                                    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 ARG JAVA_VERSION=8.0.472+8
 RUN install-tool java
@@ -100,36 +129,40 @@ RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.6
 RUN install-tool gradle
-# Layer 15 (instruction #16): RUN |10 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2026-3505, CVE-2026-5598                       │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 4          │ CVE-2021-26291, CVE-2022-1471, CVE-2020-7692, CVE-2021-26291      │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 21         │ CVE-2022-42003, CVE-2022-42004, CVE-2022-25647, CVE-2023-2976     │
+# │            │            │ CVE-2021-22573, CVE-2024-47554, CVE-2023-4759, CVE-2025-52999     │
+# │            │            │ CVE-2021-46877, CVE-2020-36518, CVE-2021-35516, CVE-2021-35515    │
+# │            │            │ CVE-2021-35517, CVE-2021-36090, CVE-2022-46751, CVE-2022-37866    │
+# │            │            │ CVE-2026-3505, CVE-2025-67030, CVE-2025-66453, CVE-2022-25857     │
+# │            │            │ CVE-2024-21634                                                    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.3.0
+ARG GRADLE_VERSION=9.3.1
 RUN install-tool gradle
-# Layer 16 (instruction #17): RUN |10 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2026-3505, CVE-2026-5598                       │
+# │ High       │ 1          │ CVE-2026-3505                                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=8.14.4
 RUN install-tool gradle
-# Layer 17 (instruction #18): RUN |10 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2025-67030, CVE-2026-5598, CVE-2026-3505       │
+# │ High       │ 1          │ CVE-2026-3505                                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/golang-prebuild
-#ARG GOLANG_VERSION=1.24.7
+#ARG GOLANG_VERSION=1.26.2
 #RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 #ENV GOSUMDB="sum.golang.org"
@@ -149,13 +182,12 @@ RUN install-tool gradle
 #RUN chgrp -R 0 /go && chmod -R g=u /go
 
 # renovate: datasource=maven packageName=org.apache.maven:maven
-ARG MAVEN_VERSION=3.9.12
+ARG MAVEN_VERSION=3.9.14
 RUN install-tool maven
-# Layer 18 (instruction #19): RUN |11 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 1          │ CVE-2025-67030                                     │
+# │ High       │ 2          │ CVE-2025-67030, CVE-2026-3505                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=scala/scala
@@ -163,73 +195,82 @@ RUN install-tool maven
 # RUN install-tool scala
 
 # renovate: datasource=github-releases packageName=sbt/sbt
-# ARG SBT_VERSION=1.5.7
+# ARG SBT_VERSION=1.12.9
 # RUN install-tool sbt
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.6.15
 RUN install-tool python
-# Layer 19 (instruction #20): RUN |12 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2024-6345, CVE-2024-53899, CVE-2025-47273      │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 # ARG PYTHON_VERSION=2.7.18
 # RUN install-tool python
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 1          │ CVE-2025-68121                                                    │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 8          │ CVE-2025-58183, CVE-2026-25679, CVE-2025-61729, CVE-2026-32283    │
+# │            │            │ CVE-2026-32280, CVE-2026-32281, CVE-2025-61728, CVE-2025-61726    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.11.14
+ARG PYTHON_VERSION=3.11.12
 RUN install-tool python
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 1          │ CVE-2025-67030                                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.12.12
-RUN install-tool python
-
-# renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.10.19
+ARG PYTHON_VERSION=3.12.9
 RUN install-tool python
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.7.17
 RUN install-tool python
-# Layer 23 (instruction #24): RUN |12 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2025-47273, CVE-2024-6345                      │
+# │ High       │ 3          │ CVE-2025-47273, CVE-2024-53899, CVE-2024-6345      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.20
 RUN install-tool python
-# Layer 24 (instruction #25): RUN |12 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2025-47273, CVE-2024-6345                      │
+# │ High       │ 3          │ CVE-2025-47273, CVE-2024-53899, CVE-2024-6345      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.13.11
+ARG PYTHON_VERSION=3.13.1
 RUN install-tool python
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.9.25
 RUN install-tool python
 
+# renovate: datasource=github-releases packageName=containerbase/python-prebuild
+ARG PYTHON_VERSION=3.10.20
+RUN install-tool python
+
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.2.520
+# ARG CHECKOV_VERSION=3.2.524
 # RUN install-tool checkov
+# Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
+# RUN mkdir -p /etc/checkov \
+#     && printf 'output: json\ndownload-external-modules: "true"\n' > /etc/checkov/config.yaml \
+#     && chmod 644 /etc/checkov/config.yaml
 
 # renovate: datasource=github-releases packageName=containerbase/php-prebuild
-# #ARG PHP_VERSION=8.5.2
+# #ARG PHP_VERSION=8.5.5
 # #RUN install-tool php
 
 # renovate: datasource=github-releases packageName=containerbase/composer-prebuild
-# #ARG COMPOSER_VERSION=2.0.13
+# #ARG COMPOSER_VERSION=2.9.7
 # #RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
@@ -255,93 +296,79 @@ RUN install-tool python
 # renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=8.0.417
 RUN install-tool dotnet
-# Layer 27 (instruction #28): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 11         │ CVE-2026-42899, CVE-2026-33116, CVE-2026-26171, CVE-2025-26646    │
-# │            │            │ CVE-2026-26130, CVE-2026-33116, CVE-2026-26171, CVE-2025-55247    │
-# │            │            │ CVE-2025-26646, CVE-2025-55247, CVE-2025-55247                    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 2          │ CVE-2025-47273, CVE-2024-6345                      │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 ARG DOTNET_VERSION=9.0.310
 RUN install-tool dotnet
-# Layer 28 (instruction #29): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 4          │ CVE-2026-33116, CVE-2026-26171, CVE-2026-26130, CVE-2026-42899    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 2          │ CVE-2025-47273, CVE-2024-6345                      │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=7.0.410
 RUN install-tool dotnet
-# Layer 29 (instruction #30): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2024-0057                                                     │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 8          │ CVE-2024-30105, CVE-2024-38081, CVE-2024-30105, CVE-2024-30105    │
-# │            │            │ CVE-2024-38095, CVE-2025-26646, CVE-2024-30105, CVE-2025-26646    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # Set .NET SDK 7.0.405 as the default version
 RUN echo '{ "sdk": { "version": "7.0.410" } }' > ${USER_HOME}/global.json
 
 # renovate: datasource=docker versioning=docker
-#ARG RUST_VERSION=1.58.1
+#ARG RUST_VERSION=1.95.0
 #RUN install-tool rust
 
 # pip user install (so available for all python versions)
 USER ${USER_ID}
 
 # renovate: datasource=pypi
-ARG PIPENV_VERSION=2024.4.1
+ARG PIPENV_VERSION=2026.5.2
 RUN install-tool pipenv
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 4          │ CVE-2025-67221, CVE-2025-66471, CVE-2025-66418, CVE-2026-21441    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 
 
 USER 0
 
 # renovate: datasource=pypi
-#ARG UV_VERSION=0.9.7
+#ARG UV_VERSION=0.11.7
 #RUN install-tool uv
 
 # renovate: datasource=pypi
-ARG POETRY_VERSION=2.0.1
+ARG POETRY_VERSION=2.3.2
 RUN install-tool poetry
 
 # renovate: datasource=pypi
 ARG POETRY_VERSION=1.6.1
 RUN install-tool poetry
-# Layer 33 (instruction #34): RUN |15 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 1          │ CVE-2026-44432                                     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 #ENV GEM_HOME=/tmp/containerbase/cache/.ruby
 #ENV GEM_PATH="${GEM_HOME}"
 # renovate: datasource=github-releases packageName=containerbase/ruby-prebuild versioning=ruby)
-#ARG RUBY_VERSION=3.2.2
+#ARG RUBY_VERSION=4.0.3
 #RUN install-tool ruby && \
 #    gem install rubygems-update -v 3.3.0 && \
 #    gem update --system
 #ENV PATH="${GEM_HOME}/bin:${PATH}"
 
 # renovate: datasource=rubygems versioning=ruby
-#ARG BUNDLER_VERSION=2.4.18
+#ARG BUNDLER_VERSION=4.0.10
 #RUN install-tool bundler
 
 # renovate: datasource=pypi
-#ARG CONAN_VERSION=2.24.0
+#ARG CONAN_VERSION=2.27.1
 #RUN install-tool conan
 
-# #RUN install-tool erlang 24.3.3.0
+# #RUN install-tool erlang 28.4.2.0
 
-# #RUN install-tool elixir 1.13.4
+# #RUN install-tool elixir 1.19.5
 
 #### Install rbenv and ruby-build
 ### or maybe be saved to /etc/profile instead of /etc/profile.d/
@@ -362,7 +389,7 @@ RUN install-tool poetry
 # USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# #ARG HELM_VERSION=3.20.2
+# #ARG HELM_VERSION=4.1.4
 # #RUN install-tool helm
 
 ## No renovate datasource exists yet
@@ -386,12 +413,6 @@ RUN apt-get update && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
 	rm -rf /tmp/*
-# Layer 34 (instruction #35): RUN |17 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 1          │ CVE-2026-46333                                     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 
 ##### Install Conda
@@ -510,7 +531,7 @@ RUN apt-get update && \
 
 ## Install Bazel
 # renovate: datasource=github-releases packageName=bazelbuild/bazelisk
-# #ARG BAZELISK_VERSION=v1.27.0
+# #ARG BAZELISK_VERSION=v1.28.1
 # #RUN install-tool bazelisk
 
 # Pre-download Bazel 6.1.1 to cache it in the image
@@ -521,11 +542,23 @@ RUN apt-get update && \
 
 # Install Swift (including SPM)
 # renovate: datasource=docker versioning=docker
-#ARG SWIFT_VERSION=5.10.0
+#ARG SWIFT_VERSION=6.0.3
 #RUN install-tool swift
 
 # delete the partially populated directory /tmp/containerbase and recreate one with full content instead
 # RUN rm -rf /tmp/* && containerbase-cli init tool all
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 7          │ CVE-2025-55315, CVE-2025-55315, CVE-2021-26701, CVE-2021-26701    │
+# │            │            │ CVE-2021-26701, CVE-2024-0057, CVE-2024-0057                      │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 20         │ CVE-2018-8292, CVE-2018-8269, CVE-2019-1302, CVE-2019-0564        │
+# │            │            │ CVE-2025-26646, CVE-2024-21907, CVE-2024-21907, CVE-2022-41032    │
+# │            │            │ CVE-2023-29337, CVE-2023-29337, CVE-2023-29337, CVE-2022-41032    │
+# │            │            │ CVE-2023-29337, CVE-2022-41032, CVE-2023-29337, CVE-2024-0056     │
+# │            │            │ CVE-2024-0056, CVE-2024-0056, CVE-2024-0056, CVE-2024-0056        │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # END OF BASE IMAGE
 
