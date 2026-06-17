@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=amd64/ubuntu:24.04@sha256:efb00f9714bd00457a0e645d707bc7e9a9982f14a7be0d88fbe8912088619f8b
 
 # This containerbase is used for tool intallation and user/directory setup
-FROM ghcr.io/containerbase/base:14.10.21@sha256:4cf92f44244a0e448c9d1579a5d199e6e0c773d233cd6c00513e3448d7cb8fe9 AS containerbase
+FROM ghcr.io/containerbase/base:14.10.24@sha256:fcf2e943ff1a3371e29c1e7ad3b8b982da7c65f7b7e628e4b182b58549beefbe AS containerbase
 
 FROM ${BASE_IMAGE} AS base
 
@@ -49,7 +49,7 @@ RUN COERCED_NODE_VERSION=$(node -v | grep '^v2' | sed 's/^v//') && \
 RUN $DOCKERFILE_NODE_DEFAULT_PATH --version
 
 # renovate: datasource=npm depName=npm versioning=npm
-ARG NPM_VERSION=11.15.0
+ARG NPM_VERSION=11.16.0
 RUN install-tool npm
 
 # renovate: datasource=npm depName=yarn versioning=npm
@@ -80,15 +80,15 @@ ARG ELIXIR_VERSION=1.19.5
 RUN install-tool elixir
 
 # renovate: datasource=github-releases depName=php packageName=containerbase/php-prebuild
-ARG PHP_VERSION=8.5.6
+ARG PHP_VERSION=8.5.7
 RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer packageName=composer/composer
-ARG COMPOSER_VERSION=2.10.0
+ARG COMPOSER_VERSION=2.10.1
 RUN install-tool composer
 
 # renovate: datasource=docker depName=golang versioning=docker
-ARG GOLANG_VERSION=1.26.3
+ARG GOLANG_VERSION=1.26.4
 RUN install-tool golang
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
@@ -107,7 +107,7 @@ ARG POETRY_VERSION=1.8.5
 RUN install-tool poetry
 
 # renovate: datasource=pypi
-RUN install-tool uv 0.11.17
+RUN install-tool uv 0.11.19
 
 # renovate: datasource=pypi depName=hashin
 ARG HASHIN_VERSION=1.0.5
@@ -136,7 +136,7 @@ ARG COCOAPODS_VERSION=1.16.2
 RUN install-tool cocoapods
 
 # renovate: datasource=npm depName=pnpm versioning=npm
-ARG PNPM_VERSION=10.33.4
+ARG PNPM_VERSION=10.34.1
 RUN install-tool pnpm
 
 # renovate: datasource=docker depName=dotnet packageName=mcr.microsoft.com/dotnet/sdk
@@ -157,7 +157,7 @@ RUN install-tool bun 1.3.14
 RUN install-tool nix 2.34.7
 
 # renovate: datasource=github-releases packageName=jetify-com/devbox
-RUN install-tool devbox 0.17.2
+RUN install-tool devbox 0.17.3
 
 # renovate: datasource=github-releases packageName=bazelbuild/bazelisk
 RUN install-tool bazelisk v1.29.0
