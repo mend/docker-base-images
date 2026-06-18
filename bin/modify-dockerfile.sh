@@ -176,8 +176,9 @@ ${replacement}" "$temp_file"
 ${replacement}" "$temp_file"
                 ;;
             "REPLACE")
-                # Replace entire line matching pattern
-                sed -i.bak "s/.*${pattern}.*/${replacement}/" "$temp_file"
+                # Substring replacement — only the matched text is swapped, everything else
+                # on the line (including any leading '#') is preserved unchanged.
+                sed -i.bak "s/${pattern}/${replacement}/" "$temp_file"
                 ;;
             *)
                 echo "  Warning: Unknown action '$action', skipping"
