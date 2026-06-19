@@ -41,12 +41,18 @@ RUN install-tool node
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2026-33750, CVE-2026-33671                     │
+# │ High       │ 3          │ CVE-2026-33750, CVE-2026-45149, CVE-2026-33671     │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
 ARG NPM_VERSION=11.13.0
 RUN install-tool npm
+# Layer 8 (instruction #9): RUN |7 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_P
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 1          │ CVE-2026-45149                                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm packageName=@yarnpkg/cli-dist
 ARG YARN_VERSION=1.22.22
@@ -56,26 +62,26 @@ RUN install-tool yarn
 # ARG BOWER_VERSION=1.8.14
 # RUN install-tool bower
 # Layer 10 (instruction #11): RUN |9 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_P
-# ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                                │
-# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 13         │ CVE-2021-23383, CVE-2021-44906, CVE-2026-4800, CVE-2021-23807       │
-# │            │            │ CVE-2023-26136, CVE-2026-33937, CVE-2021-3918, CVE-2019-10744       │
-# │            │            │ CVE-2023-26136, CVE-2025-7783, CVE-2025-7783, CVE-2019-10744        │
-# │            │            │ CVE-2021-23369                                                      │
-# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
-# │ High       │ 41         │ CVE-2026-41907, CVE-2021-43138, CVE-2026-33750, CVE-2020-8116       │
-# │            │            │ CVE-2026-33941, CVE-2026-33939, CVE-2026-33940, CVE-2026-33938      │
-# │            │            │ CVE-2022-29167, CVE-2020-36604, CVE-2018-3728, CVE-2022-3517        │
-# │            │            │ CVE-2016-10540, CVE-2026-26996, CVE-2026-27903, CVE-2026-27904      │
-# │            │            │ CVE-2022-3517, CVE-2026-26996, CVE-2026-27903, CVE-2026-27904       │
-# │            │            │ CVE-2022-21213, CVE-2020-7792, CVE-2022-21213, CVE-2020-7792        │
-# │            │            │ CVE-2021-23343, CVE-2022-24999, CVE-2017-1000048, CVE-2022-24999    │
-# │            │            │ CVE-2022-25883, CVE-2015-8855, CVE-2022-25883, CVE-2024-12905       │
-# │            │            │ CVE-2025-48387, CVE-2025-59343, CVE-2017-15010, CVE-2017-15010      │
-# │            │            │ CVE-2026-41907, CVE-2020-8203, CVE-2021-23337, CVE-2020-8203        │
-# │            │            │ CVE-2021-23337                                                      │
-# └────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 14         │ CVE-2021-23369, CVE-2021-23383, CVE-2023-26136, CVE-2026-4800      │
+# │            │            │ CVE-2019-10744, CVE-2023-26136, CVE-2026-33937, CVE-2021-23807     │
+# │            │            │ CVE-2025-7783, CVE-2026-9277, CVE-2025-7783, CVE-2021-44906        │
+# │            │            │ CVE-2021-3918, CVE-2019-10744                                      │
+# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────┤
+# │ High       │ 44         │ CVE-2026-41907, CVE-2021-43138, CVE-2026-33750, CVE-2020-8116      │
+# │            │            │ CVE-2026-12143, CVE-2026-12143, CVE-2026-33941, CVE-2026-33939     │
+# │            │            │ CVE-2026-33940, CVE-2026-33938, CVE-2022-29167, CVE-2020-36604     │
+# │            │            │ CVE-2018-3728, CVE-2016-10540, CVE-2026-26996, CVE-2026-27903      │
+# │            │            │ CVE-2026-27904, CVE-2022-3517, CVE-2026-26996, CVE-2026-27903      │
+# │            │            │ CVE-2026-27904, CVE-2022-21213, CVE-2020-7792, CVE-2022-21213      │
+# │            │            │ CVE-2020-7792, CVE-2021-23343, CVE-2022-24999, CVE-2017-1000048    │
+# │            │            │ CVE-2022-24999, CVE-2022-25883, CVE-2015-8855, CVE-2022-25883      │
+# │            │            │ CVE-2024-12905, CVE-2025-48387, CVE-2025-59343, CVE-2026-44705     │
+# │            │            │ CVE-2017-15010, CVE-2017-15010, CVE-2026-41907, CVE-2020-8203      │
+# │            │            │ CVE-2021-23337, CVE-2020-8203, CVE-2021-23337, CVE-2022-3517       │
+# └────────────┴────────────┴────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm
 ARG PNPM_VERSION=10.33.2
@@ -101,6 +107,9 @@ RUN install-tool java
 ARG JAVA_VERSION=21.0.10+7.0.LTS
 RUN install-tool java
 
+ARG JAVA_VERSION=25.0.2+10.0.LTS
+RUN install-tool java
+
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=java-version packageName=java-jre
 ARG JAVA_VERSION=17.0.18+8
@@ -112,7 +121,7 @@ RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 # ARG GRADLE_VERSION=6.9.4
 # RUN install-tool gradle
-# Layer 19 (instruction #20): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 20 (instruction #21): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
@@ -129,7 +138,7 @@ RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.6
 RUN install-tool gradle
-# Layer 20 (instruction #21): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 21 (instruction #22): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -139,7 +148,7 @@ RUN install-tool gradle
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=9.3.1
 RUN install-tool gradle
-# Layer 21 (instruction #22): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 22 (instruction #23): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -150,7 +159,7 @@ RUN install-tool gradle
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=8.14.4
 RUN install-tool gradle
-# Layer 22 (instruction #23): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 23 (instruction #24): RUN |13 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -158,7 +167,7 @@ RUN install-tool gradle
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/golang-prebuild
-ARG GOLANG_VERSION=1.26.2
+ARG GOLANG_VERSION=1.26.4
 RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 ENV GOSUMDB="sum.golang.org"
@@ -169,6 +178,13 @@ USER ${USER_ID}
 RUN go install github.com/tools/godep@latest && \
     go install github.com/LK4D4/vndr@latest && \
     go install  github.com/kardianos/govendor@latest
+# Layer 25 (instruction #26): RUN |14 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 8          │ CVE-2026-39823, CVE-2026-42499, CVE-2026-42504, CVE-2026-39825    │
+# │            │            │ CVE-2026-33814, CVE-2026-39836, CVE-2026-39820, CVE-2026-33811    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 #All Deparacted/archived go package managers
 # RUN go install  github.com/gpmgo/gopm@latest && \
@@ -180,7 +196,7 @@ USER 0
 # renovate: datasource=maven packageName=org.apache.maven:maven
 ARG MAVEN_VERSION=3.9.14
 RUN install-tool maven
-# Layer 25 (instruction #26): RUN |15 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 26 (instruction #27): RUN |15 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -198,7 +214,7 @@ RUN install-tool sbt
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.6.15
 RUN install-tool python
-# Layer 28 (instruction #29): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 29 (instruction #30): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -208,7 +224,7 @@ RUN install-tool python
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 # ARG PYTHON_VERSION=2.7.18
 # RUN install-tool python
-# Layer 29 (instruction #30): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 30 (instruction #31): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -218,7 +234,7 @@ RUN install-tool python
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.11.12
 RUN install-tool python
-# Layer 30 (instruction #31): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 31 (instruction #32): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -232,7 +248,7 @@ RUN install-tool python
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.7.17
 RUN install-tool python
-# Layer 32 (instruction #33): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 33 (instruction #34): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -242,7 +258,7 @@ RUN install-tool python
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.8.20
 RUN install-tool python
-# Layer 33 (instruction #34): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 34 (instruction #35): RUN |18 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -285,95 +301,93 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 # renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=2.2.402
 RUN install-tool dotnet
-# Layer 42 (instruction #43): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# Layer 43 (instruction #44): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 7          │ CVE-2025-55315, CVE-2025-55315, CVE-2021-26701, CVE-2021-26701    │
-# │            │            │ CVE-2021-26701, CVE-2024-0057, CVE-2024-0057                      │
+# │ Critical   │ 6          │ CVE-2025-55315, CVE-2025-55315, CVE-2021-26701, CVE-2024-0057     │
+# │            │            │ CVE-2021-26701, CVE-2021-26701                                    │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 20         │ CVE-2018-8292, CVE-2018-8269, CVE-2019-1302, CVE-2019-0564        │
-# │            │            │ CVE-2025-26646, CVE-2024-21907, CVE-2024-21907, CVE-2022-41032    │
-# │            │            │ CVE-2023-29337, CVE-2023-29337, CVE-2023-29337, CVE-2022-41032    │
-# │            │            │ CVE-2023-29337, CVE-2022-41032, CVE-2023-29337, CVE-2024-0056     │
-# │            │            │ CVE-2024-0056, CVE-2024-0056, CVE-2024-0056, CVE-2024-0056        │
+# │ High       │ 16         │ CVE-2022-41032, CVE-2026-48109, CVE-2026-48109, CVE-2025-26646    │
+# │            │            │ CVE-2024-21907, CVE-2024-21907, CVE-2022-41032, CVE-2023-29337    │
+# │            │            │ CVE-2023-29337, CVE-2023-29337, CVE-2024-0056, CVE-2024-0056      │
+# │            │            │ CVE-2024-0056, CVE-2024-0056, CVE-2024-0056, CVE-2018-8292        │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
 # ARG DOTNET_VERSION=3.1.426
 # RUN install-tool dotnet
-# Layer 43 (instruction #44): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 2          │ CVE-2024-0057, CVE-2024-0057                                      │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 10         │ CVE-2025-26646, CVE-2022-41032, CVE-2023-29337, CVE-2023-29337    │
-# │            │            │ CVE-2023-29337, CVE-2022-41032, CVE-2023-29337, CVE-2023-33170    │
-# │            │            │ CVE-2023-29337, CVE-2024-21386                                    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
-
-# renovate: datasource=dotnet packageName=dotnet-sdk
-# ARG DOTNET_VERSION=5.0.408
-# RUN install-tool dotnet
 # Layer 44 (instruction #45): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 3          │ CVE-2024-0057, CVE-2021-24112, CVE-2024-0057                      │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 17         │ CVE-2025-26646, CVE-2025-26646, CVE-2024-21907, CVE-2024-21907    │
-# │            │            │ CVE-2024-21907, CVE-2022-41032, CVE-2023-29337, CVE-2023-29337    │
-# │            │            │ CVE-2023-29337, CVE-2022-38013, CVE-2023-33170, CVE-2024-21386    │
-# │            │            │ CVE-2022-41032, CVE-2023-29337, CVE-2022-41032, CVE-2023-29337    │
-# │            │            │ CVE-2024-38095                                                    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
-
-# renovate: datasource=dotnet packageName=dotnet-sdk
-ARG DOTNET_VERSION=6.0.428
-RUN install-tool dotnet
-# Layer 45 (instruction #46): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2024-0057                                      │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2025-24070, CVE-2025-26646                     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
-
-# renovate: datasource=dotnet packageName=dotnet-sdk
-ARG DOTNET_VERSION=8.0.417
-RUN install-tool dotnet
-# Layer 46 (instruction #47): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 11         │ CVE-2026-26130, CVE-2026-42899, CVE-2025-55247, CVE-2025-26646    │
-# │            │            │ CVE-2025-55247, CVE-2025-26646, CVE-2025-55247, CVE-2026-33116    │
-# │            │            │ CVE-2026-26171, CVE-2026-33116, CVE-2026-26171                    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
-
-# renovate: datasource=dotnet packageName=dotnet-sdk
-ARG DOTNET_VERSION=9.0.310
-RUN install-tool dotnet
-# Layer 47 (instruction #48): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 4          │ CVE-2026-26130, CVE-2026-42899, CVE-2026-33116, CVE-2026-26171    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
-
-# renovate: datasource=dotnet packageName=dotnet-sdk
-ARG DOTNET_VERSION=7.0.410
-RUN install-tool dotnet
-# Layer 48 (instruction #49): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
 # │ Critical   │ 1          │ CVE-2024-0057                                                     │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 8          │ CVE-2025-26646, CVE-2024-38081, CVE-2024-38095, CVE-2024-30105    │
-# │            │            │ CVE-2024-30105, CVE-2024-30105, CVE-2025-26646, CVE-2024-30105    │
+# │ High       │ 8          │ CVE-2024-21386, CVE-2025-26646, CVE-2022-41032, CVE-2023-29337    │
+# │            │            │ CVE-2023-29337, CVE-2022-41032, CVE-2023-33170, CVE-2023-29337    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
+
+# renovate: datasource=dotnet packageName=dotnet-sdk
+# ARG DOTNET_VERSION=5.0.408
+# RUN install-tool dotnet
+# Layer 45 (instruction #46): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 3          │ CVE-2024-0057, CVE-2021-24112, CVE-2021-26701                     │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 14         │ CVE-2025-26646, CVE-2025-26646, CVE-2024-21907, CVE-2024-21907    │
+# │            │            │ CVE-2024-21907, CVE-2022-41032, CVE-2022-38013, CVE-2023-29337    │
+# │            │            │ CVE-2023-29337, CVE-2023-33170, CVE-2024-21386, CVE-2022-41032    │
+# │            │            │ CVE-2023-29337, CVE-2024-38095                                    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
+
+# renovate: datasource=dotnet packageName=dotnet-sdk
+ARG DOTNET_VERSION=6.0.428
+RUN install-tool dotnet
+# Layer 46 (instruction #47): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ Critical   │ 1          │ CVE-2024-0057                                      │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 3          │ CVE-2025-24070, CVE-2025-26646, CVE-2024-43485     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
+
+# renovate: datasource=dotnet packageName=dotnet-sdk
+ARG DOTNET_VERSION=8.0.417
+RUN install-tool dotnet
+# Layer 47 (instruction #48): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 12         │ CVE-2026-26171, CVE-2026-42899, CVE-2026-45591, CVE-2025-55247    │
+# │            │            │ CVE-2025-26646, CVE-2025-55247, CVE-2025-26646, CVE-2025-55247    │
+# │            │            │ CVE-2026-26171, CVE-2026-33116, CVE-2026-26130, CVE-2026-33116    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
+
+# renovate: datasource=dotnet packageName=dotnet-sdk
+ARG DOTNET_VERSION=9.0.310
+RUN install-tool dotnet
+# Layer 48 (instruction #49): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 5          │ CVE-2026-26130, CVE-2026-42899, CVE-2026-45591, CVE-2026-33116    │
+# │            │            │ CVE-2026-26171                                                    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
+
+# renovate: datasource=dotnet packageName=dotnet-sdk
+ARG DOTNET_VERSION=7.0.410
+RUN install-tool dotnet
+# Layer 49 (instruction #50): RUN |22 USER_NAME=wss-scanner USER_ID=1000 USER_HOME=/home/wss-scanner APT_HTTP_
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 1          │ CVE-2024-0057                                                     │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 7          │ CVE-2025-26646, CVE-2024-38081, CVE-2024-38095, CVE-2024-30105    │
+# │            │            │ CVE-2024-30105, CVE-2025-26646, CVE-2024-30105                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # Set .NET SDK 7.0.405 as the default version
