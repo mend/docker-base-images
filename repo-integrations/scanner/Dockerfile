@@ -114,6 +114,9 @@ RUN install-tool java
 ARG JAVA_VERSION=21.0.10+7.0.LTS
 RUN install-tool java
 
+ARG JAVA_VERSION=25.0.2+10.0.LTS
+RUN install-tool java
+
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # renovate: datasource=java-version packageName=java-jre
 ARG JAVA_VERSION=17.0.18+8
@@ -162,7 +165,7 @@ RUN install-tool gradle
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/golang-prebuild
-#ARG GOLANG_VERSION=1.26.2
+#ARG GOLANG_VERSION=1.26.4
 #RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 #ENV GOSUMDB="sum.golang.org"
