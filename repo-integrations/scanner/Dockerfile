@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:14.9.5@sha256:2852f7e2784fb21e745325a81c9beb1906be51b79956376eecf9ce57dacf6fd0 AS containerbase
+FROM ghcr.io/containerbase/base:14.11.2@sha256:2f30a045b55d2f743d63bb916c6ce48d905e69a34619926740cd5261fbdaeadf AS containerbase
 
 
 FROM ${BASE_IMAGE} as base
@@ -35,7 +35,7 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=github-releases packageName=containerbase/node-prebuild versioning=node
-ARG NODE_VERSION=24.15.0
+ARG NODE_VERSION=24.16.0
 RUN install-tool node
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -45,7 +45,7 @@ RUN install-tool node
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
-ARG NPM_VERSION=11.13.0
+ARG NPM_VERSION=11.16.0
 RUN install-tool npm
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -61,7 +61,7 @@ RUN install-tool yarn
 
 # renovate: datasource=npm
 # ARG BOWER_VERSION=1.8.14
-# RUN install-tool bower
+RUN install-npm bower
 # ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                                │
 # ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
@@ -124,6 +124,21 @@ RUN install-tool java
 ENV MEND_JAVA=/usr/local/bin/mend_java
 RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
     chmod +x $MEND_JAVA
+
+# renovate: datasource=github-releases lookupName=android-sdk-cmdline-tools
+RUN install-tool android-sdk-cmdline-tools 20
+
+# Do not install as root
+USER ${USER_ID}
+
+# Temporary: don't fail build during install. Remove once verified.
+RUN set -ex; \
+  yes | sdkmanager --licenses; \
+  sdkmanager "platforms;android-35"; \
+  true
+
+# back to root user
+USER 0
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 # ARG GRADLE_VERSION=6.9.4
@@ -198,7 +213,7 @@ RUN install-tool maven
 # RUN install-tool scala
 
 # renovate: datasource=github-releases packageName=sbt/sbt
-# ARG SBT_VERSION=1.12.9
+# ARG SBT_VERSION=1.12.11
 # RUN install-tool sbt
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -261,7 +276,7 @@ ARG PYTHON_VERSION=3.10.20
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.2.524
+# ARG CHECKOV_VERSION=3.2.533
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
@@ -269,7 +284,7 @@ RUN install-tool python
 #     && chmod 644 /etc/checkov/config.yaml
 
 # renovate: datasource=github-releases packageName=containerbase/php-prebuild
-# #ARG PHP_VERSION=8.5.5
+# #ARG PHP_VERSION=8.5.7
 # #RUN install-tool php
 
 # renovate: datasource=github-releases packageName=containerbase/composer-prebuild
@@ -392,7 +407,7 @@ RUN install-tool poetry
 # USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# #ARG HELM_VERSION=4.1.4
+# #ARG HELM_VERSION=4.2.2
 # #RUN install-tool helm
 
 ## No renovate datasource exists yet
