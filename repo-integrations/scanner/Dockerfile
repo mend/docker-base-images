@@ -83,7 +83,7 @@ RUN install-npm bower
 # └────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm
-#ARG PNPM_VERSION=10.33.2
+#ARG PNPM_VERSION=10.33.4
 #RUN install-tool pnpm
 
 # renovate: datasource=npm
@@ -118,6 +118,7 @@ ARG JAVA_VERSION=25.0.2+10.0.LTS
 RUN install-tool java
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+# java_default
 # renovate: datasource=java-version packageName=java-jre
 ARG JAVA_VERSION=17.0.18+8
 RUN install-tool java
@@ -125,17 +126,15 @@ ENV MEND_JAVA=/usr/local/bin/mend_java
 RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
     chmod +x $MEND_JAVA
 
-# renovate: datasource=github-releases lookupName=android-sdk-cmdline-tools
+# renovate: ignore
 RUN install-tool android-sdk-cmdline-tools 20
 
 # Do not install as root
 USER ${USER_ID}
 
-# Temporary: don't fail build during install. Remove once verified.
-RUN set -ex; \
-  yes | sdkmanager --licenses; \
-  sdkmanager "platforms;android-35"; \
-  true
+# fail build on failure
+RUN yes | sdkmanager --licenses && \
+    sdkmanager "platforms;android-35"
 
 # back to root user
 USER 0
@@ -170,8 +169,9 @@ RUN install-tool gradle
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+# gradle_default
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.14.4
+ARG GRADLE_VERSION=8.14.5
 RUN install-tool gradle
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -200,7 +200,7 @@ RUN install-tool gradle
 #RUN chgrp -R 0 /go && chmod -R g=u /go
 
 # renovate: datasource=maven packageName=org.apache.maven:maven
-ARG MAVEN_VERSION=3.9.14
+ARG MAVEN_VERSION=3.9.16
 RUN install-tool maven
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -213,7 +213,7 @@ RUN install-tool maven
 # RUN install-tool scala
 
 # renovate: datasource=github-releases packageName=sbt/sbt
-# ARG SBT_VERSION=1.12.11
+# ARG SBT_VERSION=1.12.13
 # RUN install-tool sbt
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -233,7 +233,7 @@ RUN install-tool python
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.11.12
+ARG PYTHON_VERSION=3.11.15
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -242,7 +242,7 @@ RUN install-tool python
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.12.9
+ARG PYTHON_VERSION=3.12.13
 RUN install-tool python
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -264,13 +264,15 @@ RUN install-tool python
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.13.1
+ARG PYTHON_VERSION=3.13.14
 RUN install-tool python
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.9.25
 RUN install-tool python
 
+### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+# python_default
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.10.20
 RUN install-tool python
@@ -288,7 +290,7 @@ RUN install-tool python
 # #RUN install-tool php
 
 # renovate: datasource=github-releases packageName=containerbase/composer-prebuild
-# #ARG COMPOSER_VERSION=2.9.7
+# #ARG COMPOSER_VERSION=2.9.8
 # #RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
@@ -307,6 +309,8 @@ RUN install-tool python
 #ARG DOTNET_VERSION=5.0.408
 #RUN install-tool dotnet
 
+### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+# dotnet_default
 # renovate: datasource=dotnet packageName=dotnet-sdk
 #ARG DOTNET_VERSION=6.0.428
 #RUN install-tool dotnet
@@ -328,12 +332,14 @@ RUN install-tool dotnet
 # │ High       │ 2          │ CVE-2025-47273, CVE-2024-6345                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
+### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+# dotnet_default
 # renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=7.0.410
 RUN install-tool dotnet
 
-# Set .NET SDK 7.0.405 as the default version
-RUN echo '{ "sdk": { "version": "7.0.410" } }' > ${USER_HOME}/global.json
+# Set the default .NET SDK to the last-installed DOTNET_VERSION (keeps global.json in sync on updates)
+RUN echo '{ "sdk": { "version": "${DOTNET_VERSION}" } }' > ${USER_HOME}/global.json
 
 # renovate: datasource=docker versioning=docker
 #ARG RUST_VERSION=1.95.0
@@ -356,13 +362,15 @@ RUN install-tool pipenv
 USER 0
 
 # renovate: datasource=pypi
-#ARG UV_VERSION=0.11.7
+#ARG UV_VERSION=0.11.28
 #RUN install-tool uv
 
 # renovate: datasource=pypi
-ARG POETRY_VERSION=2.3.2
+ARG POETRY_VERSION=2.3.4
 RUN install-tool poetry
 
+### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
+# poetry_default
 # renovate: datasource=pypi
 ARG POETRY_VERSION=1.6.1
 RUN install-tool poetry
