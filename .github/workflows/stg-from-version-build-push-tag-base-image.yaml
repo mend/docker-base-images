@@ -151,7 +151,7 @@ jobs:
 
           # Merge release branch back into develop
           git checkout develop
-          git merge release/${{ env.FULL_TAG }} --commit --no-edit
+          git merge release/${{ env.FULL_TAG }} --commit --no-edit -X theirs
           git push
         shell: bash
 
