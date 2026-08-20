@@ -45,7 +45,7 @@ RUN install-tool node
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
-ARG NPM_VERSION=11.16.0
+ARG NPM_VERSION=11.19.0
 RUN install-tool npm
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -83,7 +83,7 @@ RUN install-npm bower
 # └────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm
-#ARG PNPM_VERSION=10.33.4
+#ARG PNPM_VERSION=10.34.5
 #RUN install-tool pnpm
 
 # renovate: datasource=npm
@@ -103,24 +103,26 @@ RUN install-npm bower
 # │            │            │ CVE-2026-26996                                                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
-ARG JAVA_VERSION=8.0.472+8
+# renovate: datasource=java-version packageName=java-jre
+ARG JAVA_VERSION=8.0.502+7
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=11.0.29+7
+ARG JAVA_VERSION=11.0.32+9
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
 ARG JAVA_VERSION=21.0.10+7.0.LTS
 RUN install-tool java
 
+# renovate: datasource=java-version packageName=java-jre
 ARG JAVA_VERSION=25.0.2+10.0.LTS
 RUN install-tool java
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # java_default
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=17.0.18+8
+ARG JAVA_VERSION=17.0.20+8
 RUN install-tool java
 ENV MEND_JAVA=/usr/local/bin/mend_java
 RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
@@ -160,7 +162,7 @@ RUN install-tool gradle
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.3.1
+ARG GRADLE_VERSION=9.6.1
 RUN install-tool gradle
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -278,7 +280,7 @@ ARG PYTHON_VERSION=3.10.20
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.2.533
+# ARG CHECKOV_VERSION=3.3.10
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
@@ -324,6 +326,7 @@ RUN install-tool dotnet
 # │ High       │ 2          │ CVE-2025-47273, CVE-2024-6345                      │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
+# renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=9.0.310
 RUN install-tool dotnet
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
@@ -349,7 +352,7 @@ RUN echo '{ "sdk": { "version": "${DOTNET_VERSION}" } }' > ${USER_HOME}/global.j
 USER ${USER_ID}
 
 # renovate: datasource=pypi
-ARG PIPENV_VERSION=2026.5.2
+ARG PIPENV_VERSION=2026.6.2
 RUN install-tool pipenv
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -366,13 +369,13 @@ USER 0
 #RUN install-tool uv
 
 # renovate: datasource=pypi
-ARG POETRY_VERSION=2.3.4
+ARG POETRY_VERSION=2.4.1
 RUN install-tool poetry
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # poetry_default
 # renovate: datasource=pypi
-ARG POETRY_VERSION=1.6.1
+ARG POETRY_VERSION=1.8.5
 RUN install-tool poetry
 
 #ENV GEM_HOME=/tmp/containerbase/cache/.ruby
@@ -415,7 +418,7 @@ RUN install-tool poetry
 # USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# #ARG HELM_VERSION=4.2.2
+# #ARG HELM_VERSION=4.2.4
 # #RUN install-tool helm
 
 ## No renovate datasource exists yet
