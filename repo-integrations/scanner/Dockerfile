@@ -41,20 +41,19 @@ RUN install-tool node
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 10         │ CVE-2026-69152, CVE-2026-14257, CVE-2026-13149, CVE-2026-45149    │
-# │            │            │ CVE-2026-69192, CVE-2026-48815, CVE-2026-59871, CVE-2026-59873    │
-# │            │            │ CVE-2026-59874, CVE-2026-12151                                    │
+# │ High       │ 11         │ CVE-2026-59873, CVE-2026-59874, CVE-2026-13149, CVE-2026-73566    │
+# │            │            │ CVE-2026-45149, CVE-2026-12151, CVE-2026-69152, CVE-2026-69192    │
+# │            │            │ CVE-2026-48815, CVE-2026-14257, CVE-2026-59871                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
-ARG NPM_VERSION=11.16.0
+ARG NPM_VERSION=11.19.0
 RUN install-tool npm
 # instruction #9: install-tool npm
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 8          │ CVE-2026-59873, CVE-2026-69152, CVE-2026-59874, CVE-2026-13149    │
-# │            │            │ CVE-2026-69192, CVE-2026-12151, CVE-2026-14257, CVE-2026-59871    │
+# │ High       │ 4          │ CVE-2026-69152, CVE-2026-14257, CVE-2026-69192, CVE-2026-73566    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm packageName=@yarnpkg/cli-dist
@@ -84,7 +83,7 @@ RUN install-npm bower
 # └────────────┴────────────┴────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm
-#ARG PNPM_VERSION=10.33.4
+#ARG PNPM_VERSION=10.34.5
 #RUN install-tool pnpm
 
 # renovate: datasource=npm
@@ -95,24 +94,26 @@ RUN install-npm bower
 # RUN echo '{ "allow_root": true }' > ${USER_HOME}/.bowerrc && \
 # 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
 
-ARG JAVA_VERSION=8.0.472+8
+# renovate: datasource=java-version packageName=java-jre
+ARG JAVA_VERSION=8.0.502+7
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=11.0.29+7
+ARG JAVA_VERSION=11.0.32+9
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
 ARG JAVA_VERSION=21.0.10+7.0.LTS
 RUN install-tool java
 
+# renovate: datasource=java-version packageName=java-jre
 ARG JAVA_VERSION=25.0.2+10.0.LTS
 RUN install-tool java
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # java_default
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=17.0.18+8
+ARG JAVA_VERSION=17.0.20+8
 RUN install-tool java
 ENV MEND_JAVA=/usr/local/bin/mend_java
 RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
@@ -152,12 +153,12 @@ RUN install-tool gradle
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
 # │ Critical   │ 1          │ CVE-2025-14813                                                        │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
-# │ High       │ 5          │ CVE-2026-3505, GHSA-r7wm-3cxj-wff9, CVE-2026-54513, CVE-2026-54512    │
+# │ High       │ 5          │ GHSA-r7wm-3cxj-wff9, CVE-2026-54513, CVE-2026-54512, CVE-2026-3505    │
 # │            │            │ CVE-2025-67030                                                        │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.3.1
+ARG GRADLE_VERSION=9.6.1
 RUN install-tool gradle
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
@@ -243,7 +244,7 @@ ARG PYTHON_VERSION=3.10.20
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.2.533
+# ARG CHECKOV_VERSION=3.3.10
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
@@ -289,12 +290,14 @@ RUN install-tool dotnet
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
 # │ Critical   │ 2          │ CVE-2026-47304, CVE-2024-0057                                     │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 16         │ CVE-2026-50527, CVE-2026-50648, CVE-2026-32203, CVE-2026-33116    │
-# │            │            │ CVE-2026-47302, CVE-2026-50525, CVE-2026-26171, CVE-2026-45591    │
-# │            │            │ CVE-2026-42899, CVE-2026-56170, CVE-2026-26130, CVE-2025-55247    │
-# │            │            │ CVE-2025-26646, CVE-2024-30105, CVE-2024-38081, CVE-2024-38095    │
+# │ High       │ 17         │ CVE-2026-56170, CVE-2026-26130, CVE-2025-55247, CVE-2025-26646    │
+# │            │            │ CVE-2026-62901, CVE-2026-47302, CVE-2026-42899, CVE-2026-50527    │
+# │            │            │ CVE-2026-50648, CVE-2026-32203, CVE-2026-33116, CVE-2026-45591    │
+# │            │            │ CVE-2026-50525, CVE-2026-26171, CVE-2024-38081, CVE-2024-38095    │
+# │            │            │ CVE-2024-30105                                                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
+# renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=9.0.310
 RUN install-tool dotnet
 
@@ -315,7 +318,7 @@ RUN echo '{ "sdk": { "version": "${DOTNET_VERSION}" } }' > ${USER_HOME}/global.j
 USER ${USER_ID}
 
 # renovate: datasource=pypi
-ARG PIPENV_VERSION=2026.5.2
+ARG PIPENV_VERSION=2026.6.2
 RUN install-tool pipenv
 
 
@@ -327,7 +330,7 @@ USER 0
 #RUN install-tool uv
 
 # renovate: datasource=pypi
-ARG POETRY_VERSION=2.3.4
+ARG POETRY_VERSION=2.4.1
 RUN install-tool poetry
 # instruction #37: install-tool poetry
 # ┌────────────┬────────────┬────────────────────────────────────────────────────────┐
@@ -339,7 +342,7 @@ RUN install-tool poetry
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # poetry_default
 # renovate: datasource=pypi
-ARG POETRY_VERSION=1.6.1
+ARG POETRY_VERSION=1.8.5
 RUN install-tool poetry
 
 #ENV GEM_HOME=/tmp/containerbase/cache/.ruby
@@ -382,7 +385,7 @@ RUN install-tool poetry
 # USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# #ARG HELM_VERSION=4.2.2
+# #ARG HELM_VERSION=4.2.4
 # #RUN install-tool helm
 
 ## No renovate datasource exists yet
@@ -410,21 +413,32 @@ RUN apt-get update && \
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2026-53215                                                    │
+# │ Critical   │ 5          │ CVE-2026-63940, CVE-2026-74394, CVE-2026-64535, CVE-2026-64564    │
+# │            │            │ CVE-2026-53398                                                    │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 49         │ CVE-2026-52908, CVE-2026-43263, CVE-2026-53198, CVE-2026-53183    │
-# │            │            │ CVE-2026-52909, CVE-2026-46331, CVE-2026-43009, CVE-2026-45850    │
-# │            │            │ CVE-2026-53196, CVE-2026-53175, CVE-2026-53182, CVE-2025-38187    │
-# │            │            │ CVE-2026-46275, CVE-2026-53275, CVE-2025-71073, CVE-2026-53269    │
-# │            │            │ CVE-2026-53270, CVE-2025-40190, CVE-2026-53250, CVE-2026-23240    │
-# │            │            │ CVE-2025-71315, CVE-2026-53148, CVE-2026-43116, CVE-2026-53176    │
-# │            │            │ CVE-2026-53178, CVE-2026-53359, CVE-2026-31536, CVE-2024-57857    │
-# │            │            │ CVE-2026-64531, CVE-2026-53239, CVE-2026-46320, CVE-2026-46330    │
-# │            │            │ CVE-2026-53090, CVE-2026-53264, CVE-2026-53262, CVE-2026-53266    │
-# │            │            │ CVE-2026-23208, CVE-2026-53186, CVE-2026-53224, CVE-2026-53254    │
-# │            │            │ CVE-2026-53256, CVE-2026-31663, CVE-2026-53212, CVE-2025-38563    │
-# │            │            │ CVE-2026-43083, CVE-2026-53185, CVE-2026-53159, CVE-2026-53151    │
-# │            │            │ CVE-2026-43198                                                    │
+# │ High       │ 91         │ CVE-2026-64032, CVE-2026-68451, CVE-2026-43116, CVE-2026-63954    │
+# │            │            │ CVE-2026-64383, CVE-2026-63926, CVE-2026-64093, CVE-2026-68470    │
+# │            │            │ CVE-2026-53388, CVE-2026-64380, CVE-2026-64361, CVE-2026-43009    │
+# │            │            │ CVE-2026-64390, CVE-2026-53254, CVE-2026-64387, CVE-2026-64423    │
+# │            │            │ CVE-2026-72478, CVE-2026-63976, CVE-2026-63917, CVE-2025-71315    │
+# │            │            │ CVE-2026-64091, CVE-2026-68442, CVE-2026-68446, CVE-2026-53264    │
+# │            │            │ CVE-2026-53399, CVE-2026-53269, CVE-2026-68323, CVE-2026-68329    │
+# │            │            │ CVE-2026-53262, CVE-2026-53270, CVE-2026-64396, CVE-2026-53239    │
+# │            │            │ CVE-2025-40190, CVE-2026-53275, CVE-2026-53256, CVE-2026-64385    │
+# │            │            │ CVE-2026-64386, CVE-2026-53250, CVE-2025-40158, CVE-2026-72024    │
+# │            │            │ CVE-2026-72472, CVE-2026-68399, CVE-2026-63974, CVE-2026-63971    │
+# │            │            │ CVE-2026-53266, CVE-2026-68098, CVE-2026-68085, CVE-2026-72124    │
+# │            │            │ CVE-2026-46275, CVE-2026-43263, CVE-2026-46320, CVE-2026-53090    │
+# │            │            │ CVE-2025-71073, CVE-2026-64188, CVE-2026-64123, CVE-2026-64115    │
+# │            │            │ CVE-2026-53356, CVE-2026-53357, CVE-2026-64018, CVE-2025-40075    │
+# │            │            │ CVE-2026-64440, CVE-2024-57857, CVE-2026-64432, CVE-2025-10263    │
+# │            │            │ CVE-2026-74341, CVE-2026-64548, CVE-2025-38187, CVE-2026-74390    │
+# │            │            │ CVE-2026-64554, CVE-2026-72288, CVE-2026-74438, CVE-2026-74427    │
+# │            │            │ CVE-2025-68304, CVE-2026-23240, CVE-2026-68198, CVE-2026-53196    │
+# │            │            │ CVE-2026-53198, CVE-2026-53186, CVE-2026-53185, CVE-2026-53178    │
+# │            │            │ CVE-2026-53182, CVE-2026-64266, CVE-2026-64269, CVE-2026-74535    │
+# │            │            │ CVE-2026-74534, CVE-2026-72338, CVE-2026-63884, CVE-2026-45850    │
+# │            │            │ CVE-2026-23393, CVE-2026-64442, CVE-2026-74268                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 
