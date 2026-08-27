@@ -41,9 +41,9 @@ RUN install-tool node
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 10         │ CVE-2026-69152, CVE-2026-14257, CVE-2026-13149, CVE-2026-45149    │
-# │            │            │ CVE-2026-69192, CVE-2026-48815, CVE-2026-59871, CVE-2026-59873    │
-# │            │            │ CVE-2026-59874, CVE-2026-12151                                    │
+# │ High       │ 11         │ CVE-2026-59873, CVE-2026-59874, CVE-2026-13149, CVE-2026-73566    │
+# │            │            │ CVE-2026-45149, CVE-2026-12151, CVE-2026-69152, CVE-2026-69192    │
+# │            │            │ CVE-2026-48815, CVE-2026-14257, CVE-2026-59871                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
@@ -86,11 +86,11 @@ RUN install-npm bower
 ARG PNPM_VERSION=10.34.5
 RUN install-tool pnpm
 # instruction #12: install-tool pnpm
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2026-69152, CVE-2026-14257, CVE-2026-69192     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 4          │ CVE-2026-69152, CVE-2026-14257, CVE-2026-69192, CVE-2026-73566    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm
 ARG BUN_VERSION=1.3.14
@@ -127,7 +127,7 @@ RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
 
 # renovate: ignore
 RUN install-tool android-sdk-cmdline-tools 20
-# instruction #21: install-tool android-sdk-cmdline-tools 20
+# instruction #20: install-tool android-sdk-cmdline-tools 20
 # ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                            │
 # ├────────────┼────────────┼─────────────────────────────────────────────────────────────────┤
@@ -149,24 +149,19 @@ USER 0
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 # ARG GRADLE_VERSION=6.9.4
 # RUN install-tool gradle
-# instruction #23: install-tool gradle
-# ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                                   │
-# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 4          │ CVE-2021-26291, CVE-2020-7692, CVE-2022-1471, CVE-2025-14813           │
-# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────────┤
-# │ High       │ 25         │ CVE-2026-54513, CVE-2022-42003, CVE-2026-50193, CVE-2020-36518         │
-# │            │            │ CVE-2026-54512, CVE-2022-25647, CVE-2023-2976, CVE-2021-46877          │
-# │            │            │ CVE-2025-52999, GHSA-r7wm-3cxj-wff9, CVE-2022-42004, CVE-2021-22573    │
-# │            │            │ CVE-2024-47554, CVE-2021-36090, CVE-2021-35517, CVE-2021-35516         │
-# │            │            │ CVE-2021-35515, CVE-2022-37866, CVE-2022-46751, CVE-2026-3505          │
-# │            │            │ CVE-2025-67030, CVE-2023-4759, CVE-2025-66453, CVE-2022-25857          │
-# │            │            │ CVE-2024-21634                                                         │
-# └────────────┴────────────┴────────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=7.6.6
 RUN install-tool gradle
+# instruction #22: install-tool gradle
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                                  │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 1          │ CVE-2025-14813                                                        │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
+# │ High       │ 5          │ GHSA-r7wm-3cxj-wff9, CVE-2026-54513, CVE-2026-54512, CVE-2026-3505    │
+# │            │            │ CVE-2025-67030                                                        │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=9.6.1
@@ -190,7 +185,7 @@ USER ${USER_ID}
 RUN go install github.com/tools/godep@latest && \
     go install github.com/LK4D4/vndr@latest && \
     go install  github.com/kardianos/govendor@latest
-# instruction #28: go install github.com/tools/godep@latest && go install github.com/lk4d4/vndr@lat
+# instruction #26: go install github.com/tools/godep@latest && go install github.com/lk4d4/vndr@lat
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
@@ -213,7 +208,7 @@ RUN install-tool maven
 # renovate: datasource=github-releases packageName=scala/scala
 ARG SCALA_VERSION=v2.13.16
 RUN install-tool scala
-# instruction #30: install-tool scala
+# instruction #28: install-tool scala
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -227,7 +222,7 @@ RUN install-tool sbt
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.6.15
 RUN install-tool python
-# instruction #32: install-tool python
+# instruction #30: install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -292,22 +287,22 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 # renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=2.2.402
 RUN install-tool dotnet
-# instruction #46: install-tool dotnet
+# instruction #39: install-tool dotnet
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 6          │ CVE-2025-55315, CVE-2021-26701, CVE-2026-48509, CVE-2024-0057     │
-# │            │            │ CVE-2021-24112, CVE-2026-47304                                    │
+# │ Critical   │ 5          │ CVE-2021-26701, CVE-2026-48509, CVE-2025-55315, CVE-2024-0057     │
+# │            │            │ CVE-2026-47304                                                    │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 35         │ CVE-2026-48517, CVE-2024-0056, CVE-2026-48514, CVE-2026-48515     │
-# │            │            │ CVE-2026-48512, CVE-2026-48513, CVE-2026-48510, CVE-2026-48511    │
-# │            │            │ CVE-2026-48109, CVE-2026-48516, CVE-2026-48506, CVE-2025-26646    │
-# │            │            │ CVE-2018-8292, CVE-2024-21907, CVE-2022-41032, CVE-2023-29337     │
-# │            │            │ CVE-2023-33170, CVE-2024-21386, CVE-2022-38013, CVE-2024-38095    │
-# │            │            │ CVE-2024-43485, CVE-2025-24070, CVE-2026-50527, CVE-2026-50648    │
-# │            │            │ CVE-2026-32203, CVE-2026-33116, CVE-2026-47302, CVE-2026-50525    │
-# │            │            │ CVE-2026-26171, CVE-2026-45591, CVE-2026-42899, CVE-2026-56170    │
-# │            │            │ CVE-2026-26130, CVE-2025-55247, CVE-2026-62901                    │
+# │ High       │ 34         │ CVE-2026-48513, CVE-2026-48510, CVE-2026-48511, CVE-2026-48109    │
+# │            │            │ CVE-2026-48516, CVE-2026-48506, CVE-2026-48517, CVE-2026-48514    │
+# │            │            │ CVE-2026-48515, CVE-2026-48512, CVE-2025-26646, CVE-2024-0056     │
+# │            │            │ CVE-2024-21907, CVE-2023-29337, CVE-2022-41032, CVE-2018-8292     │
+# │            │            │ CVE-2025-24070, CVE-2024-43485, CVE-2026-56170, CVE-2026-26130    │
+# │            │            │ CVE-2025-55247, CVE-2026-62901, CVE-2026-47302, CVE-2026-42899    │
+# │            │            │ CVE-2026-50527, CVE-2026-50648, CVE-2026-32203, CVE-2026-33116    │
+# │            │            │ CVE-2026-45591, CVE-2026-50525, CVE-2026-26171, CVE-2024-38081    │
+# │            │            │ CVE-2024-38095, CVE-2024-30105                                    │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
@@ -361,6 +356,12 @@ RUN install-tool uv
 # renovate: datasource=pypi
 ARG POETRY_VERSION=2.4.1
 RUN install-tool poetry
+# instruction #48: install-tool poetry
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 1          │ CVE-2026-42305                                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # poetry_default
@@ -375,6 +376,14 @@ ARG RUBY_VERSION=4.0.3
 RUN install-tool ruby && \
     gem install rubygems-update -v 3.3.0 && \
     gem update --system
+# instruction #50: install-tool ruby && gem install rubygems-update -v 3.3.0 && gem update --system
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ Critical   │ 2          │ CVE-2026-33210, CVE-2026-42257                     │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 2          │ CVE-2026-42245, CVE-2026-42246                     │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 ENV PATH="${GEM_HOME}/bin:${PATH}"
 
 # renovate: datasource=rubygems versioning=ruby
