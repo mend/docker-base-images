@@ -269,7 +269,7 @@ ARG PYTHON_VERSION=3.10.20
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.3.10
+# ARG CHECKOV_VERSION=3.3.13
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
