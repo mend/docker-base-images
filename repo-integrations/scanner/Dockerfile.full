@@ -41,9 +41,9 @@ RUN install-tool node
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 11         │ CVE-2026-59873, CVE-2026-59874, CVE-2026-13149, CVE-2026-73566    │
-# │            │            │ CVE-2026-45149, CVE-2026-12151, CVE-2026-69152, CVE-2026-69192    │
-# │            │            │ CVE-2026-48815, CVE-2026-14257, CVE-2026-59871                    │
+# │ High       │ 12         │ CVE-2026-59871, CVE-2026-59873, CVE-2026-59874, CVE-2026-13149    │
+# │            │            │ CVE-2026-73566, CVE-2026-45149, CVE-2026-69152, CVE-2026-69192    │
+# │            │            │ CVE-2026-9496, CVE-2026-12151, CVE-2026-48815, CVE-2026-14257     │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
@@ -74,8 +74,8 @@ RUN install-npm bower
 # │ High       │ 35         │ CVE-2020-36604, CVE-2018-3728, CVE-2026-41907, CVE-2021-43138      │
 # │            │            │ CVE-2026-69152, CVE-2026-14257, CVE-2026-13149, CVE-2026-33750     │
 # │            │            │ CVE-2020-8116, CVE-2026-12143, CVE-2026-33939, CVE-2026-33938      │
-# │            │            │ CVE-2026-33940, CVE-2026-33941, CVE-2022-29167, CVE-2026-27904     │
-# │            │            │ CVE-2022-3517, CVE-2016-10540, CVE-2026-26996, CVE-2026-27903      │
+# │            │            │ CVE-2026-33940, CVE-2026-33941, CVE-2022-29167, CVE-2026-26996     │
+# │            │            │ CVE-2026-27903, CVE-2026-27904, CVE-2022-3517, CVE-2016-10540      │
 # │            │            │ CVE-2020-7792, CVE-2022-21213, CVE-2021-23343, CVE-2022-24999      │
 # │            │            │ CVE-2017-1000048, CVE-2015-8855, CVE-2022-25883, CVE-2026-13311    │
 # │            │            │ CVE-2025-48387, CVE-2025-59343, CVE-2024-12905, CVE-2026-44705     │
@@ -264,7 +264,7 @@ ARG PYTHON_VERSION=3.10.20
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.3.10
+# ARG CHECKOV_VERSION=3.3.13
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
