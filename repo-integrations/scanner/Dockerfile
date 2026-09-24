@@ -215,7 +215,7 @@ RUN install-tool maven
 # RUN install-tool scala
 
 # renovate: datasource=github-releases packageName=sbt/sbt
-# ARG SBT_VERSION=1.12.13
+# ARG SBT_VERSION=1.12.15
 # RUN install-tool sbt
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -280,7 +280,7 @@ ARG PYTHON_VERSION=3.10.20
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.3.13
+# ARG CHECKOV_VERSION=3.3.16
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
@@ -392,7 +392,7 @@ RUN install-tool poetry
 #RUN install-tool bundler
 
 # renovate: datasource=pypi
-#ARG CONAN_VERSION=2.27.1
+#ARG CONAN_VERSION=2.31.2
 #RUN install-tool conan
 
 # #RUN install-tool erlang 28.4.2.0
@@ -418,7 +418,7 @@ RUN install-tool poetry
 # USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# #ARG HELM_VERSION=4.2.4
+# #ARG HELM_VERSION=4.3.0
 # #RUN install-tool helm
 
 ## No renovate datasource exists yet
