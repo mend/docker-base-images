@@ -25,6 +25,15 @@ on:
         default: ""
         type: string
         required: false
+      SkipScannerBuild:
+        description: "SkipScannerBuild: (default false) If True, scanner (SCA + SAST) and remediate images will NOT be built. Instead, they are pulled from ECR using PreviousScannerVersion and retagged. Only the controller is built fresh."
+        default: false
+        type: boolean
+      PreviousScannerVersion:
+        description: "PreviousScannerVersion: Required when SkipScannerBuild is true. The ECR version to pull scanner images from (e.g. '26.9.1.2')."
+        default: ""
+        type: string
+        required: false
       TriggeredBy:
         description: "TriggeredBy: (default manual) Indicates what triggered this workflow. Set to 'ubuntu-refresh' to suppress Slack notifications."
         default: "manual"
@@ -93,10 +102,21 @@ jobs:
       - name: Build Docker Images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          SKIP_SCANNER: ${{ github.event.inputs.SkipScannerBuild }}
         run: |
           echo "🔨 Starting Docker build process..."
           ./bin/build.sh "${{ env.FULL_TAG }}" "$ECR_REGISTRY" "${{ github.event.inputs.CopyVersionScript }}" "" "${{ github.event.inputs.Tag }}"
           echo "✅ Docker build completed successfully"
+        shell: bash
+
+      - name: Retag scanner images from previous version
+        if: github.event.inputs.SkipScannerBuild == 'true'
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          echo "🔄 Retagging scanner images from previous version..."
+          ./bin/retag-scanner-images.sh "${{ github.event.inputs.PreviousScannerVersion }}" "${{ env.FULL_TAG }}" "$ECR_REGISTRY"
+          echo "✅ Scanner images retagged successfully"
         shell: bash
 
       - name: Publish to ECR
