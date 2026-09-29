@@ -26,7 +26,7 @@ on:
         type: string
         required: false
       SkipScannerBuild:
-        description: "SkipScannerBuild: (default false) If True, scanner images (SCA + SAST) will NOT be built. Instead, they are pulled from ECR using PreviousScannerVersion and retagged."
+        description: "SkipScannerBuild: (default false) If True, scanner (SCA + SAST) and remediate images will NOT be built. Instead, they are pulled from ECR using PreviousScannerVersion and retagged. Only the controller is built fresh."
         default: false
         type: boolean
       PreviousScannerVersion:

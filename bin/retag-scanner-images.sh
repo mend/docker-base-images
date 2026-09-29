@@ -21,9 +21,10 @@ IMAGES=(
   "base-repo-scanner-sast:${OLD_TAG}:${NEW_TAG}"
   "base-repo-scanner:${OLD_TAG}:${NEW_TAG}"
   "base-repo-scanner:${OLD_FULL_TAG}:${NEW_FULL_TAG}"
+  "base-repo-remediate:${OLD_TAG}:${NEW_TAG}"
 )
 
-echo "🔄 Retagging scanner images from ${OLD_VERSION} → ${NEW_VERSION}"
+echo "🔄 Retagging images from ${OLD_VERSION} → ${NEW_VERSION}"
 
 for entry in "${IMAGES[@]}"; do
   IFS=':' read -r repo old new <<< "$entry"
@@ -37,4 +38,4 @@ for entry in "${IMAGES[@]}"; do
   docker tag "${src}" "${dst}"
 done
 
-echo "✅ Scanner images retagged successfully (${OLD_VERSION} → ${NEW_VERSION})"
+echo "✅ Images retagged successfully (${OLD_VERSION} → ${NEW_VERSION})"

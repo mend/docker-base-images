@@ -62,7 +62,12 @@ else
 fi
 
 docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE_TAG} -f repo-integrations/controller/Dockerfile .
-docker build --no-cache ${REMEDIATE_BASE_ARG} -t ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE_TAG} -f repo-integrations/remediate/Dockerfile .
+
+if [ "${SKIP_SCANNER:-false}" = "true" ]; then
+  echo "⏭️  SKIP_SCANNER is set — skipping remediate image build"
+else
+  docker build --no-cache ${REMEDIATE_BASE_ARG} -t ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE_TAG} -f repo-integrations/remediate/Dockerfile .
+fi
 
 
 #Validate built images successfully created
@@ -96,10 +101,14 @@ if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE_TA
 fi
 echo "✅ Controller image validated"
 
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE_TAG} 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE_TAG} was not built successfully"
-  exit 1
+if [ "${SKIP_SCANNER:-false}" != "true" ]; then
+  if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE_TAG} 2> /dev/null)" ]; then
+    echo "❌ ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE_TAG} was not built successfully"
+    exit 1
+  fi
+  echo "✅ Remediate image validated"
+else
+  echo "⏭️  Remediate validation skipped (SKIP_SCANNER=true)"
 fi
-echo "✅ Remediate image validated"
 
 echo "🎉 All images built successfully with prefix: ${REGISTRY_PREFIX}"
