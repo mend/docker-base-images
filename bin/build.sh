@@ -53,20 +53,42 @@ ENV ARCHITECTURE=aarch64
   fi
 fi
 
-docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE_TAG} -f repo-integrations/scanner/DockerfileSast .
+if [ "${SKIP_SCANNER:-false}" = "true" ]; then
+  echo "⏭️  SKIP_SCANNER is set — skipping scanner image builds (SAST, SCA, SCA-full)"
+else
+  docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE_TAG} -f repo-integrations/scanner/DockerfileSast .
+  docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE_TAG} -f repo-integrations/scanner/Dockerfile .
+  docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${FULL_TAG} -f repo-integrations/scanner/Dockerfile.full .
+fi
+
 docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE_TAG} -f repo-integrations/controller/Dockerfile .
 docker build --no-cache ${REMEDIATE_BASE_ARG} -t ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE_TAG} -f repo-integrations/remediate/Dockerfile .
-docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE_TAG} -f repo-integrations/scanner/Dockerfile .
-docker build --no-cache -t ${REGISTRY_PREFIX}/base-repo-scanner:${FULL_TAG} -f repo-integrations/scanner/Dockerfile.full .
 
 
 #Validate built images successfully created
 echo "🔍 Validating built images..."
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE_TAG} 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE_TAG} was not built successfully"
-  exit 1
+
+if [ "${SKIP_SCANNER:-false}" != "true" ]; then
+  if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE_TAG} 2> /dev/null)" ]; then
+    echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner-sast:${RELEASE_TAG} was not built successfully"
+    exit 1
+  fi
+  echo "✅ SAST scanner image validated"
+
+  if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE_TAG} 2> /dev/null)" ]; then
+    echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE_TAG} was not built successfully"
+    exit 1
+  fi
+  echo "✅ SCA scanner image validated"
+
+  if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${FULL_TAG} 2> /dev/null)" ]; then
+    echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner:${FULL_TAG} was not built successfully"
+    exit 1
+  fi
+  echo "✅ SCA full scanner image validated"
+else
+  echo "⏭️  Scanner validation skipped (SKIP_SCANNER=true)"
 fi
-echo "✅ SAST scanner image validated"
 
 if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE_TAG} 2> /dev/null)" ]; then
   echo "❌ ${REGISTRY_PREFIX}/base-repo-controller:${RELEASE_TAG} was not built successfully"
@@ -79,16 +101,5 @@ if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-remediate:${RELEASE_TAG
   exit 1
 fi
 echo "✅ Remediate image validated"
-
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE_TAG} 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner:${RELEASE_TAG} was not built successfully"
-  exit 1
-fi
-echo "✅ SCA scanner image validated"
-
-if [ -z "$(docker images -q ${REGISTRY_PREFIX}/base-repo-scanner:${FULL_TAG} 2> /dev/null)" ]; then
-  echo "❌ ${REGISTRY_PREFIX}/base-repo-scanner:${FULL_TAG} was not built successfully"
-  exit 1
-fi
 
 echo "🎉 All images built successfully with prefix: ${REGISTRY_PREFIX}"
