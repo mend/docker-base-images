@@ -41,9 +41,9 @@ RUN install-tool node
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 12         │ CVE-2026-59871, CVE-2026-59873, CVE-2026-59874, CVE-2026-13149    │
-# │            │            │ CVE-2026-73566, CVE-2026-45149, CVE-2026-69152, CVE-2026-69192    │
-# │            │            │ CVE-2026-9496, CVE-2026-12151, CVE-2026-48815, CVE-2026-14257     │
+# │ High       │ 12         │ CVE-2026-13149, CVE-2026-59871, CVE-2026-59873, CVE-2026-59874    │
+# │            │            │ CVE-2026-45149, CVE-2026-73566, CVE-2026-69152, CVE-2026-14257    │
+# │            │            │ CVE-2026-69192, CVE-2026-9496, CVE-2026-12151, CVE-2026-48815     │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
@@ -133,8 +133,8 @@ RUN install-tool android-sdk-cmdline-tools 20
 # ├────────────┼────────────┼─────────────────────────────────────────────────────────────────┤
 # │ Critical   │ 2          │ CVE-2025-14813, CVE-2026-8763                                   │
 # ├────────────┼────────────┼─────────────────────────────────────────────────────────────────┤
-# │ High       │ 5          │ CVE-2026-13506, CVE-2024-7254, CVE-2022-3171, CVE-2026-56740    │
-# │            │            │ CVE-2026-56741                                                  │
+# │ High       │ 6          │ CVE-2024-7254, CVE-2026-56740, CVE-2022-3171, CVE-2026-13506    │
+# │            │            │ CVE-2026-77422, CVE-2026-56741                                  │
 # └────────────┴────────────┴─────────────────────────────────────────────────────────────────┘
 
 # Do not install as root
@@ -155,14 +155,14 @@ USER 0
 ARG GRADLE_VERSION=7.6.6
 RUN install-tool gradle
 # instruction #22: install-tool gradle
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                                  │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 2          │ CVE-2026-8763, CVE-2025-14813                                         │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
-# │ High       │ 6          │ CVE-2026-54512, CVE-2026-54513, GHSA-r7wm-3cxj-wff9, CVE-2026-3505    │
-# │            │            │ CVE-2026-13506, CVE-2025-67030                                        │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                                   │
+# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 2          │ CVE-2026-8763, CVE-2025-14813                                          │
+# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────────┤
+# │ High       │ 7          │ CVE-2026-68497, CVE-2026-54513, GHSA-r7wm-3cxj-wff9, CVE-2026-54512    │
+# │            │            │ CVE-2026-3505, CVE-2026-13506, CVE-2025-67030                          │
+# └────────────┴────────────┴────────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
 ARG GRADLE_VERSION=9.6.1
@@ -213,11 +213,11 @@ RUN install-tool scala
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 2          │ CVE-2026-56741, CVE-2026-56740                     │
+# │ High       │ 3          │ CVE-2026-77422, CVE-2026-56741, CVE-2026-56740     │
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=sbt/sbt
-ARG SBT_VERSION=1.12.13
+ARG SBT_VERSION=1.12.15
 RUN install-tool sbt
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -265,7 +265,7 @@ ARG PYTHON_VERSION=3.10.20
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.3.13
+# ARG CHECKOV_VERSION=3.3.16
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
@@ -392,7 +392,7 @@ ARG BUNDLER_VERSION=4.0.10
 RUN install-tool bundler
 
 # renovate: datasource=pypi
-ARG CONAN_VERSION=2.27.1
+ARG CONAN_VERSION=2.31.2
 RUN install-tool conan
 
 # RUN install-tool erlang 28.4.2.0
@@ -418,7 +418,7 @@ RUN pod setup
 USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# ARG HELM_VERSION=4.2.4
+# ARG HELM_VERSION=4.3.0
 # RUN install-tool helm
 
 ## No renovate datasource exists yet
