@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=amd64/ubuntu:24.04@sha256:8fafaf19208770e521b4e06257f683244a9ffcf14cd1d083e5620e8718f34b54
 
 # This containerbase is used for tool intallation and user/directory setup
-FROM ghcr.io/containerbase/base:14.15.2@sha256:04525ed6b7e61f56e81948ff3079f2e48ca4a874c6d73369f0b5ad0cbe01dcd4 AS containerbase
+FROM ghcr.io/containerbase/base:14.21.1@sha256:150b9ce5d54835ff80f01f6b0e451de5157ab6fda57c29cfd5c40e1ebd5f58d4 AS containerbase
 
 FROM ${BASE_IMAGE} AS base
 
