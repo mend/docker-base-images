@@ -80,7 +80,7 @@ ARG ELIXIR_VERSION=1.20.4
 RUN install-tool elixir
 
 # renovate: datasource=github-releases depName=php packageName=containerbase/php-prebuild
-ARG PHP_VERSION=8.5.10
+ARG PHP_VERSION=8.5.12
 RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer packageName=composer/composer

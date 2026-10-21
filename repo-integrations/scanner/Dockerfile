@@ -259,7 +259,7 @@ RUN install-tool python
 #     && chmod 644 /etc/checkov/config.yaml
 
 # renovate: datasource=github-releases packageName=containerbase/php-prebuild
-# #ARG PHP_VERSION=8.5.7
+# #ARG PHP_VERSION=8.5.12
 # #RUN install-tool php
 
 # renovate: datasource=github-releases packageName=containerbase/composer-prebuild
