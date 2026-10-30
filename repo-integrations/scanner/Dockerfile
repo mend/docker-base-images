@@ -26,16 +26,16 @@ RUN install-containerbase && \
     prepare-tool all
 
 # renovate: datasource=github-tags packageName=git/git
-ARG GIT_VERSION=v2.54.0
+ARG GIT_VERSION=v2.56.0
 RUN install-tool git
 
 # install git lfs
 # renovate: datasource=github-releases packageName=git-lfs/git-lfs
-#ARG GIT_LFS_VERSION=v3.7.1
+#ARG GIT_LFS_VERSION=v3.8.1
 #RUN install-tool git-lfs
 
 # renovate: datasource=github-releases packageName=containerbase/node-prebuild versioning=node
-ARG NODE_VERSION=24.16.0
+ARG NODE_VERSION=24.22.1
 RUN install-tool node
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -45,7 +45,7 @@ RUN install-tool node
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
-ARG NPM_VERSION=11.19.0
+ARG NPM_VERSION=11.21.1
 RUN install-tool npm
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -83,11 +83,11 @@ RUN install-npm bower
 # └────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm
-#ARG PNPM_VERSION=10.34.5
+#ARG PNPM_VERSION=10.34.9
 #RUN install-tool pnpm
 
 # renovate: datasource=npm
-#ARG BUN_VERSION=1.3.14
+#ARG BUN_VERSION=1.4.4
 #RUN install-tool bun
 
 ### provide permissions
@@ -104,7 +104,7 @@ RUN install-npm bower
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=8.0.502+7
+ARG JAVA_VERSION=8.0.504+1
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
@@ -112,17 +112,17 @@ ARG JAVA_VERSION=11.0.32+9
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=21.0.10+7.0.LTS
+ARG JAVA_VERSION=21.0.13+9.0.LTS
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=25.0.2+10.0.LTS
+ARG JAVA_VERSION=25.0.5+8.0.LTS
 RUN install-tool java
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # java_default
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=17.0.20+8
+ARG JAVA_VERSION=17.0.21+9
 RUN install-tool java
 ENV MEND_JAVA=/usr/local/bin/mend_java
 RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
@@ -162,7 +162,7 @@ RUN install-tool gradle
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.6.1
+ARG GRADLE_VERSION=9.8.2
 RUN install-tool gradle
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -173,7 +173,7 @@ RUN install-tool gradle
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # gradle_default
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.14.5
+ARG GRADLE_VERSION=8.14.6
 RUN install-tool gradle
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -182,7 +182,7 @@ RUN install-tool gradle
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/golang-prebuild
-#ARG GOLANG_VERSION=1.26.4
+#ARG GOLANG_VERSION=1.27.3
 #RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 #ENV GOSUMDB="sum.golang.org"
@@ -211,11 +211,11 @@ RUN install-tool maven
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=scala/scala
-# ARG SCALA_VERSION=v2.13.16
+# ARG SCALA_VERSION=v2.13.18
 # RUN install-tool scala
 
 # renovate: datasource=github-releases packageName=sbt/sbt
-# ARG SBT_VERSION=1.12.15
+# ARG SBT_VERSION=1.13.0
 # RUN install-tool sbt
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -235,7 +235,7 @@ RUN install-tool python
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.11.15
+ARG PYTHON_VERSION=3.11.18
 RUN install-tool python
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -244,7 +244,7 @@ RUN install-tool python
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.12.13
+ARG PYTHON_VERSION=3.12.16
 RUN install-tool python
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -266,7 +266,7 @@ RUN install-tool python
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.13.14
+ARG PYTHON_VERSION=3.13.18
 RUN install-tool python
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -276,11 +276,11 @@ RUN install-tool python
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # python_default
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.10.20
+ARG PYTHON_VERSION=3.10.22
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.3.16
+# ARG CHECKOV_VERSION=3.3.30
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
@@ -288,11 +288,11 @@ RUN install-tool python
 #     && chmod 644 /etc/checkov/config.yaml
 
 # renovate: datasource=github-releases packageName=containerbase/php-prebuild
-# #ARG PHP_VERSION=8.5.7
+# #ARG PHP_VERSION=8.5.12
 # #RUN install-tool php
 
 # renovate: datasource=github-releases packageName=containerbase/composer-prebuild
-# #ARG COMPOSER_VERSION=2.9.8
+# #ARG COMPOSER_VERSION=2.10.3
 # #RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
@@ -318,7 +318,7 @@ RUN install-tool python
 #RUN install-tool dotnet
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
-ARG DOTNET_VERSION=8.0.417
+ARG DOTNET_VERSION=8.0.425
 RUN install-tool dotnet
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -327,7 +327,7 @@ RUN install-tool dotnet
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
-ARG DOTNET_VERSION=9.0.310
+ARG DOTNET_VERSION=9.0.318
 RUN install-tool dotnet
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -345,14 +345,14 @@ RUN install-tool dotnet
 RUN echo '{ "sdk": { "version": "${DOTNET_VERSION}" } }' > ${USER_HOME}/global.json
 
 # renovate: datasource=docker versioning=docker
-#ARG RUST_VERSION=1.95.0
+#ARG RUST_VERSION=1.99.1
 #RUN install-tool rust
 
 # pip user install (so available for all python versions)
 USER ${USER_ID}
 
 # renovate: datasource=pypi
-ARG PIPENV_VERSION=2026.6.2
+ARG PIPENV_VERSION=2026.10.3
 RUN install-tool pipenv
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -365,11 +365,11 @@ RUN install-tool pipenv
 USER 0
 
 # renovate: datasource=pypi
-#ARG UV_VERSION=0.11.28
+#ARG UV_VERSION=0.13.6
 #RUN install-tool uv
 
 # renovate: datasource=pypi
-ARG POETRY_VERSION=2.4.1
+ARG POETRY_VERSION=2.5.1
 RUN install-tool poetry
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
@@ -381,18 +381,18 @@ RUN install-tool poetry
 #ENV GEM_HOME=/tmp/containerbase/cache/.ruby
 #ENV GEM_PATH="${GEM_HOME}"
 # renovate: datasource=github-releases packageName=containerbase/ruby-prebuild versioning=ruby)
-#ARG RUBY_VERSION=4.0.3
+#ARG RUBY_VERSION=4.0.9
 #RUN install-tool ruby && \
 #    gem install rubygems-update -v 3.3.0 && \
 #    gem update --system
 #ENV PATH="${GEM_HOME}/bin:${PATH}"
 
 # renovate: datasource=rubygems versioning=ruby
-#ARG BUNDLER_VERSION=4.0.10
+#ARG BUNDLER_VERSION=4.0.23
 #RUN install-tool bundler
 
 # renovate: datasource=pypi
-#ARG CONAN_VERSION=2.31.2
+#ARG CONAN_VERSION=2.34.0
 #RUN install-tool conan
 
 # #RUN install-tool erlang 28.4.2.0
@@ -410,7 +410,7 @@ RUN install-tool poetry
 #ENV PATH ${USER_HOME}/.rbenv/bin:$PATH
 
 # renovate: datasource=rubygems versioning=ruby
-# ARG COCOAPODS_VERSION=1.16.2
+# ARG COCOAPODS_VERSION=1.17.0
 # RUN install-tool cocoapods && \
 #     adduser cocoapods
 # USER cocoapods
@@ -418,7 +418,7 @@ RUN install-tool poetry
 # USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# #ARG HELM_VERSION=4.3.0
+# #ARG HELM_VERSION=4.3.1
 # #RUN install-tool helm
 
 ## No renovate datasource exists yet
@@ -560,7 +560,7 @@ RUN apt-get update && \
 
 ## Install Bazel
 # renovate: datasource=github-releases packageName=bazelbuild/bazelisk
-# #ARG BAZELISK_VERSION=v1.28.1
+# #ARG BAZELISK_VERSION=v1.30.0
 # #RUN install-tool bazelisk
 
 # Pre-download Bazel 6.1.1 to cache it in the image
@@ -571,7 +571,7 @@ RUN apt-get update && \
 
 # Install Swift (including SPM)
 # renovate: datasource=docker versioning=docker
-#ARG SWIFT_VERSION=6.0.3
+#ARG SWIFT_VERSION=6.4.1
 #RUN install-tool swift
 
 # delete the partially populated directory /tmp/containerbase and recreate one with full content instead
