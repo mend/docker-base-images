@@ -1,8 +1,8 @@
 # This default may be swapped for any compatible base image
-ARG BASE_IMAGE=amd64/ubuntu:24.04@sha256:8fafaf19208770e521b4e06257f683244a9ffcf14cd1d083e5620e8718f34b54
+ARG BASE_IMAGE=amd64/ubuntu:24.04@sha256:a7166ff02e22b82d113bb77ba5921a6cb5556c863f4c5c921fc7f7aa3c984154
 
 # This containerbase is used for tool intallation and user/directory setup
-FROM ghcr.io/containerbase/base:14.21.1@sha256:150b9ce5d54835ff80f01f6b0e451de5157ab6fda57c29cfd5c40e1ebd5f58d4 AS containerbase
+FROM ghcr.io/containerbase/base:14.56.0@sha256:77cfffb2493ea9a8a3488fe434209c725f4c3f239e4e4e2098f2a9840cd52f89 AS containerbase
 
 FROM ${BASE_IMAGE} AS base
 
@@ -29,7 +29,7 @@ RUN install-containerbase && \
 # --------------------------------------------------------------
 
 # renovate: datasource=github-tags depName=git packageName=git/git
-ARG GIT_VERSION=v2.55.0
+ARG GIT_VERSION=v2.56.0
 RUN install-tool git
 
 # install git-lfs
@@ -38,7 +38,7 @@ RUN install-tool git
 #ENV RENOVATE_GIT_NO_VERIFY=commit
 
 # renovate: datasource=github-releases depName=node packageName=nodejs/node versioning=node
-ARG NODE_VERSION=24.21.0
+ARG NODE_VERSION=24.22.2
 RUN install-tool node
 
 # Copy and validate the expected node runtime installation path used by the worker for executing the Renovate CLI
@@ -49,7 +49,7 @@ RUN COERCED_NODE_VERSION=$(node -v | grep '^v2' | sed 's/^v//') && \
 RUN $DOCKERFILE_NODE_DEFAULT_PATH --version
 
 # renovate: datasource=npm depName=npm versioning=npm
-ARG NPM_VERSION=11.19.1
+ARG NPM_VERSION=11.21.1
 RUN install-tool npm
 
 # renovate: datasource=npm depName=yarn versioning=npm
@@ -64,15 +64,15 @@ RUN install-tool yarn
 RUN install-tool docker v28.5.2
 
 # renovate: datasource=adoptium-java depName=java
-ARG JAVA_VERSION=11.0.32+101
+ARG JAVA_VERSION=25.0.5+8.0.LTS
 RUN install-tool java
 
 # renovate: datasource=gradle-version depName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.7.1
+ARG GRADLE_VERSION=9.8.2
 RUN install-tool gradle
 
 # renovate: datasource=github-releases depName=erlang packageName=containerbase/erlang-prebuild versioning=docker
-ARG ERLANG_VERSION=28.5.0.6
+ARG ERLANG_VERSION=28.5.0.8
 RUN install-tool erlang
 
 # renovate: datasource=docker depName=elixir versioning=docker
@@ -80,7 +80,7 @@ ARG ELIXIR_VERSION=1.20.4
 RUN install-tool elixir
 
 # renovate: datasource=github-releases depName=php packageName=containerbase/php-prebuild
-ARG PHP_VERSION=8.5.10
+ARG PHP_VERSION=8.5.12
 RUN install-tool php
 
 # renovate: datasource=github-releases depName=composer packageName=composer/composer
@@ -88,18 +88,18 @@ ARG COMPOSER_VERSION=2.10.3
 RUN install-tool composer
 
 # renovate: datasource=docker depName=golang versioning=docker
-ARG GOLANG_VERSION=1.27.1
+ARG GOLANG_VERSION=1.27.3
 RUN install-tool golang
 
 # renovate: datasource=github-releases depName=python packageName=containerbase/python-prebuild
-ARG PYTHON_VERSION=3.14.7
+ARG PYTHON_VERSION=3.15.2
 RUN install-tool python
 
 # renovate: datasource=pypi
-RUN install-tool conan 2.32.0
+RUN install-tool conan 2.34.0
 
 # renovate: datasource=pypi depName=pipenv
-ARG PIPENV_VERSION=2026.8.0
+ARG PIPENV_VERSION=2026.10.3
 RUN install-tool pipenv
 
 # renovate: datasource=github-releases depName=poetry packageName=python-poetry/poetry
@@ -107,28 +107,28 @@ ARG POETRY_VERSION=1.8.5
 RUN install-tool poetry
 
 # renovate: datasource=pypi
-RUN install-tool uv 0.12.14
+RUN install-tool uv 0.13.6
 
 # renovate: datasource=pypi depName=hashin
 ARG HASHIN_VERSION=1.0.5
 RUN install-tool hashin
 
 # renovate: datasource=pypi
-RUN install-tool pdm 2.29.1
+RUN install-tool pdm 2.29.4
 
 # renovate: datasource=pypi
-RUN install-tool pip-tools 7.6.1
+RUN install-tool pip-tools 7.6.2
 
 # renovate: datasource=docker depName=rust versioning=docker
-ARG RUST_VERSION=1.98.1
+ARG RUST_VERSION=1.99.1
 RUN install-tool rust
 
 # renovate: datasource=github-releases depName=ruby packageName=containerbase/ruby-prebuild versioning=ruby
-ARG RUBY_VERSION=4.0.7
+ARG RUBY_VERSION=4.0.9
 RUN install-tool ruby
 
 # renovate: datasource=rubygems depName=bundler
-ARG BUNDLER_VERSION=4.0.20
+ARG BUNDLER_VERSION=4.0.23
 RUN install-tool bundler
 
 # renovate: datasource=rubygems depName=cocoapods versioning=ruby
@@ -136,36 +136,36 @@ ARG COCOAPODS_VERSION=1.17.0
 RUN install-tool cocoapods
 
 # renovate: datasource=npm depName=pnpm versioning=npm
-ARG PNPM_VERSION=10.34.5
+ARG PNPM_VERSION=10.34.7
 RUN install-tool pnpm
 
 # renovate: datasource=docker depName=dotnet packageName=mcr.microsoft.com/dotnet/sdk
-ARG DOTNET_VERSION=8.0.425
+ARG DOTNET_VERSION=8.0.427
 RUN install-tool dotnet
 
 # renovate: datasource=github-releases depName=helm packageName=helm/helm
-ARG HELM_VERSION=v4.3.0
+ARG HELM_VERSION=v4.3.1
 RUN install-tool helm
 
 # renovate: datasource=github-releases packageName=jsonnet-bundler/jsonnet-bundler
 RUN install-tool jb v0.6.0
 
 # renovate: datasource=npm
-RUN install-tool bun 1.4.2
+RUN install-tool bun 1.4.3
 
 # renovate: datasource=github-releases packageName=containerbase/nix-prebuild
-RUN install-tool nix 2.35.2
+RUN install-tool nix 2.35.4
 
 # renovate: datasource=github-releases packageName=jetify-com/devbox
-RUN install-tool devbox 0.18.1
+RUN install-tool devbox 0.18.5
 
 # renovate: datasource=github-releases packageName=bazelbuild/bazelisk
-RUN install-tool bazelisk v1.29.0
+RUN install-tool bazelisk v1.30.0
 
 # renovate: datasource=dart-version
-RUN install-tool dart 3.13.4
+RUN install-tool dart 3.13.7
 
 # renovate: datasource=flutter-version
-RUN install-tool flutter 3.47.4
+RUN install-tool flutter 3.47.8
 
 # END OF BASE IMAGE
