@@ -348,8 +348,9 @@ RUN echo '{ "sdk": { "version": "${DOTNET_VERSION}" } }' > ${USER_HOME}/global.j
 #ARG RUST_VERSION=1.99.1
 #RUN install-tool rust
 
-# pip user install (so available for all python versions)
-USER ${USER_ID}
+# pipenv is installed as root, like the other pip tools (checkov, uv, poetry). Since virtualenv 21.15.12
+# (read-only seed images in app-data) a non-root install-tool fails during docker build with EACCES.
+# containerbase still gives the scanner user ownership of the tool dirs, so runtime installs keep working. SCA-9073
 
 # renovate: datasource=pypi
 ARG PIPENV_VERSION=2026.10.3
@@ -361,8 +362,6 @@ RUN install-tool pipenv
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 
-
-USER 0
 
 # renovate: datasource=pypi
 #ARG UV_VERSION=0.13.6
