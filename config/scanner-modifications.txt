@@ -7,6 +7,10 @@ COMMENT_BLOCK:Install Mono
 # Comment out the entire nuget installation block
 COMMENT_BLOCK:Install Nuget CLI
 
+
+# Comment out the entire nuget installation block
+COMMENT_BLOCK:Install NuGet CLI
+
 # Comment out only the specific nuget install line - precise and safe
 COMMENT:apt-get install.*nuget
 

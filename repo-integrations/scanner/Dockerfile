@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:14.21.1@sha256:150b9ce5d54835ff80f01f6b0e451de5157ab6fda57c29cfd5c40e1ebd5f58d4 AS containerbase
+FROM ghcr.io/containerbase/base:14.68.3@sha256:17fce5cf4bfeacbaaa4476409b407899679663b929c7d1c9cf6bbda8b72a8138 AS containerbase
 
 
 FROM ${BASE_IMAGE} as base
@@ -26,7 +26,7 @@ RUN install-containerbase && \
     prepare-tool all
 
 # renovate: datasource=github-tags packageName=git/git
-ARG GIT_VERSION=v2.56.0
+ARG GIT_VERSION=v2.56.1
 RUN install-tool git
 
 # install git lfs
@@ -35,7 +35,7 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=github-releases packageName=containerbase/node-prebuild versioning=node
-ARG NODE_VERSION=24.22.1
+ARG NODE_VERSION=24.22.3
 RUN install-tool node
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -45,7 +45,7 @@ RUN install-tool node
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
-ARG NPM_VERSION=11.21.1
+ARG NPM_VERSION=11.21.2
 RUN install-tool npm
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -104,11 +104,11 @@ RUN install-npm bower
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=8.0.504+1
+ARG JAVA_VERSION=8.0.512+9
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=11.0.32+9
+ARG JAVA_VERSION=11.0.33+10
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
@@ -142,27 +142,7 @@ RUN yes | sdkmanager --licenses && \
 USER 0
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-# ARG GRADLE_VERSION=6.9.4
-# RUN install-tool gradle
-
-# renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=7.6.6
-RUN install-tool gradle
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 4          │ CVE-2021-26291, CVE-2022-1471, CVE-2020-7692, CVE-2021-26291      │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 21         │ CVE-2022-42003, CVE-2022-42004, CVE-2022-25647, CVE-2023-2976     │
-# │            │            │ CVE-2021-22573, CVE-2024-47554, CVE-2023-4759, CVE-2025-52999     │
-# │            │            │ CVE-2021-46877, CVE-2020-36518, CVE-2021-35516, CVE-2021-35515    │
-# │            │            │ CVE-2021-35517, CVE-2021-36090, CVE-2022-46751, CVE-2022-37866    │
-# │            │            │ CVE-2026-3505, CVE-2025-67030, CVE-2025-66453, CVE-2022-25857     │
-# │            │            │ CVE-2024-21634                                                    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
-
-# renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.8.2
+ARG GRADLE_VERSION=9.9.1
 RUN install-tool gradle
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -173,7 +153,7 @@ RUN install-tool gradle
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # gradle_default
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.14.6
+ARG GRADLE_VERSION=8.14.7
 RUN install-tool gradle
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -182,7 +162,7 @@ RUN install-tool gradle
 # └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/golang-prebuild
-#ARG GOLANG_VERSION=1.27.3
+#ARG GOLANG_VERSION=1.27.4
 #RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 #ENV GOSUMDB="sum.golang.org"
@@ -215,7 +195,7 @@ RUN install-tool maven
 # RUN install-tool scala
 
 # renovate: datasource=github-releases packageName=sbt/sbt
-# ARG SBT_VERSION=1.13.0
+# ARG SBT_VERSION=1.13.1
 # RUN install-tool sbt
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
@@ -280,7 +260,7 @@ ARG PYTHON_VERSION=3.10.22
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.3.30
+# ARG CHECKOV_VERSION=3.4.5
 # RUN install-tool checkov
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
@@ -292,7 +272,7 @@ RUN install-tool python
 # #RUN install-tool php
 
 # renovate: datasource=github-releases packageName=containerbase/composer-prebuild
-# #ARG COMPOSER_VERSION=2.10.3
+# #ARG COMPOSER_VERSION=2.11.2
 # #RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
@@ -318,7 +298,7 @@ RUN install-tool python
 #RUN install-tool dotnet
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
-ARG DOTNET_VERSION=8.0.425
+ARG DOTNET_VERSION=8.0.428
 RUN install-tool dotnet
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
@@ -345,7 +325,7 @@ RUN install-tool dotnet
 RUN echo '{ "sdk": { "version": "${DOTNET_VERSION}" } }' > ${USER_HOME}/global.json
 
 # renovate: datasource=docker versioning=docker
-#ARG RUST_VERSION=1.99.1
+#ARG RUST_VERSION=1.100.0
 #RUN install-tool rust
 
 # pipenv is installed as root, like the other pip tools (checkov, uv, poetry). Since virtualenv 21.15.12
@@ -353,7 +333,7 @@ RUN echo '{ "sdk": { "version": "${DOTNET_VERSION}" } }' > ${USER_HOME}/global.j
 # containerbase still gives the scanner user ownership of the tool dirs, so runtime installs keep working. SCA-9073
 
 # renovate: datasource=pypi
-ARG PIPENV_VERSION=2026.10.3
+ARG PIPENV_VERSION=2026.10.4
 RUN install-tool pipenv
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                              │
@@ -364,7 +344,7 @@ RUN install-tool pipenv
 
 
 # renovate: datasource=pypi
-#ARG UV_VERSION=0.13.6
+#ARG UV_VERSION=0.13.8
 #RUN install-tool uv
 
 # renovate: datasource=pypi
@@ -387,7 +367,7 @@ RUN install-tool poetry
 #ENV PATH="${GEM_HOME}/bin:${PATH}"
 
 # renovate: datasource=rubygems versioning=ruby
-#ARG BUNDLER_VERSION=4.0.23
+#ARG BUNDLER_VERSION=4.0.24
 #RUN install-tool bundler
 
 # renovate: datasource=pypi
@@ -417,14 +397,8 @@ RUN install-tool poetry
 # USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# #ARG HELM_VERSION=4.3.1
+# #ARG HELM_VERSION=4.3.2
 # #RUN install-tool helm
-
-## No renovate datasource exists yet
-ARG HASKELL_GHC_VERSION=8.6.5
-
-## No renovate datasource exists yet
-ARG CABAL_VERSION=3.2
 
 # Fix for npm engine-strict
 ENV npm_config_engine_strict=false
@@ -522,40 +496,37 @@ RUN apt-get update && \
 #RUN R -e "install.packages(c('devtools', 'packrat'), repos='https://cloud.r-project.org/')"
 
 
-#### Install Cabal
+#### Install GHC and Cabal
 #RUN apt-get update &&\
 #	apt-get install -y build-essential curl libffi-dev libffi8ubuntu1 libgmp-dev libgmp10 libncurses-dev && \
 #	apt-get clean && \
 #	rm -rf /var/lib/apt/lists/* && \
 #	rm -rf /tmp/*
 #
-#RUN su -p ${USER_NAME} -c "curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh && \
-#	source /home/wss-scanner/.ghcup/env && \
-#	echo "source /home/wss-scanner/.ghcup/env" >> /home/wss-scanner/.bashrc && \
-#	ghcup install cabal ${CABAL_VERSION} &&\
-#	cabal update" && \
-#   chgrp -R 0 ${USER_HOME}/.cabal ${USER_HOME}/.ghcup && \
-#   chmod -R g=u ${USER_HOME}/.cabal ${USER_HOME}/.ghcup
+# renovate: datasource=docker packageName=haskell
+#ARG GHC_VERSION=9.14.1
+#RUN install-tool ghc
+#
+# Cabal 3.2 has no static linux-deb10 build that install-tool could use
+# renovate: datasource=github-releases packageName=haskell/cabal versioning=docker
+#ARG CABAL_VERSION=3.16.1.0
+#RUN install-tool cabal
 
 #### Install Mono
-#RUN apt-get update && \
-#    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-#    apt-get install -y --no-install-recommends apt-transport-https ca-certificates && \
-#    echo "deb https://download.mono-project.com/repo/ubuntu bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list && \
-#    apt-get update && \
-#    apt-get install -y mono-devel && \
-#    apt-get clean && \
-#    rm -rf /var/lib/apt/lists/* && \
-#    rm -rf /tmp/*
+# renovate: datasource=github-releases packageName=containerbase/mono-prebuild
+#ARG MONO_VERSION=6.14.1
+#RUN install-tool mono
 #
-#### Install Nuget CLI
-#RUN apt-get update && \
-# #    apt-get install nuget
+#### Install NuGet CLI (nuget.exe run via mono)
+# Must be >= 6.8: nuget.exe 6.4-6.7 crashes on a dangling ~/.local (SCA-8042)
+# renovate: datasource=nuget packageName=NuGet.CommandLine
+#ARG NUGET_VERSION=7.9.0
+#RUN install-tool nuget
 
 ## Install Paket
-#ENV PAKET_HOME=${USER_HOME}/.dotnet/tools
-#ENV PATH="${PATH}:${PAKET_HOME}"
-#RUN dotnet tool install Paket --version 7.2.1 --tool-path ${PAKET_HOME}
+# renovate: datasource=nuget packageName=Paket
+#ARG PAKET_VERSION=7.2.1
+#RUN install-tool paket
 
 ## Install Bazel
 # renovate: datasource=github-releases packageName=bazelbuild/bazelisk
@@ -570,7 +541,7 @@ RUN apt-get update && \
 
 # Install Swift (including SPM)
 # renovate: datasource=docker versioning=docker
-#ARG SWIFT_VERSION=6.4.1
+#ARG SWIFT_VERSION=6.4.2
 #RUN install-tool swift
 
 # delete the partially populated directory /tmp/containerbase and recreate one with full content instead

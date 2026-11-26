@@ -2,7 +2,7 @@
 ARG BASE_IMAGE=ubuntu:24.04
 
 # Containerbase is used for tool installation and user/directory setup
-FROM ghcr.io/containerbase/base:14.21.1@sha256:150b9ce5d54835ff80f01f6b0e451de5157ab6fda57c29cfd5c40e1ebd5f58d4 AS containerbase
+FROM ghcr.io/containerbase/base:14.68.3@sha256:17fce5cf4bfeacbaaa4476409b407899679663b929c7d1c9cf6bbda8b72a8138 AS containerbase
 
 
 FROM ${BASE_IMAGE} as base
@@ -26,7 +26,7 @@ RUN install-containerbase && \
     prepare-tool all
 
 # renovate: datasource=github-tags packageName=git/git
-ARG GIT_VERSION=v2.56.0
+ARG GIT_VERSION=v2.56.1
 RUN install-tool git
 
 # install git lfs
@@ -35,29 +35,21 @@ RUN install-tool git
 #RUN install-tool git-lfs
 
 # renovate: datasource=github-releases packageName=containerbase/node-prebuild versioning=node
-ARG NODE_VERSION=24.22.1
+ARG NODE_VERSION=24.22.3
 RUN install-tool node
 # instruction #8: install-tool node
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                                  │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2026-109383                                                       │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
-# │ High       │ 7          │ CVE-2026-102278, CVE-2026-102276, CVE-2026-109932, CVE-2026-109869    │
-# │            │            │ CVE-2026-109924, CVE-2026-19534, CVE-2026-87018                       │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                                │
+# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 1          │ CVE-2026-109383                                                     │
+# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
+# │ High       │ 7          │ CVE-2026-19534, CVE-2026-87018, CVE-2026-102278, CVE-2026-102276    │
+# │            │            │ CVE-2026-109932, CVE-2026-109924, CVE-2026-109869                   │
+# └────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm versioning=npm
-ARG NPM_VERSION=11.21.1
+ARG NPM_VERSION=11.21.2
 RUN install-tool npm
-# instruction #9: install-tool npm
-# ┌────────────┬────────────┬──────────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                                 │
-# ├────────────┼────────────┼──────────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 1          │ CVE-2026-109383                                                      │
-# ├────────────┼────────────┼──────────────────────────────────────────────────────────────────────┤
-# │ High       │ 4          │ CVE-2026-109932, CVE-2026-109869, CVE-2026-109924, CVE-2026-87018    │
-# └────────────┴────────────┴──────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm packageName=@yarnpkg/cli-dist
 ARG YARN_VERSION=1.22.22
@@ -70,21 +62,21 @@ RUN install-npm bower
 # ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                                │
 # ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 13         │ CVE-2023-26136, CVE-2025-7783, CVE-2026-4800, CVE-2019-10744        │
-# │            │            │ CVE-2021-23369, CVE-2026-33937, CVE-2021-44906, CVE-2021-23807      │
-# │            │            │ CVE-2026-106445, CVE-2026-106446, CVE-2021-3918, CVE-2021-23383     │
-# │            │            │ CVE-2026-9277                                                       │
+# │ Critical   │ 13         │ CVE-2021-3918, CVE-2021-23807, CVE-2026-106446, CVE-2026-9277       │
+# │            │            │ CVE-2019-10744, CVE-2023-26136, CVE-2026-106445, CVE-2026-33937     │
+# │            │            │ CVE-2026-4800, CVE-2021-23369, CVE-2025-7783, CVE-2021-44906        │
+# │            │            │ CVE-2021-23383                                                      │
 # ├────────────┼────────────┼─────────────────────────────────────────────────────────────────────┤
-# │ High       │ 37         │ CVE-2026-41907, CVE-2021-43138, CVE-2026-69152, CVE-2026-14257      │
-# │            │            │ CVE-2026-13149, CVE-2026-102276, CVE-2026-102278, CVE-2026-33750    │
-# │            │            │ CVE-2020-8116, CVE-2026-12143, CVE-2026-33939, CVE-2026-33938       │
-# │            │            │ CVE-2026-33940, CVE-2021-23337, CVE-2020-8203, CVE-2026-26996       │
-# │            │            │ CVE-2026-27903, CVE-2026-27904, CVE-2022-3517, CVE-2016-10540       │
-# │            │            │ CVE-2020-7792, CVE-2022-21213, CVE-2021-23343, CVE-2022-24999       │
-# │            │            │ CVE-2017-1000048, CVE-2015-8855, CVE-2022-25883, CVE-2026-13311     │
-# │            │            │ CVE-2025-48387, CVE-2025-59343, CVE-2024-12905, CVE-2026-44705      │
-# │            │            │ CVE-2017-15010, CVE-2026-33941, CVE-2022-29167, CVE-2020-36604      │
-# │            │            │ CVE-2018-3728                                                       │
+# │ High       │ 37         │ CVE-2018-3728, CVE-2026-26996, CVE-2026-27903, CVE-2026-27904       │
+# │            │            │ CVE-2022-3517, CVE-2016-10540, CVE-2026-69152, CVE-2020-8116        │
+# │            │            │ CVE-2021-23337, CVE-2020-8203, CVE-2021-23343, CVE-2026-12143       │
+# │            │            │ CVE-2026-14257, CVE-2026-13149, CVE-2026-102276, CVE-2026-102278    │
+# │            │            │ CVE-2026-33750, CVE-2020-36604, CVE-2015-8855, CVE-2022-25883       │
+# │            │            │ CVE-2026-41907, CVE-2017-15010, CVE-2025-48387, CVE-2025-59343      │
+# │            │            │ CVE-2024-12905, CVE-2022-24999, CVE-2017-1000048, CVE-2020-7792     │
+# │            │            │ CVE-2022-21213, CVE-2026-33939, CVE-2026-33938, CVE-2026-33940      │
+# │            │            │ CVE-2026-33941, CVE-2026-13311, CVE-2021-43138, CVE-2026-44705      │
+# │            │            │ CVE-2022-29167                                                      │
 # └────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=npm
@@ -100,11 +92,11 @@ RUN install-tool bun
 # 	chown -R ${USER_NAME}:${GROUP_NAME} ${USER_HOME}/.bowerrc
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=8.0.504+1
+ARG JAVA_VERSION=8.0.512+9
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
-ARG JAVA_VERSION=11.0.32+9
+ARG JAVA_VERSION=11.0.33+10
 RUN install-tool java
 
 # renovate: datasource=java-version packageName=java-jre
@@ -127,14 +119,15 @@ RUN ln -sf /opt/containerbase/tools/java/$JAVA_VERSION/bin/java $MEND_JAVA && \
 # renovate: ignore
 RUN install-tool android-sdk-cmdline-tools 20
 # instruction #21: install-tool android-sdk-cmdline-tools 20
-# ┌────────────┬────────────┬─────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                            │
-# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 2          │ CVE-2025-14813, CVE-2026-8763                                   │
-# ├────────────┼────────────┼─────────────────────────────────────────────────────────────────┤
-# │ High       │ 7          │ CVE-2024-7254, CVE-2026-56740, CVE-2022-3171, CVE-2026-13506    │
-# │            │            │ CVE-2026-77422, CVE-2026-56741, CVE-2026-102554                 │
-# └────────────┴────────────┴─────────────────────────────────────────────────────────────────┘
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 2          │ CVE-2026-8763, CVE-2025-14813                                     │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 9          │ CVE-2026-102554, CVE-2026-13506, CVE-2022-3171, CVE-2024-7254     │
+# │            │            │ CVE-2026-77422, CVE-2026-77423, CVE-2026-56741, CVE-2026-56740    │
+# │            │            │ CVE-2026-5598                                                     │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # Do not install as root
 USER ${USER_ID}
@@ -147,41 +140,23 @@ RUN yes | sdkmanager --licenses && \
 USER 0
 
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-# ARG GRADLE_VERSION=6.9.4
-# RUN install-tool gradle
+ARG GRADLE_VERSION=9.9.1
+RUN install-tool gradle
 # instruction #23: install-tool gradle
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 5          │ CVE-2021-26291, CVE-2020-7692, CVE-2022-1471, CVE-2026-8763       │
-# │            │            │ CVE-2025-14813                                                    │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 32         │ CVE-2022-42004, CVE-2026-54513, CVE-2022-42003, CVE-2026-50193    │
-# │            │            │ CVE-2024-21634, CVE-2026-89425, CVE-2026-68494, CVE-2025-52999    │
-# │            │            │ CVE-2020-36518, CVE-2026-54512, CVE-2026-91777, CVE-2026-91776    │
-# │            │            │ CVE-2021-46877, CVE-2022-25647, CVE-2023-2976, CVE-2026-102554    │
-# │            │            │ CVE-2021-22573, CVE-2024-47554, CVE-2021-36090, CVE-2021-35517    │
-# │            │            │ CVE-2021-35516, CVE-2021-35515, CVE-2022-37866, CVE-2022-46751    │
-# │            │            │ CVE-2026-3505, CVE-2025-67030, CVE-2023-4759, CVE-2025-66453      │
-# │            │            │ CVE-2022-25857, CVE-2026-68497, CVE-2026-13506, CVE-2026-75140    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
-
-# renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=7.6.6
-RUN install-tool gradle
-
-# renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=9.8.2
-RUN install-tool gradle
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 1          │ CVE-2026-102554                                    │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 
 ### !!! PAY ATTENTION! The version that should be the default, must be installed last !!! ###
 # gradle_default
 # renovate: datasource=gradle-version packageName=gradle versioning=gradle
-ARG GRADLE_VERSION=8.14.6
+ARG GRADLE_VERSION=8.14.7
 RUN install-tool gradle
 
 # renovate: datasource=github-releases packageName=containerbase/golang-prebuild
-ARG GOLANG_VERSION=1.27.3
+ARG GOLANG_VERSION=1.27.4
 RUN install-tool golang
 # A temporary workaround, until it is fixed by renovate
 ENV GOSUMDB="sum.golang.org"
@@ -192,7 +167,7 @@ USER ${USER_ID}
 RUN go install github.com/tools/godep@latest && \
     go install github.com/LK4D4/vndr@latest && \
     go install  github.com/kardianos/govendor@latest
-# instruction #28: go install github.com/tools/godep@latest && go install github.com/lk4d4/vndr@lat
+# instruction #26: go install github.com/tools/godep@latest && go install github.com/lk4d4/vndr@lat
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -208,7 +183,7 @@ USER 0
 # renovate: datasource=maven packageName=org.apache.maven:maven
 ARG MAVEN_VERSION=3.9.16
 RUN install-tool maven
-# instruction #29: install-tool maven
+# instruction #27: install-tool maven
 # ┌────────────┬────────────┬────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                               │
 # ├────────────┼────────────┼────────────────────────────────────────────────────┤
@@ -218,27 +193,28 @@ RUN install-tool maven
 # renovate: datasource=github-releases packageName=scala/scala
 ARG SCALA_VERSION=v2.13.18
 RUN install-tool scala
-# instruction #30: install-tool scala
-# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                               │
-# ├────────────┼────────────┼────────────────────────────────────────────────────┤
-# │ High       │ 3          │ CVE-2026-77422, CVE-2026-56741, CVE-2026-56740     │
-# └────────────┴────────────┴────────────────────────────────────────────────────┘
+# instruction #28: install-tool scala
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                              │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
+# │ High       │ 4          │ CVE-2026-77422, CVE-2026-77423, CVE-2026-56741, CVE-2026-56740    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=sbt/sbt
-ARG SBT_VERSION=1.13.0
+ARG SBT_VERSION=1.13.1
 RUN install-tool sbt
 
 # renovate: datasource=github-releases packageName=containerbase/python-prebuild
 ARG PYTHON_VERSION=3.6.15
 RUN install-tool python
-# instruction #32: install-tool python
+# instruction #30: install-tool python
 # ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────────┐
 # │ Severity   │ Count      │ CVEs                                                                  │
 # ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
-# │ High       │ 13         │ CVE-2024-53899, CVE-2025-47273, CVE-2026-102925, CVE-2026-102937      │
-# │            │            │ CVE-2024-6345, CVE-2026-102930, CVE-2026-113732, CVE-2026-113725      │
-# │            │            │ CVE-2026-113726, CVE-2026-113723, CVE-2026-113722, CVE-2026-113718    │
+# │ High       │ 17         │ CVE-2026-113723, CVE-2026-113722, CVE-2024-6345, CVE-2026-113732      │
+# │            │            │ CVE-2024-53899, CVE-2026-113720, CVE-2026-102925, CVE-2026-102937     │
+# │            │            │ CVE-2026-113718, CVE-2026-113717, CVE-2026-113726, CVE-2026-113715    │
+# │            │            │ CVE-2026-102930, CVE-2026-113714, CVE-2026-113725, CVE-2025-47273     │
 # │            │            │ CVE-2026-113776                                                       │
 # └────────────┴────────────┴───────────────────────────────────────────────────────────────────────┘
 
@@ -277,8 +253,14 @@ ARG PYTHON_VERSION=3.10.22
 RUN install-tool python
 
 # renovate: datasource=pypi ; Must be installed after python and before python version 3.7.17
-# ARG CHECKOV_VERSION=3.3.30
+# ARG CHECKOV_VERSION=3.4.5
 # RUN install-tool checkov
+# # instruction #39: install-tool checkov
+# ┌────────────┬────────────┬────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                               │
+# ├────────────┼────────────┼────────────────────────────────────────────────────┤
+# │ High       │ 2          │ CVE-2026-126191, CVE-2026-126190                   │
+# └────────────┴────────────┴────────────────────────────────────────────────────┘
 # Prevent scanned repos from injecting their own .checkov.yaml config (CVE: config injection via external-checks-dir/git)
 # RUN mkdir -p /etc/checkov \
 #     && printf 'output: json\ndownload-external-modules: "true"\n' > /etc/checkov/config.yaml \
@@ -287,9 +269,18 @@ RUN install-tool python
 # renovate: datasource=github-releases packageName=containerbase/php-prebuild
 # ARG PHP_VERSION=8.5.12
 # RUN install-tool php
+# # instruction #41: install-tool php
+# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                                  │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 6          │ CVE-2026-129474, CVE-2026-115560, CVE-2026-129496, CVE-2026-126714    │
+# │            │            │ CVE-2026-129289, CVE-2026-129182                                      │
+# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────────┤
+# │ High       │ 4          │ CVE-2026-129291, CVE-2026-129481, CVE-2026-128064, CVE-2026-127960    │
+# └────────────┴────────────┴───────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=github-releases packageName=containerbase/composer-prebuild
-# ARG COMPOSER_VERSION=2.10.3
+# ARG COMPOSER_VERSION=2.11.2
 # RUN install-tool composer
 
 # These are needed to get earlier dotnet versions to install in Ubuntu 24.04
@@ -300,25 +291,26 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 # renovate: datasource=dotnet packageName=dotnet-sdk
 ARG DOTNET_VERSION=2.2.402
 RUN install-tool dotnet
-# instruction #46: install-tool dotnet
-# ┌────────────┬────────────┬───────────────────────────────────────────────────────────────────┐
-# │ Severity   │ Count      │ CVEs                                                              │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ Critical   │ 8          │ CVE-2025-55315, CVE-2026-48509, CVE-2024-0057, CVE-2021-26701     │
-# │            │            │ CVE-2021-24112, CVE-2026-88092, CVE-2026-47304, CVE-2026-70188    │
-# ├────────────┼────────────┼───────────────────────────────────────────────────────────────────┤
-# │ High       │ 42         │ CVE-2026-48513, CVE-2026-48510, CVE-2026-48511, CVE-2026-48109    │
-# │            │            │ CVE-2026-48516, CVE-2026-48506, CVE-2026-48517, CVE-2026-48514    │
-# │            │            │ CVE-2026-48515, CVE-2026-48512, CVE-2024-0056, CVE-2025-26646     │
-# │            │            │ CVE-2024-21907, CVE-2023-29337, CVE-2022-41032, CVE-2018-8292     │
-# │            │            │ CVE-2023-33170, CVE-2024-21386, CVE-2022-38013, CVE-2024-38095    │
-# │            │            │ CVE-2025-24070, CVE-2024-43485, CVE-2026-70181, CVE-2026-70183    │
-# │            │            │ CVE-2026-96236, CVE-2026-70159, CVE-2026-96231, CVE-2026-70175    │
-# │            │            │ CVE-2026-69651, CVE-2026-96233, CVE-2026-58280, CVE-2026-96225    │
-# │            │            │ CVE-2026-96958, CVE-2026-96222, CVE-2026-70186, CVE-2026-84008    │
-# │            │            │ CVE-2026-96959, CVE-2026-50525, CVE-2026-96960, CVE-2026-50527    │
-# │            │            │ CVE-2026-50648, CVE-2026-47302                                    │
-# └────────────┴────────────┴───────────────────────────────────────────────────────────────────┘
+# instruction #44: install-tool dotnet
+# ┌────────────┬────────────┬────────────────────────────────────────────────────────────────────────┐
+# │ Severity   │ Count      │ CVEs                                                                   │
+# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────────┤
+# │ Critical   │ 8          │ CVE-2025-55315, CVE-2026-48509, CVE-2021-26701, CVE-2024-0057          │
+# │            │            │ CVE-2021-24112, CVE-2026-47304, CVE-2026-70188, CVE-2026-88092         │
+# ├────────────┼────────────┼────────────────────────────────────────────────────────────────────────┤
+# │ High       │ 48         │ CVE-2026-48517, CVE-2026-48514, CVE-2026-48515, CVE-2026-48512         │
+# │            │            │ CVE-2026-48513, CVE-2026-48510, CVE-2026-48511, CVE-2024-21907         │
+# │            │            │ CVE-2018-8292, CVE-2024-0056, CVE-2026-48109, CVE-2026-48516           │
+# │            │            │ CVE-2026-48506, CVE-2025-26646, CVE-2023-29337, CVE-2022-41032         │
+# │            │            │ CVE-2024-21386, CVE-2023-33170, CVE-2024-38095, CVE-2022-38013         │
+# │            │            │ CVE-2024-43485, CVE-2025-24070, CVE-2026-84008, CVE-2026-50648         │
+# │            │            │ CVE-2026-96958, CVE-2026-47302, CVE-2026-96959, CVE-2026-50525         │
+# │            │            │ CVE-2026-96960, CVE-2026-96222, CVE-2026-50527, CVE-2026-96233         │
+# │            │            │ CVE-2026-58280, CVE-2026-96225, GHSA-p3jp-9v83-76w9, CVE-2026-70175    │
+# │            │            │ CVE-2026-70186, CVE-2026-114149, CVE-2026-70181, CVE-2026-114147       │
+# │            │            │ CVE-2026-70183, CVE-2026-114146, CVE-2026-96236, CVE-2026-70159        │
+# │            │            │ CVE-2026-96231, CVE-2026-69651, CVE-2024-38081, CVE-2024-30105         │
+# └────────────┴────────────┴────────────────────────────────────────────────────────────────────────┘
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
 # ARG DOTNET_VERSION=3.1.426
@@ -333,7 +325,7 @@ ARG DOTNET_VERSION=6.0.428
 RUN install-tool dotnet
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
-ARG DOTNET_VERSION=8.0.425
+ARG DOTNET_VERSION=8.0.428
 RUN install-tool dotnet
 
 # renovate: datasource=dotnet packageName=dotnet-sdk
@@ -350,7 +342,7 @@ RUN install-tool dotnet
 RUN echo '{ "sdk": { "version": "${DOTNET_VERSION}" } }' > ${USER_HOME}/global.json
 
 # renovate: datasource=docker versioning=docker
-ARG RUST_VERSION=1.99.1
+ARG RUST_VERSION=1.100.0
 RUN install-tool rust
 
 # pipenv is installed as root, like the other pip tools (checkov, uv, poetry). Since virtualenv 21.15.12
@@ -358,13 +350,13 @@ RUN install-tool rust
 # containerbase still gives the scanner user ownership of the tool dirs, so runtime installs keep working. SCA-9073
 
 # renovate: datasource=pypi
-ARG PIPENV_VERSION=2026.10.3
+ARG PIPENV_VERSION=2026.10.4
 RUN install-tool pipenv
 
 
 
 # renovate: datasource=pypi
-ARG UV_VERSION=0.13.6
+ARG UV_VERSION=0.13.8
 RUN install-tool uv
 
 # renovate: datasource=pypi
@@ -387,7 +379,7 @@ RUN install-tool ruby && \
 ENV PATH="${GEM_HOME}/bin:${PATH}"
 
 # renovate: datasource=rubygems versioning=ruby
-ARG BUNDLER_VERSION=4.0.23
+ARG BUNDLER_VERSION=4.0.24
 RUN install-tool bundler
 
 # renovate: datasource=pypi
@@ -417,14 +409,8 @@ RUN pod setup
 USER 0
 
 # renovate: datasource=github-releases packageName=helm/helm
-# ARG HELM_VERSION=4.3.1
+# ARG HELM_VERSION=4.3.2
 # RUN install-tool helm
-
-## No renovate datasource exists yet
-ARG HASKELL_GHC_VERSION=8.6.5
-
-## No renovate datasource exists yet
-ARG CABAL_VERSION=3.2
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANGUAGE	en_US.UTF-8
@@ -522,40 +508,37 @@ RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc |
 # Install devtools and packrat from R
 RUN R -e "install.packages(c('devtools', 'packrat'), repos='https://cloud.r-project.org/')"
 
-#### Install Cabal
+#### Install GHC and Cabal
 RUN apt-get update &&\
 	apt-get install -y build-essential curl libffi-dev libffi8ubuntu1 libgmp-dev libgmp10 libncurses-dev && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
 	rm -rf /tmp/*
 
-RUN su -p ${USER_NAME} -c "curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh && \
-	source /home/wss-scanner/.ghcup/env && \
-	echo "source /home/wss-scanner/.ghcup/env" >> /home/wss-scanner/.bashrc && \
-	ghcup install cabal ${CABAL_VERSION} &&\
-	cabal update" && \
-    chgrp -R 0 ${USER_HOME}/.cabal ${USER_HOME}/.ghcup && \
-    chmod -R g=u ${USER_HOME}/.cabal ${USER_HOME}/.ghcup
+# renovate: datasource=docker packageName=haskell
+ARG GHC_VERSION=9.14.1
+RUN install-tool ghc
+
+# Cabal 3.2 has no static linux-deb10 build that install-tool could use
+# renovate: datasource=github-releases packageName=haskell/cabal versioning=docker
+ARG CABAL_VERSION=3.16.1.0
+RUN install-tool cabal
 
 #### Install Mono
-# RUN apt-get update && \
-#     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-#     apt-get install -y --no-install-recommends apt-transport-https ca-certificates && \
-#     echo "deb https://download.mono-project.com/repo/ubuntu bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list && \
-#     apt-get update && \
-#     apt-get install -y mono-devel && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/* && \
-#     rm -rf /tmp/*
+# renovate: datasource=github-releases packageName=containerbase/mono-prebuild
+ARG MONO_VERSION=6.14.1
+# RUN install-tool mono
 
-### Install Nuget CLI
-# RUN apt-get update && \
-# # 	apt-get install nuget
+### Install NuGet CLI (nuget.exe run via mono)
+# Must be >= 6.8: nuget.exe 6.4-6.7 crashes on a dangling ~/.local (SCA-8042)
+# renovate: datasource=nuget packageName=NuGet.CommandLine
+ARG NUGET_VERSION=7.9.0
+# RUN install-tool nuget
 
 ## Install Paket
-ENV PAKET_HOME=${USER_HOME}/.dotnet/tools
-ENV PATH="${PATH}:${PAKET_HOME}"
-RUN dotnet tool install Paket --version 7.2.1 --tool-path ${PAKET_HOME}
+# renovate: datasource=nuget packageName=Paket
+ARG PAKET_VERSION=7.2.1
+RUN install-tool paket
 
 ## Install Bazel
 # renovate: datasource=github-releases packageName=bazelbuild/bazelisk
@@ -570,7 +553,7 @@ RUN dotnet tool install Paket --version 7.2.1 --tool-path ${PAKET_HOME}
 
 # Install Swift (including SPM)
 # renovate: datasource=docker versioning=docker
-ARG SWIFT_VERSION=6.4.1
+ARG SWIFT_VERSION=6.4.2
 RUN install-tool swift
 
 # delete the partially populated directory /tmp/containerbase and recreate one with full content instead
